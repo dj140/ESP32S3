@@ -27,7 +27,7 @@
 #define LV_COLOR_DEPTH 16
 
 /*Swap the 2 bytes of RGB565 color. Useful if the display has an 8-bit interface (e.g. SPI)*/
-#define LV_COLOR_16_SWAP 0
+#define LV_COLOR_16_SWAP 1
 
 /*Enable features to draw on transparent background.
  *It's required if opa, and transform_* style properties are used.
@@ -368,9 +368,9 @@
 #define LV_FONT_MONTSERRAT_16 1
 #define LV_FONT_MONTSERRAT_18 0
 #define LV_FONT_MONTSERRAT_20 0
-#define LV_FONT_MONTSERRAT_22 0
+#define LV_FONT_MONTSERRAT_22 1
 #define LV_FONT_MONTSERRAT_24 0
-#define LV_FONT_MONTSERRAT_26 0
+#define LV_FONT_MONTSERRAT_26 1
 #define LV_FONT_MONTSERRAT_28 0
 #define LV_FONT_MONTSERRAT_30 0
 #define LV_FONT_MONTSERRAT_32 0
@@ -705,7 +705,7 @@
 #define LV_USE_SNAPSHOT 0
 
 /*1: Enable Monkey test*/
-#define LV_USE_MONKEY 0
+#define LV_USE_MONKEY 1
 
 /*1: Enable grid navigation*/
 #define LV_USE_GRIDNAV 0

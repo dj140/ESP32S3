@@ -15,6 +15,7 @@
 
 Arduino_DataBus *bus = create_default_Arduino_DataBus();
 Arduino_GFX *gfx = new Arduino_ST7789(bus, DF_GFX_RST, 0 /* rotation */, false /* IPS */,240 ,240);
+
 #define GFX_BL DF_GFX_BL // default backlight pin, you may replace DF_GFX_BL to actual backlight pin
 
 /*********************
@@ -143,7 +144,7 @@ static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_colo
         /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
         uint32_t w = (area->x2 - area->x1 + 1);
         uint32_t h = (area->y2 - area->y1 + 1);
-        gfx->draw16bitRGBBitmap(area->x1, area->y1, (uint16_t *)&color_p->full, w, h);
+        gfx->draw16bitBeRGBBitmap(area->x1, area->y1, (uint16_t *)&color_p->full, w, h);
     }
 
     /*IMPORTANT!!!

@@ -76,7 +76,7 @@ void App_Init()
     lv_obj_set_style_bg_opa(lv_scr_act(), LV_OPA_COVER, 0);
     lv_obj_set_style_bg_color(lv_scr_act(), lv_color_black(), 0);
     lv_obj_clear_flag(scr, LV_OBJ_FLAG_SCROLLABLE);
-    lv_disp_set_bg_color(lv_disp_get_default(), lv_color_black());
+    // lv_disp_set_bg_color(lv_disp_get_default(), lv_color_black());
 
     /* Set root default style */
     static lv_style_t rootStyle;

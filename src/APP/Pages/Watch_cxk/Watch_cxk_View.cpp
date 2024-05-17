@@ -59,7 +59,7 @@ void Watch_cxk_View::Watch_Create(lv_obj_t* par)
     lv_obj_clear_flag(ui_Watch_cxk, LV_OBJ_FLAG_GESTURE_BUBBLE);      /// Flags
     lv_obj_set_style_bg_color(ui_Watch_cxk, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Watch_cxk, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_size(ui_Watch_cxk, 397, 397);
+    lv_obj_set_size(ui_Watch_cxk, TFT_HOR_RES, TFT_VER_RES);
     lv_obj_set_align(ui_Watch_cxk, LV_ALIGN_CENTER);
     ui.cont = ui_Watch_cxk;
   
@@ -74,6 +74,7 @@ void Watch_cxk_View::Watch_Create(lv_obj_t* par)
     ui.ui_bg = ui_bg_cxk;
   
     lv_obj_t* ui_clock_group = lv_obj_create(ui_Watch_cxk);
+    lv_obj_remove_style_all(ui_clock_group);
     lv_obj_set_width(ui_clock_group, 350);
     lv_obj_set_height(ui_clock_group, 350);
     lv_obj_set_align(ui_clock_group, LV_ALIGN_CENTER);
@@ -141,7 +142,7 @@ void Watch_cxk_View::Delete()
 {
     if (ui.anim_timeline)
     {
-        lv_anim_timeline_del(ui.anim_timeline);
+        lv_anim_timeline_delete(ui.anim_timeline);
         ui.anim_timeline = nullptr;
     }
 }

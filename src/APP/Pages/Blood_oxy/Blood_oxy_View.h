@@ -10,6 +10,7 @@ class Blood_oxy_View
 {
 public:
     void Create(lv_obj_t* root);
+    void Delete();
 
 public:
     struct

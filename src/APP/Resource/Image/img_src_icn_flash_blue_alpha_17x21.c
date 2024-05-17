@@ -121,11 +121,10 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG__ICN_FLAS
 };
 
 const lv_img_dsc_t img_src_icn_flash_blue_alpha_17x21 = {
-  .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
-  .header.always_zero = 0,
-  .header.reserved = 0,
+  .header.cf = LV_COLOR_FORMAT_RGB565,
+  .header.magic = LV_IMAGE_HEADER_MAGIC,
   .header.w = 17,
   .header.h = 21,
-  .data_size = 357 * LV_IMG_PX_SIZE_ALPHA_BYTE,
+  .data_size = 357 * 2,
   .data = _icn_flash_blue_alpha_17x21_map,
 };

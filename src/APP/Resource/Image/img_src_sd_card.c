@@ -89,11 +89,11 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_IMG_SRC_S
 };
 
 const lv_img_dsc_t img_src_sd_card = {
-  .header.always_zero = 0,
+  .header.cf = LV_COLOR_FORMAT_RGB565,
+  .header.magic = LV_IMAGE_HEADER_MAGIC,
   .header.w = 10,
   .header.h = 13,
-  .data_size = 130 * LV_IMG_PX_SIZE_ALPHA_BYTE,
-  .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+  .data_size = 130 * 2,
   .data = img_src_sd_card_map,
 };
 

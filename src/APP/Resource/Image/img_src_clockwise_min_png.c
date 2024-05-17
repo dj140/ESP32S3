@@ -69,11 +69,11 @@ const LV_ATTRIBUTE_MEM_ALIGN uint8_t ui_img_clockwise_min_png_data[] = {
     0xFF,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0xFF,0x00,0xFF,0xFF,0x00,
 };
 const lv_img_dsc_t img_src_clockwise_min_png = {
-    .header.always_zero = 0,
+    .header.cf = LV_COLOR_FORMAT_RGB565,
+    .header.magic = LV_IMAGE_HEADER_MAGIC,
     .header.w = 18,
     .header.h = 157,
     .data_size = sizeof(ui_img_clockwise_min_png_data),
-    .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
     .data = ui_img_clockwise_min_png_data
 };
 

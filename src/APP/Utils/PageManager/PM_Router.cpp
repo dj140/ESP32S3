@@ -196,7 +196,7 @@ bool PageManager::SwitchTo(PageBase* newNode, bool isEnterAct, const PageBase::S
 
         if (newNode->priv.Stash.ptr == nullptr)
         {
-            buffer = lv_mem_alloc(stash->size);
+            buffer = lv_malloc(stash->size);
             if (buffer == nullptr)
             {
                 PM_LOG_ERROR("stash malloc failed");

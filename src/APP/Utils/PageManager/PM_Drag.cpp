@@ -43,7 +43,7 @@ void PageManager::onRootDragEvent(lv_event_t* event)
         return;
     }
 
-    lv_obj_t* root = lv_event_get_current_target(event);
+    lv_obj_t* root = lv_event_get_current_target_obj(event);
     PageBase* base = (PageBase*)lv_event_get_user_data(event);
 
     if (base == nullptr)
@@ -195,7 +195,7 @@ void PageManager::onRootAsyncLeave(void* data)
 {
     PageBase* base = (PageBase*)data;
     PM_LOG_INFO("Page(%s) send event: LV_EVENT_LEAVE, need to handle...", base->_Name);
-    lv_event_send(base->_root, LV_EVENT_LEAVE, base);
+    lv_obj_send_event(base->_root, LV_EVENT_LEAVE, base);
 }
 
 /**

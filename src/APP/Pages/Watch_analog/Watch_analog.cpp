@@ -35,14 +35,16 @@ void Watch_analog::onViewDidLoad()
 void Watch_analog::onViewWillAppear()
 {
     LV_LOG_USER("begin");
-    timer = lv_timer_create(onTimerUpdate, 3000, this);
     View.AppearAnimStart();
-
+//    lv_obj_set_style_opa(_root, LV_OPA_TRANSP, 0);
+//    lv_obj_fade_in(_root, 500, 0);
 }
 
 void Watch_analog::onViewDidAppear()
 {
-    LV_LOG_USER("begin");
+    LV_LOG_USER("begin"); 
+  timer = lv_timer_create(onTimerUpdate, 3000, this);
+
 }
 
 void Watch_analog::onViewWillDisappear()
@@ -54,6 +56,8 @@ void Watch_analog::onViewDidDisappear()
 {
     LV_LOG_USER("begin");
     lv_timer_del(timer);
+      View.Delete();
+
 }
 
 void Watch_analog::onViewUnload()
@@ -91,7 +95,7 @@ void Watch_analog::onEvent(lv_event_t* event)
     Watch_analog* instance = (Watch_analog*)lv_event_get_user_data(event);
     LV_ASSERT_NULL(instance);
 
-    lv_obj_t* obj = lv_event_get_current_target(event);
+    lv_obj_t* obj = lv_event_get_current_target_obj(event);
     lv_event_code_t code = lv_event_get_code(event);
 
 
@@ -108,9 +112,9 @@ void Watch_analog::onEvent(lv_event_t* event)
         if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
             instance->_Manager->Push("Pages/SystemInfos");
         }
-        if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
-            instance->_Manager->Push("Pages/Blood_oxy");
-        }
+//        if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
+//            instance->_Manager->Push("Pages/Blood_oxy");
+//        }
         if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_BOTTOM) {
             instance->_Manager->Push("Pages/Setting");
         }
@@ -118,9 +122,9 @@ void Watch_analog::onEvent(lv_event_t* event)
             instance->_Manager->Replace("Pages/Watch_cxk");
         }
     }
-    if (code == LV_EVENT_LONG_PRESSED)
-    {
-        instance->_Manager->Replace("Pages/Watch_cxk");
+//    if (code == LV_EVENT_LONG_PRESSED)
+//    {
+//        instance->_Manager->Replace("Pages/Watch_cxk");
 
-    }
+//    }
 }

@@ -16,7 +16,7 @@ void Setting::onCustomAttrConfig()
 {
     LV_LOG_USER("begin");
     SetCustomCacheEnable(true);
-    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_BOTTOM, 1000, lv_anim_path_bounce);
+    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_BOTTOM, 500, lv_anim_path_overshoot);
 }
 
 void Setting::onViewLoad()
@@ -25,6 +25,7 @@ void Setting::onViewLoad()
     View.Create(_root);
     AttachEvent(_root);
     AttachEvent(View.ui.cont);
+    AttachEvent(View.ui.bg_img);
 
 }
 
@@ -37,6 +38,8 @@ void Setting::onViewWillAppear()
 {
     LV_LOG_USER("begin");
     timer = lv_timer_create(onTimerUpdate, 3000, this);
+//    lv_obj_set_style_opa(_root, LV_OPA_TRANSP, 0);
+//    lv_obj_fade_in(_root, 300, 0);
 }
 
 void Setting::onViewDidAppear()
@@ -47,6 +50,7 @@ void Setting::onViewDidAppear()
 void Setting::onViewWillDisappear()
 {
     LV_LOG_USER("begin");
+//    lv_obj_fade_out(_root, 300, 0);
 }
 
 void Setting::onViewDidDisappear()
@@ -91,7 +95,7 @@ void Setting::onEvent(lv_event_t* event)
     Setting* instance = (Setting*)lv_event_get_user_data(event);
     LV_ASSERT_NULL(instance);
 
-    lv_obj_t* obj = lv_event_get_current_target(event);
+    lv_obj_t* obj = lv_event_get_current_target_obj(event);
     lv_event_code_t code = lv_event_get_code(event);
 
 

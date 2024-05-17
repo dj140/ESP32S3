@@ -10,38 +10,7 @@ void Watch_analog_View::Create(lv_obj_t* root)
 
     Watch_Create(root);
 
-    ui.anim_timeline = lv_anim_timeline_create();
 
-#define ANIM_DEF(start_time, obj, attr, start, end) \
-    {start_time, obj, LV_ANIM_EXEC(attr), start, end, 500, lv_anim_path_ease_out, true}
-
-#define ANIM_IMG_DEF(start_time, obj, attr, start, end) \
-    {start_time, obj, LV_ANIM_IMG(attr), start, end, 2000, lv_anim_path_ease_out, true}
-
-#define ANIM_OPA_DEF(start_time, obj) \
-    ANIM_DEF(start_time, obj, opa_scale, LV_OPA_TRANSP, LV_OPA_COVER)
-
-    //lv_coord_t y_tar_top = lv_obj_get_y(ui.topInfo.cont);
-    lv_coord_t angle_sec = lv_img_get_angle(ui.ui_sec);
-    lv_coord_t angle_min = lv_img_get_angle(ui.ui_min);
-    lv_coord_t angle_hour = lv_img_get_angle(ui.ui_hour);
-
-    //lv_coord_t h_tar_btn = lv_obj_get_height(ui.bottomInfo.labelweek);
-
-    lv_anim_timeline_wrapper_t wrapper[] =
-    {
-        //ANIM_DEF(0, ui.topInfo.cont, y, -lv_obj_get_height(ui.topInfo.cont), y_tar_top),
-
-       ANIM_IMG_DEF(200, ui.ui_sec, angle, -lv_img_get_angle(ui.ui_sec), angle_sec+3600),
-       ANIM_IMG_DEF(200, ui.ui_min, angle, -lv_img_get_angle(ui.ui_min), angle_min+1620),
-       ANIM_IMG_DEF(200, ui.ui_hour, angle, -lv_img_get_angle(ui.ui_hour), angle_hour+900),
-
-       //ANIM_OPA_DEF(500, ui.bottomInfo.labelweek),
-/*              ANIM_DEF(600, ui.btnCont.btnRec, height, 0, h_tar_btn),
-              ANIM_DEF(700, ui.btnCont.btnMenu, height, 0, h_tar_btn),*/
-              LV_ANIM_TIMELINE_WRAPPER_END
-    };
-    lv_anim_timeline_add_wrapper(ui.anim_timeline, wrapper);
 
 }
 void Watch_analog_View::Watch_Create(lv_obj_t* par)
@@ -52,7 +21,7 @@ void Watch_analog_View::Watch_Create(lv_obj_t* par)
     lv_obj_clear_flag(ui_watch_analog, LV_OBJ_FLAG_GESTURE_BUBBLE);      /// Flags
     lv_obj_set_style_bg_color(ui_watch_analog, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_watch_analog, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_size(ui_watch_analog, 397, 397);
+    lv_obj_set_size(ui_watch_analog, TFT_HOR_RES, TFT_VER_RES);
     lv_obj_set_align(ui_watch_analog, LV_ALIGN_CENTER);
     ui.cont = ui_watch_analog;
   
@@ -283,12 +252,44 @@ void Watch_analog_View::Delete()
 {
     if (ui.anim_timeline)
     {
-        lv_anim_timeline_del(ui.anim_timeline);
+        lv_anim_timeline_delete(ui.anim_timeline);
         ui.anim_timeline = nullptr;
     }
 }
 void Watch_analog_View::AppearAnimStart(bool reverse)
 {
+      ui.anim_timeline = lv_anim_timeline_create();
+
+#define ANIM_DEF(start_time, obj, attr, start, end) \
+    {start_time, obj, LV_ANIM_EXEC(attr), start, end, 500, lv_anim_path_ease_out, true}
+
+#define ANIM_IMG_DEF(start_time, obj, attr, start, end) \
+    {start_time, obj, LV_ANIM_IMG(attr), start, end, 2000, lv_anim_path_ease_out, true}
+
+#define ANIM_OPA_DEF(start_time, obj) \
+    ANIM_DEF(start_time, obj, opa_scale, LV_OPA_TRANSP, LV_OPA_COVER)
+
+    //lv_coord_t y_tar_top = lv_obj_get_y(ui.topInfo.cont);
+    lv_coord_t angle_sec = lv_img_get_angle(ui.ui_sec);
+    lv_coord_t angle_min = lv_img_get_angle(ui.ui_min);
+    lv_coord_t angle_hour = lv_img_get_angle(ui.ui_hour);
+
+    //lv_coord_t h_tar_btn = lv_obj_get_height(ui.bottomInfo.labelweek);
+
+    lv_anim_timeline_wrapper_t wrapper[] =
+    {
+        //ANIM_DEF(0, ui.topInfo.cont, y, -lv_obj_get_height(ui.topInfo.cont), y_tar_top),
+
+       ANIM_IMG_DEF(200, ui.ui_sec, angle, -lv_img_get_angle(ui.ui_sec), angle_sec+3600),
+       ANIM_IMG_DEF(200, ui.ui_min, angle, -lv_img_get_angle(ui.ui_min), angle_min+1620),
+       ANIM_IMG_DEF(200, ui.ui_hour, angle, -lv_img_get_angle(ui.ui_hour), angle_hour+900),
+
+       //ANIM_OPA_DEF(500, ui.bottomInfo.labelweek),
+/*              ANIM_DEF(600, ui.btnCont.btnRec, height, 0, h_tar_btn),
+              ANIM_DEF(700, ui.btnCont.btnMenu, height, 0, h_tar_btn),*/
+              LV_ANIM_TIMELINE_WRAPPER_END
+    };
+    lv_anim_timeline_add_wrapper(ui.anim_timeline, wrapper);
     lv_anim_timeline_set_reverse(ui.anim_timeline, reverse);
     lv_anim_timeline_start(ui.anim_timeline);
 }

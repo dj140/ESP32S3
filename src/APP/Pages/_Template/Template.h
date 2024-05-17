@@ -3,6 +3,7 @@
 
 #include "TemplateView.h"
 #include "TemplateModel.h"
+#include "JPEGDEC.h"
 
 namespace Page
 {
@@ -29,7 +30,7 @@ public:
     virtual void onViewDidDisappear();
     virtual void onViewUnload();
     virtual void onViewDidUnload();
-    void update_img(uint8_t *downloaded_jpeg_buf, size_t buf_size);
+    static int jpegDrawCallback(JPEGDRAW *pDraw);
 
 private:
     void Update();

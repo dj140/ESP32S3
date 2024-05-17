@@ -35,11 +35,11 @@ void Dialplate::onViewDidLoad()
 
 void Dialplate::onViewWillAppear()
 {
-    lv_indev_wait_release(lv_indev_get_act());
-    lv_group_t* group = lv_group_get_default();
-    LV_ASSERT_NULL(group);
+//    lv_indev_wait_release(lv_indev_get_act());
+//    lv_group_t* group = lv_group_get_default();
+//    LV_ASSERT_NULL(group);
 
-    lv_group_set_wrap(group, false);
+//    lv_group_set_wrap(group, false);
 
 //    lv_group_add_obj(group, View.ui.btnCont.btnMap);
 //    lv_group_add_obj(group, View.ui.btnCont.btnRec);
@@ -54,11 +54,13 @@ void Dialplate::onViewWillAppear()
 //        lv_group_focus_obj(View.ui.btnCont.btnRec);
 //    }
 
-    Model.SetStatusBarStyle(DataProc::STATUS_BAR_STYLE_TRANSP);
+//    Model.SetStatusBarStyle(DataProc::STATUS_BAR_STYLE_TRANSP);
 
     Update();
 
     View.AppearAnimStart();
+//    lv_obj_set_style_opa(_root, LV_OPA_TRANSP, 0);
+//    lv_obj_fade_in(_root, 500, 0);
 }
 
 void Dialplate::onViewDidAppear()
@@ -68,10 +70,10 @@ void Dialplate::onViewDidAppear()
 
 void Dialplate::onViewWillDisappear()
 {
-    lv_group_t* group = lv_group_get_default();
-    LV_ASSERT_NULL(group);
-    lastFocus = lv_group_get_focused(group);
-    lv_group_remove_all_objs(group);
+//    lv_group_t* group = lv_group_get_default();
+//    LV_ASSERT_NULL(group);
+//    lastFocus = lv_group_get_focused(group);
+//    lv_group_remove_all_objs(group);
     lv_timer_del(timer);
     //View.AppearAnimStart(true);
 }
@@ -98,11 +100,6 @@ void Dialplate::AttachEvent(lv_obj_t* obj)
 
 void Dialplate::Update()
 {
-    HAL::Clock_Info_t clockInfo;
-    Model.GetClockinfo(&clockInfo);
-
-    lv_label_set_text_fmt(View.ui.dialplate.labelClockmin, "%02d", clockInfo.minute);
-    lv_label_set_text_fmt(View.ui.dialplate.labelClockhour, "%02d", clockInfo.hour);
 //    char buf[16];
 //    lv_label_set_text_fmt(View.ui.topInfo.labelSpeed, "%02d", (int)Model.GetSpeed());
 
@@ -136,7 +133,7 @@ void Dialplate::onEvent(lv_event_t* event)
     Dialplate* instance = (Dialplate*)lv_event_get_user_data(event);
     LV_ASSERT_NULL(instance);
 
-    lv_obj_t* obj = lv_event_get_current_target(event);
+    lv_obj_t* obj = lv_event_get_current_target_obj(event);
     lv_event_code_t code = lv_event_get_code(event);
 
     if (code == LV_EVENT_GESTURE)
@@ -156,11 +153,10 @@ void Dialplate::onEvent(lv_event_t* event)
             instance->_Manager->Replace("Pages/Watch_analog");
         }
     }
-    if (code == LV_EVENT_LONG_PRESSED)
-    {
-        instance->_Manager->Replace("Pages/Watch_analog");
-
-    }
+//    if (code == LV_EVENT_LONG_PRESSED)
+//    {
+//        instance->_Manager->Replace("Pages/Watch_analog");
+//    }
 //    if (code == LV_EVENT_SHORT_CLICKED)
 //    {
 //        instance->onBtnClicked(obj);

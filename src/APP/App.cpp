@@ -81,8 +81,8 @@ void App_Init()
     /* Set root default style */
     static lv_style_t rootStyle;
     lv_style_init(&rootStyle);
-    lv_style_set_width(&rootStyle, 397);
-    lv_style_set_height(&rootStyle, 397);
+    lv_style_set_width(&rootStyle, TFT_HOR_RES);
+    lv_style_set_height(&rootStyle, TFT_VER_RES);
     lv_style_set_bg_opa(&rootStyle, LV_OPA_COVER);
     lv_style_set_bg_color(&rootStyle, lv_color_black());
     lv_style_set_border_width(&rootStyle, 0);

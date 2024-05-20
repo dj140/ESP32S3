@@ -85,6 +85,9 @@ do{\
         IMPORT_IMG(cxk_hour);
         IMPORT_IMG(cxk_min);
         IMPORT_IMG(cxk_sec);
+        IMPORT_IMG(setting_menu);
+        IMPORT_IMG(watch_face2);
+        IMPORT_IMG(SHM_Logo);
     }
 
 } /* extern "C" */

@@ -120,6 +120,11 @@ bool Audio_PlayMusic(const char* name);
 /* Memory */
 void Memory_DumpInfo();
 
+/* TP */
+// void getTouchRaw(TouchPoint_t& tp);
+// bool TP_Init(const int& sda, const int& scl, const int& rst, const int& intr, const bool& initI2c, const uint32_t& speed);
+// void setPin(const int& sda, const int& scl, const int& rst, const int& intr);
+// bool isTouched();
 }
 
 #endif

@@ -26,7 +26,7 @@ void Watch_analog_View::Watch_Create(lv_obj_t* par)
     ui.cont = ui_watch_analog;
   
     lv_obj_t* ui_bg_2 = lv_img_create(ui_watch_analog);
-    lv_img_set_src(ui_bg_2, ResourcePool::GetImage("apple_watch"));
+    lv_img_set_src(ui_bg_2, ResourcePool::GetImage("watch_face2"));
     lv_obj_set_width(ui_bg_2, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_bg_2, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_bg_2, LV_ALIGN_CENTER);
@@ -108,7 +108,7 @@ void Watch_analog_View::Watch_Create(lv_obj_t* par)
 
     //lv_label_set_text(ui_comp_get_child(ui_weather_title_group_2, UI_COMP_TITLEGROUP_TITLE), "Partly Cloudy");
 
-    //lv_label_set_text(ui_comp_get_child(ui_weather_title_group_2, UI_COMP_TITLEGROUP_SUBTITLE), "Max: 18¡ã Min: 12¡ã");
+    //lv_label_set_text(ui_comp_get_child(ui_weather_title_group_2, UI_COMP_TITLEGROUP_SUBTITLE), "Max: 18ï¿½ï¿½ Min: 12ï¿½ï¿½");
 
     lv_obj_t* ui_weather_group_5 = lv_obj_create(ui_watch_analog);
     lv_obj_remove_style_all(ui_weather_group_5);

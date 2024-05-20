@@ -108,4 +108,13 @@
 #  define CONFIG_WATCH_DOG_TIMEOUT (10 * 1000) // [ms]
 #endif
 
+/* I2C peripheral */
+#define HAL_PIN_I2C_PORT    0
+#define HAL_PIN_I2C_SCL     10
+#define HAL_PIN_I2C_SDA     11
+
+/* Touch pad */
+#define HAL_PIN_TP_RST      3
+#define HAL_PIN_TP_INTR     12
+
 #endif

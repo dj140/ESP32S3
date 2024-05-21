@@ -7,7 +7,7 @@
 #ifndef _MJPEGCLASS_H_
 #define _MJPEGCLASS_H_
 
-#define READ_BUFFER_SIZE 1024
+#define READ_BUFFER_SIZE 4096
 #define MAXOUTPUTSIZE (MAX_BUFFERED_PIXELS / 16 / 16)
 
 /* Wio Terminal */

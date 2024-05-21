@@ -30,7 +30,6 @@ public:
     virtual void onViewDidDisappear();
     virtual void onViewUnload();
     virtual void onViewDidUnload();
-    static int jpegDrawCallback(JPEGDRAW *pDraw);
 
 private:
     void Update();

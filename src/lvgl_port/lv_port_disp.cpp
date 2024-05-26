@@ -11,25 +11,14 @@
  *********************/
 #include "lv_port_disp.h"
 #include <stdbool.h>
-#include <Arduino_GFX_Library.h>
-
-Arduino_DataBus *bus = create_default_Arduino_DataBus();
-Arduino_GFX *gfx = new Arduino_ST7789(bus, DF_GFX_RST, 0 /* rotation */, false /* IPS */,240 ,240);
-
-#define GFX_BL DF_GFX_BL // default backlight pin, you may replace DF_GFX_BL to actual backlight pin
 
 /*********************
  *      DEFINES
  *********************/
-#ifndef MY_DISP_HOR_RES
-    #warning Please define or replace the macro MY_DISP_HOR_RES with the actual screen width, default value 320 is used for now.
-    #define MY_DISP_HOR_RES    320
-#endif
+#define MY_DISP_HOR_RES    368
+#define MY_DISP_VER_RES    448
 
-#ifndef MY_DISP_VER_RES
-    #warning Please define or replace the macro MY_DISP_HOR_RES with the actual screen height, default value 240 is used for now.
-    #define MY_DISP_VER_RES    240
-#endif
+LGFX display;
 
 /**********************
  *      TYPEDEFS
@@ -67,12 +56,48 @@ void lv_port_disp_init(void)
      * Create a buffer for drawing
      *----------------------------*/
 
-    /* Example for 3) also set disp_drv.full_refresh = 1 below*/
-    static lv_disp_draw_buf_t draw_buf_dsc_3;
-    static lv_color_t buf_3_1[MY_DISP_HOR_RES * MY_DISP_VER_RES];            /*A screen sized buffer*/
-    // static lv_color_t buf_3_2[MY_DISP_HOR_RES * MY_DISP_VER_RES];            /*Another screen sized buffer*/
-    lv_disp_draw_buf_init(&draw_buf_dsc_3, buf_3_1, NULL,
-                          MY_DISP_VER_RES * MY_DISP_HOR_RES);   /*Initialize the display buffer*/
+    /**
+     * LVGL requires a buffer where it internally draws the widgets.
+     * Later this buffer will passed to your display driver's `flush_cb` to copy its content to your display.
+     * The buffer has to be greater than 1 display row
+     *
+     * There are 3 buffering configurations:
+     * 1. Create ONE buffer:
+     *      LVGL will draw the display's content here and writes it to your display
+     *
+     * 2. Create TWO buffer:
+     *      LVGL will draw the display's content to a buffer and writes it your display.
+     *      You should use DMA to write the buffer's content to the display.
+     *      It will enable LVGL to draw the next part of the screen to the other buffer while
+     *      the data is being sent form the first buffer. It makes rendering and flushing parallel.
+     *
+     * 3. Double buffering
+     *      Set 2 screens sized buffers and set disp_drv.full_refresh = 1.
+     *      This way LVGL will always provide the whole rendered screen in `flush_cb`
+     *      and you only need to change the frame buffer's address.
+     */
+
+    // /* Example for 2) */
+    static lv_disp_draw_buf_t draw_buf_dsc_2;
+    // static lv_color_t buf_2_1[MY_DISP_HOR_RES * 64];                        /*A buffer for 10 rows*/
+    // static lv_color_t buf_2_2[MY_DISP_HOR_RES * 64];                        /*An other buffer for 10 rows*/
+
+    static lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(MY_DISP_HOR_RES * MY_DISP_VER_RES * 2, MALLOC_CAP_SPIRAM);
+    static lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(MY_DISP_HOR_RES * MY_DISP_VER_RES * 2, MALLOC_CAP_SPIRAM);
+
+    /* If failed */
+    if ((buf_3_1 == NULL) || (buf_3_2 == NULL)) {
+        ESP_LOGE(TAG, "malloc buffer from PSRAM fialed");
+        Serial.println("malloc buffer from PSRAM fialed");
+        while (1);
+    } else {
+        ESP_LOGI(TAG, "malloc buffer from PSRAM successful");
+        Serial.println("malloc buffer from PSRAM successful");
+        Serial.printf("PSRAM free size: %d\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+        ESP_LOGI(TAG, "free PSRAM: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+    }
+
+    lv_disp_draw_buf_init(&draw_buf_dsc_2, buf_3_1, buf_3_2, MY_DISP_HOR_RES * MY_DISP_VER_RES);   /*Initialize the display buffer*/
 
     /*-----------------------------------
      * Register the display in LVGL
@@ -91,10 +116,10 @@ void lv_port_disp_init(void)
     disp_drv.flush_cb = disp_flush;
 
     /*Set a display buffer*/
-    disp_drv.draw_buf = &draw_buf_dsc_3;
+    disp_drv.draw_buf = &draw_buf_dsc_2;
 
     /*Required for Example 3)*/
-    disp_drv.full_refresh = 1;
+    //disp_drv.full_refresh = 1;
 
     /* Fill a memory array with a color if you have GPU.
      * Note that, in lv_conf.h you can enable GPUs that has built-in support in LVGL.
@@ -113,10 +138,8 @@ void lv_port_disp_init(void)
 static void disp_init(void)
 {
     /*You code here*/
-    gfx->begin();
-    gfx->fillScreen(BLACK);
-    pinMode(GFX_BL, OUTPUT);
-    digitalWrite(GFX_BL, HIGH);
+        display.init();
+    display.setColorDepth(16);
 }
 
 volatile bool disp_flush_enabled = true;
@@ -144,7 +167,10 @@ static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_colo
         /*The most simple case (but also the slowest) to put all pixels to the screen one-by-one*/
         uint32_t w = (area->x2 - area->x1 + 1);
         uint32_t h = (area->y2 - area->y1 + 1);
-        gfx->draw16bitBeRGBBitmap(area->x1, area->y1, (uint16_t *)&color_p->full, w, h);
+        display.startWrite();
+        display.setWindow(area->x1, area->y1, area->x2, area->y2);
+        display.pushPixels((uint16_t *)color_p, w * h, true);
+        display.endWrite();
     }
 
     /*IMPORTANT!!!

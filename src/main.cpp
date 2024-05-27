@@ -19,7 +19,7 @@ void setup(void)
   lv_init(); 
   lv_port_disp_init();
   lv_port_indev_init();
-  // lv_demo_benchmark();
+  //lv_demo_benchmark();
   //lv_demo_music();
   lv_tick_set_cb(my_tick_get_cb);
   App_Init();

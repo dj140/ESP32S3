@@ -18,7 +18,7 @@ public:
         lv_obj_t* labelTitle;
         lv_obj_t* Spinner;
         lv_obj_t* cont;
-        lv_obj_t* image;
+        lv_obj_t* canvas;
 
     } ui;
 

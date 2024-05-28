@@ -138,6 +138,18 @@ void SystemInfos::onEvent(lv_event_t* event)
         {
             instance->_Manager->BackHome();
         }
+        if (obj == instance->View.ui.app2.cont)
+        {
+            instance->_Manager->Push("Pages/Image_Player");
+        }
+                if (obj == instance->View.ui.app3.cont)
+        {
+            instance->_Manager->BackHome();
+        }
+                if (obj == instance->View.ui.app4.cont)
+        {
+            instance->_Manager->BackHome();
+        }
 //                if (obj == instance->View.ui.gps.cont)
 //        {
 //            instance->_Manager->Push("Pages/_Template");

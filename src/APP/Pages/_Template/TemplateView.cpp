@@ -16,8 +16,10 @@ void TemplateView::Create(lv_obj_t* root)
     lv_obj_set_align(cont, LV_ALIGN_CENTER);
     ui.cont = cont;
 
-
-    // ui.canvas = camera_canvas;
+    lv_obj_t* video_canvas = lv_canvas_create(cont);
+    lv_obj_center(video_canvas);
+    lv_canvas_fill_bg(video_canvas, lv_palette_lighten(LV_PALETTE_GREY, 3), LV_OPA_COVER);
+    ui.canvas = video_canvas;
 }
 /**
   * @brief  List up to 25 file on the root directory with extension .BMP

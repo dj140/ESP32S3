@@ -24,6 +24,7 @@
 #define __LV_OBJ_EXT_FUNC_H
 
 #include "lvgl.h"
+#include "cstring"
 
 #define LV_ANIM_TIME_DEFAULT    400
 #define LV_ANIM_EXEC(attr)      (lv_anim_exec_xcb_t)lv_obj_set_##attr

@@ -7,6 +7,9 @@
 #include "lvgl_demo/demos/benchmark/lv_demo_benchmark.h"
 static uint32_t my_tick_get_cb(void) { return millis(); }
 
+//increase loop task stack to 48kb for prevent rlottie crash
+SET_LOOP_TASK_STACK_SIZE( 128 * 1024 ); // 48KB
+
 void setup(void)
 {
   Serial.begin(115200);
@@ -21,6 +24,8 @@ void setup(void)
   lv_port_indev_init();
   //lv_demo_benchmark();
   //lv_demo_music();
+  //lv_demo_vector_graphic();
+  // lv_demo_multilang();
   lv_tick_set_cb(my_tick_get_cb);
   App_Init();
 }
@@ -28,5 +33,5 @@ void setup(void)
 void loop()
 { 
   lv_timer_handler(); /* let the GUI do its work */
-  delay(5);
+  vTaskDelay(pdMS_TO_TICKS(2));
 }

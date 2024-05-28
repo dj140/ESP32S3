@@ -23,6 +23,7 @@
 #include "Account.h"
 #include "DataCenter.h"
 #include "DataCenterLog.h"
+#include "cstring"
 
 #define ACCOUNT_DISCARD_READ_DATA   1
 

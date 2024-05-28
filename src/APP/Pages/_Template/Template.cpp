@@ -34,29 +34,14 @@ extern LGFX display;
 uint8_t *mjpeg_buf;
 uint16_t *output_buf;
 TaskHandle_t Task1Task_Handler;
-static lv_obj_t * camera_canvas = NULL;
 
-// pixel drawing callback
-// static int jpegDrawCallback(JPEGDRAW *pDraw)
-// {
-//    //Serial.printf("Draw pos = %d,%d. size = %d x %d\n", pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight);
-//     unsigned long start = millis();
-//     display.startWrite();
-//     display.setWindow(pDraw->x, pDraw->y, pDraw->iWidth+pDraw->x, pDraw->iHeight+pDraw->y);
-//     display.pushPixels((uint16_t *)pDraw->pPixels, pDraw->iWidth * pDraw->iHeight, true);
-//     display.endWrite();
-// //   gfx->draw16bitBeRGBBitmap(pDraw->x, pDraw->y, pDraw->pPixels, pDraw->iWidth, pDraw->iHeight);
-//   total_show_video += millis() - start;
-//   return 1;
-// }
 static void show_video_task(void *arg)
 {
-while(1)
-{
-    printf("show_video_task begin \n");
-    vTaskDelay(10);
-}
-
+    while(1)
+    {
+        printf("show_video_task begin \n");
+        vTaskDelay(10);
+    }
 }
 
 Template::Template()
@@ -82,20 +67,28 @@ void Template::onViewLoad()
     View.Create(_root);
     AttachEvent(_root);
     AttachEvent(View.ui.cont);
-    camera_canvas = lv_canvas_create(View.ui.cont);
-    // lv_obj_center(camera_canvas);
+    AttachEvent(View.ui.canvas);
 
     if (!LittleFS.begin())
     {
         Serial.println(F("ERROR: File System Mount Failed!"));
-    // gfx->println(F("ERROR: File System Mount Failed!"));
     }
     else
     {
           Serial.println(F("File System Mount OKKKK!"));
     }
-    mjpeg_buf = (uint8_t *)malloc(MJPEG_BUFFER_SIZE);
-
+    mjpeg_buf = (uint8_t *)heap_caps_malloc(MJPEG_BUFFER_SIZE, MALLOC_CAP_SPIRAM);
+    output_buf = (uint16_t *)heap_caps_aligned_alloc(16, MJPEG_OUTPUT_SIZE, MALLOC_CAP_8BIT);
+    Serial.printf("PSRAM free size: %d\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+    if (output_buf!=NULL && mjpeg_buf!=NULL)
+    {    
+        lv_canvas_set_buffer(View.ui.canvas, (uint8_t*)output_buf, 368, 448, LV_COLOR_FORMAT_RGB565);
+        Serial.println(F("input/output_buf malloc successful!"));
+    }
+    else
+    {
+        Serial.println(F("input/output_buf malloc fail!"));
+    }
 }
 
 void Template::onViewDidLoad()
@@ -111,13 +104,6 @@ void Template::onViewWillAppear()
     if (!mjpegFile || mjpegFile.isDirectory())
     {
         Serial.println(F("ERROR: Failed to open " MJPEG_FILENAME " file for reading"));
-    //   gfx->println(F("ERROR: Failed to open " MJPEG_FILENAME " file for reading"));
-    }
-    output_buf = (uint16_t *)heap_caps_aligned_alloc(16, MJPEG_OUTPUT_SIZE, MALLOC_CAP_8BIT);
-    lv_canvas_set_buffer(camera_canvas, (uint8_t*)output_buf, 368, 448, LV_COLOR_FORMAT_RGB565);
-    if (!output_buf)
-    {
-        Serial.println(F("output_buf malloc failed!"));
     }
     else
     {
@@ -129,9 +115,8 @@ void Template::onViewWillAppear()
                 &mjpegFile, mjpeg_buf,
                 output_buf, MJPEG_OUTPUT_SIZE, true /* useBigEndian */))
         {
-        Serial.println(F("mjpeg.setup() failed!"));
+            Serial.println(F("mjpeg.setup() failed!"));
         }
-
     }
     timer = lv_timer_create(onTimerUpdate, 10, this);
     // vTaskResume(Task1Task_Handler);	//恢复任务1
@@ -140,9 +125,7 @@ void Template::onViewWillAppear()
 void Template::onViewDidAppear()
 {
     LV_LOG_USER("begin");
-//    lv_obj_del(View.ui.Spinner);
     //  xTaskCreate(show_video_task, "video task", 8196, NULL, 4, &Task1Task_Handler);
-
 }
 
 void Template::onViewWillDisappear()
@@ -155,18 +138,18 @@ void Template::onViewDidDisappear()
     LV_LOG_USER("begin");
     lv_timer_del(timer);
     mjpegFile.close();
-    int time_used = millis() - start_ms;
-    Serial.println(F("MJPEG end"));
+    // int time_used = millis() - start_ms;
+    // Serial.println(F("MJPEG end"));
 
-    float fps = 1000.0 * total_frames / time_used;
-    Serial.printf("Arduino_GFX ESP32 SIMD MJPEG decoder\n\n");
-    Serial.printf("Frame size: %d x %d\n", mjpeg.getWidth(), mjpeg.getHeight());
-    Serial.printf("Total frames: %d\n", total_frames);
-    Serial.printf("Time used: %d ms\n", time_used);
-    Serial.printf("Average FPS: %0.1f\n", fps);
-    Serial.printf("Read MJPEG: %lu ms (%0.1f %%)\n", total_read_video, 100.0 * total_read_video / time_used);
-    Serial.printf("Decode video: %lu ms (%0.1f %%)\n", total_decode_video, 100.0 * total_decode_video / time_used);
-    Serial.printf("Show video: %lu ms (%0.1f %%)\n", total_show_video, 100.0 * total_show_video / time_used);
+    // float fps = 1000.0 * total_frames / time_used;
+    // Serial.printf("Arduino_GFX ESP32 SIMD MJPEG decoder\n\n");
+    // Serial.printf("Frame size: %d x %d\n", mjpeg.getWidth(), mjpeg.getHeight());
+    // Serial.printf("Total frames: %d\n", total_frames);
+    // Serial.printf("Time used: %d ms\n", time_used);
+    // Serial.printf("Average FPS: %0.1f\n", fps);
+    // Serial.printf("Read MJPEG: %lu ms (%0.1f %%)\n", total_read_video, 100.0 * total_read_video / time_used);
+    // Serial.printf("Decode video: %lu ms (%0.1f %%)\n", total_decode_video, 100.0 * total_decode_video / time_used);
+    // Serial.printf("Show video: %lu ms (%0.1f %%)\n", total_show_video, 100.0 * total_show_video / time_used);
     // vTaskSuspend(Task1Task_Handler);
 }
 
@@ -188,40 +171,37 @@ void Template::AttachEvent(lv_obj_t* obj)
 
 void Template::Update()
 {
-        if (mjpegFile.available() && mjpeg.readMjpegBuf())
-        {
-            // Read video
-            total_read_video += millis() - curr_ms;
-            curr_ms = millis();
+    if (mjpegFile.available() && mjpeg.readMjpegBuf())
+    {
+        // Read video
+        total_read_video += millis() - curr_ms;
+        curr_ms = millis();
 
-            // Play video
-            mjpeg.decodeJpg();
-            total_decode_video += millis() - curr_ms;
-            curr_ms = millis();
+        // Play video
+        mjpeg.decodeJpg();
+        total_decode_video += millis() - curr_ms;
+        curr_ms = millis();
 
-            // if (x == -1)
-            // {
-            //     w = mjpeg.getWidth();
-            //     h = mjpeg.getHeight();
-            //     x = (w > 368) ? 0 : ((368 - w) / 2);
-            //     y = (h > 448) ? 0 : ((448 - h) / 2);
-            //     Serial.printf("Draw pos = %d,%d. size = %d x %d\n", x, y, w, h);
-            // }
-            // gfx->draw16bitBeRGBBitmap(x, y, output_buf, w, h);
-            // display.startWrite();
-            // display.setWindow(0, 0, 368, 448); 
-            // // Serial.printf("Draw pos = %d,%d. size = %d x %d\n", x, y, w, h);
+        // if (x == -1)
+        // {
+        //     w = mjpeg.getWidth();
+        //     h = mjpeg.getHeight();
+        //     x = (w > 368) ? 0 : ((368 - w) / 2);
+        //     y = (h > 448) ? 0 : ((448 - h) / 2);
+        //     Serial.printf("Draw pos = %d,%d. size = %d x %d\n", x, y, w, h);
+        // }
+        // display.startWrite();
+        // display.setWindow(0, 0, 368, 448); 
+        // display.pushPixels(output_buf, 368 * 448, false);
+        // display.endWrite();
 
-            // display.pushPixels(output_buf, 368 * 448, false);
-            // display.endWrite();
-            lv_obj_invalidate(camera_canvas);
+        lv_obj_invalidate(View.ui.canvas);
 
-            total_show_video += millis() - curr_ms;
+        total_show_video += millis() - curr_ms;
+        curr_ms = millis();
+        total_frames++;
+    }
 
-            curr_ms = millis();
-            total_frames++;
-        }
-   
 }
 
 void Template::onTimerUpdate(lv_timer_t* timer)

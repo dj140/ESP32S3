@@ -31,6 +31,7 @@
 #include "Setting/Setting.h"
 #include "Watch_analog/Watch_analog.h"
 #include "Watch_cxk/Watch_cxk.h"
+#include "Image_Player/Image_Player.h"
 
 #define APP_CLASS_MATCH(className)\
 do{\
@@ -52,6 +53,7 @@ PageBase* AppFactory::CreatePage(const char* name)
     APP_CLASS_MATCH(Heartbeat_Measuing);
     APP_CLASS_MATCH(Setting);
     APP_CLASS_MATCH(Watch_cxk);
+    APP_CLASS_MATCH(Image_Player);
 
     return nullptr;
 }

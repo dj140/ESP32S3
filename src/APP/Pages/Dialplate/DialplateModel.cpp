@@ -1,4 +1,5 @@
 #include "DialplateModel.h"
+#include "cstring"
 
 using namespace Page;
 

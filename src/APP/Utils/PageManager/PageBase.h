@@ -24,6 +24,7 @@
 #define __PAGE_BASE_H
 
 #include "lvgl.h"
+#include "cstring"
 
 /* Generate stash area data */
 #define PAGE_STASH_MAKE(data) {&(data), sizeof(data)}

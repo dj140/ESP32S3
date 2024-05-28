@@ -61,7 +61,7 @@ void lv_port_disp_init(void)
     } else {
         ESP_LOGI(TAG, "malloc buffer from PSRAM successful");
         Serial.println("malloc buffer from PSRAM successful");
-          Serial.printf("PSRAM free size: %d\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+        Serial.printf("PSRAM free size: %d\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
         ESP_LOGI(TAG, "free PSRAM: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
     }
     /* Example 2

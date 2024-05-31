@@ -100,24 +100,12 @@ void Dialplate::AttachEvent(lv_obj_t* obj)
 
 void Dialplate::Update()
 {
-//    char buf[16];
-//    lv_label_set_text_fmt(View.ui.topInfo.labelSpeed, "%02d", (int)Model.GetSpeed());
+    HAL::Clock_Info_t clockInfo;
+    Model.GetClockinfo(&clockInfo);
 
-//    lv_label_set_text_fmt(View.ui.dialplate.labelInfoGrp[0].lableValue, "%0.1f km/h", Model.GetAvgSpeed());
-////    lv_label_set_text(
-////        View.ui.dialplate.labelInfoGrp[1].lableValue,
-////        DataProc::MakeTimeString(Model.sportStatusInfo.singleTime, buf, sizeof(buf))
-////    );
-//    lv_label_set_text_fmt(
-//        View.ui.dialplate.labelInfoGrp[2].lableValue,
-//        "%0.1f km",
-//        Model.sportStatusInfo.singleDistance / 1000
-//    );
-//    lv_label_set_text_fmt(
-//        View.ui.dialplate.labelInfoGrp[3].lableValue,
-//        "%d k",
-//        int(Model.sportStatusInfo.singleCalorie)
-//    );
+    lv_label_set_text_fmt(View.ui.dialplate.labelClockmin, "%02d", clockInfo.minute);
+    lv_label_set_text_fmt(View.ui.dialplate.labelClockhour, "%02d", clockInfo.hour);
+
 }
 
 void Dialplate::onTimerUpdate(lv_timer_t* timer)

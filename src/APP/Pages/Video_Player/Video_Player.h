@@ -1,14 +1,14 @@
-#ifndef __TEMPLATE_PRESENTER_H
-#define __TEMPLATE_PRESENTER_H
+#ifndef __Video_Player_H
+#define __Video_Player_H
 
-#include "TemplateView.h"
-#include "TemplateModel.h"
+#include "Video_Player_View.h"
+#include "Video_Player_Model.h"
 #include "JPEGDEC.h"
 
 namespace Page
 {
 
-class Template : public PageBase
+class Video_Player : public PageBase
 {
 public:
     typedef struct
@@ -18,8 +18,8 @@ public:
     } Param_t;
 
 public:
-    Template();
-    virtual ~Template();
+    Video_Player();
+    virtual ~Video_Player();
 
     virtual void onCustomAttrConfig();
     virtual void onViewLoad();
@@ -38,8 +38,8 @@ private:
     static void onEvent(lv_event_t* event);
 
 private:
-    TemplateView View;
-    TemplateModel Model;
+    Video_Player_View View;
+    Video_Player_Model Model;
     lv_timer_t* timer;
 };
 

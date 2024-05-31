@@ -1,12 +1,12 @@
-#ifndef __TEMPLATE_VIEW_H
-#define __TEMPLATE_VIEW_H
+#ifndef __Video_Player_VIEW_H
+#define __Video_Player_VIEW_H
 
 #include "../Page.h"
 
 namespace Page
 {
 
-class TemplateView
+class Video_Player_View
 {
 public:
     void Create(lv_obj_t* root);

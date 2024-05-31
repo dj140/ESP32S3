@@ -54,9 +54,9 @@ do{\
 //        IMPORT_IMG(bg1_png);
 //        IMPORT_IMG(bg2_png);
 //        IMPORT_IMG(bg3_png);
-        IMPORT_IMG(clockwise_hour_png);
-        IMPORT_IMG(clockwise_min_png);
-        IMPORT_IMG(clockwise_sec_png);
+        IMPORT_IMG(clockwise_hour);
+        IMPORT_IMG(clockwise_min);
+        IMPORT_IMG(clockwise_sec);
         IMPORT_IMG(sec_dot_png);
 //        IMPORT_IMG(app_icon_hdpi_boxing_png);
 //        IMPORT_IMG(app_icon_hdpi_pingpong_png);
@@ -88,6 +88,10 @@ do{\
         IMPORT_IMG(setting_menu);
         IMPORT_IMG(watch_face2);
         IMPORT_IMG(SHM_Logo);
+        IMPORT_IMG(bg_day);
+        IMPORT_IMG(image1);
+        IMPORT_IMG(image2);
+        IMPORT_IMG(image3);
     }
 
 } /* extern "C" */

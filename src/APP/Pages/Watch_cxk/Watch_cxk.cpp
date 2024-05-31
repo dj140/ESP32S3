@@ -111,9 +111,9 @@ void Watch_cxk::onEvent(lv_event_t* event)
         if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
             instance->_Manager->Push("Pages/SystemInfos");
         }
-//        if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
-//            instance->_Manager->Push("Pages/Blood_oxy");
-//        }
+       if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
+           instance->_Manager->Push("Pages/Blood_oxy");
+       }
         if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_BOTTOM) {
             instance->_Manager->Push("Pages/Setting");
         }

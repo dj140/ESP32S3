@@ -1,12 +1,12 @@
-#ifndef __TEMPLATE_MODEL_H
-#define __TEMPLATE_MODEL_H
+#ifndef __Video_Player_MODEL_H
+#define __Video_Player_MODEL_H
 
 #include "lvgl.h"
 
 namespace Page
 {
 
-class TemplateModel
+class Video_Player_Model
 {
 public:
     uint32_t TickSave;

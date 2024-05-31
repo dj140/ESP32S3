@@ -2,6 +2,7 @@
 #define __WATCH_ANALOG_VIEW_H
 
 #include "../Page.h"
+#include "Watch_analog_Model.h"
 
 namespace Page
 {
@@ -26,13 +27,17 @@ public:
         lv_obj_t* ui_sec;
         lv_obj_t* ui_min;
         lv_obj_t* ui_hour;
+        lv_obj_t* ui_year;
+        lv_obj_t* ui_month;
+        lv_obj_t* ui_day;
         lv_anim_timeline_t* anim_timeline;
 
     } ui;
 
 private:
     void Watch_Create(lv_obj_t* par);
-
+    Watch_analog_Model Model;
+    Account* myaccount;
 };
 
 }

@@ -1,6 +1,9 @@
 #include "HAL.h"
 //#include "rtc.h"
+#include <ESP32Time.h>
 
+//ESP32Time rtc;
+ESP32Time rtc(3600);  // offset in seconds GMT+1
 
 
 
@@ -16,83 +19,27 @@ static void RTC_CalendarConfig(void)
 
 void HAL::Clock_Init()
 {
-
-
-  /*##-2- Check if Data stored in BackUp register1: No Need to reconfigure RTC#*/
-  /* Read the Back Up Register 1 Data */
-//  if (HAL_RTCEx_BKUPRead(&RtcHandle, RTC_BKP_DR1) != 0x32F2)
-//  {
-//    /* Configure RTC Calendar */
-//    RTC_CalendarConfig();
-//  }
-//  else
-//  {
-//    /* Check if the Power On Reset flag is set */
-//    if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST) != RESET)
-//    {
-//      /* Turn on LED2: Power on reset occurred */
-////      BSP_LED_On(LED2);
-//    }
-//    /* Check if Pin Reset flag is set */
-//    if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST) != RESET)
-//    {
-//      /* Turn on LED1: External reset occurred */
-////      BSP_LED_On(LED1);
-//    }
-//    /* Clear source Reset Flag */
-//    __HAL_RCC_CLEAR_RESET_FLAGS();
-//  }
-
+  rtc.setTime(30, 24, 15, 5, 6, 2024);  // 17th Jan 2024 15:24:30
 }
 
 void HAL::Clock_GetInfo(Clock_Info_t* info)
 {
 
+  info->year = rtc.getYear();
+  info->month = rtc.getMonth();
+  info->day = rtc.getDay();
+  info->week = rtc.getDayofWeek();
+  info->hour = rtc.getHour(true);
+  info->minute = rtc.getMinute();
+  info->second = rtc.getSecond();
+  info->millisecond = rtc.getMillis();
+  Serial.println(rtc.getTime("%A, %B %d %Y %H:%M:%S"));   // (String) returns time with specified format 
+  // struct tm timeinfo = rtc.getTimeStruct();
 }
 
 void HAL::Clock_SetInfo(const Clock_Info_t* info)
 {
-//  RTC_DateTypeDef sdatestructure;
-//  RTC_TimeTypeDef stimestructure;
-
-//  /*##-1- Configure the Date #################################################*/
-//  /* Set Date: Tuesday February 18th 2014 */
-//  sdatestructure.Year = info->year;
-//  sdatestructure.Month = info->month;
-//  sdatestructure.Date = info->day;
-//  sdatestructure.WeekDay = info->week;
-//  
-//  if(HAL_RTC_SetDate(&RtcHandle,&sdatestructure,RTC_FORMAT_BCD) != HAL_OK)
-//  {
-//    /* Initialization Error */
-////    Error_Handler();
-//  }
-
-//  /*##-2- Configure the Time #################################################*/
-//  /* Set Time: 02:00:00 */
-//  stimestructure.Hours = info->hour;
-//  stimestructure.Minutes = info->minute;
-//  stimestructure.Seconds = info->second;
-//  stimestructure.TimeFormat = RTC_HOURFORMAT_24;
-//  stimestructure.DayLightSaving = RTC_DAYLIGHTSAVING_NONE ;
-//  stimestructure.StoreOperation = RTC_STOREOPERATION_RESET;
-
-//  if (HAL_RTC_SetTime(&RtcHandle, &stimestructure, RTC_FORMAT_BCD) != HAL_OK)
-//  {
-//    /* Initialization Error */
-////    Error_Handler();
-//  }
-
-//  /*##-3- Writes a data in a RTC Backup data Register1 #######################*/
-//  HAL_RTCEx_BKUPWrite(&RtcHandle, RTC_BKP_DR1, 0x32F2);
-//    RTC_SetTime(
-//        info->year,
-//        info->month,
-//        info->day,
-//        info->hour,
-//        info->minute,
-//        info->second
-//    );
+    rtc.setTime(info->second, info->minute, info->hour, info->day, info->month, info->year);  // 17th Jan 2021 15:24:30
 }
 
 const char* HAL::Clock_GetWeekString(uint8_t week)

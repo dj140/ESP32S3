@@ -16,7 +16,7 @@ void Setting::onCustomAttrConfig()
 {
     LV_LOG_USER("begin");
     SetCustomCacheEnable(true);
-    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_BOTTOM, 300, lv_anim_path_overshoot);
+    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_BOTTOM, 300, lv_anim_path_linear);
 }
 
 void Setting::onViewLoad()

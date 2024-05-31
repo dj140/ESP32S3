@@ -2,6 +2,14 @@
 #include "stdio.h"
 using namespace Page;
 
+uint32_t counter = 0;
+uint8_t  ubNumberOfFiles = 4;
+uint8_t str[10];
+#define MAX_BMP_FILES     10
+#define MAX_BMP_FILE_NAME 10
+char* pDirectoryFiles[MAX_BMP_FILES];
+uint8_t num = 1;
+
 Image_Player::Image_Player()
     : timer(nullptr)
 {
@@ -25,7 +33,8 @@ void Image_Player::onViewLoad()
     View.Create(_root);
     AttachEvent(_root);
     AttachEvent(View.ui.cont);
-    AttachEvent(View.ui.lottie);
+    AttachEvent(View.ui.image);
+    // AttachEvent(View.ui.lottie);
 
 }
 
@@ -38,7 +47,7 @@ void Image_Player::onViewDidLoad()
 void Image_Player::onViewWillAppear()
 {
     LV_LOG_USER("begin");
-    timer = lv_timer_create(onTimerUpdate, 10, this);
+    timer = lv_timer_create(onTimerUpdate, 4000, this);
 }
 
 void Image_Player::onViewDidAppear()
@@ -76,7 +85,32 @@ void Image_Player::AttachEvent(lv_obj_t* obj)
 
 void Image_Player::Update()
 {
+    static lv_style_t style;                     //创建样式
+    lv_style_init(&style);                       //初始化样式
+    //lv_img_set_src(View.ui.image, ResourcePool::GetImage("image_001"));
+    if (num == ubNumberOfFiles)
+    {
+        num = 1;
+    }
 
+   sprintf((char*)str, "image%01d",num); 
+   printf("%d: %s\r\n", num, (char*)str);
+   num++;
+   lv_opa_t opa;
+   opa = lv_obj_get_style_opa(View.ui.image, 0);
+   printf("opa: %d", opa);
+   if (opa < 10)
+   {
+       //TRANSP -> Bright
+       lv_obj_fade_in(View.ui.image, 4000, 0);
+       lv_img_set_src(View.ui.image, ResourcePool::GetImage((char*)str));
+
+   }
+   else
+   {   
+       //Bright -> TRANSP
+       lv_obj_fade_out(View.ui.image, 2000, 0); 
+   }
 }
 
 void Image_Player::onTimerUpdate(lv_timer_t* timer)

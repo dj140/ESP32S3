@@ -17,6 +17,7 @@ public:
     {
         lv_obj_t* cont;
         lv_obj_t* lottie;
+        lv_obj_t* image;
 
     } ui;
 

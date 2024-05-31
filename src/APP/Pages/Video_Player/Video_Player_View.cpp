@@ -1,10 +1,10 @@
-#include "TemplateView.h"
+#include "Video_Player_View.h"
 #include <stdarg.h>
 #include <stdio.h>
 
 using namespace Page;
 
-void TemplateView::Create(lv_obj_t* root)
+void Video_Player_View::Create(lv_obj_t* root)
 {
     lv_obj_t* cont = lv_obj_create(root);
     lv_obj_remove_style_all(cont);
@@ -26,7 +26,7 @@ void TemplateView::Create(lv_obj_t* root)
   * @param  None
   * @retval The number of the found files
   */
-uint32_t TemplateView::Storage_GetDirectoryBitmapFiles (const char* DirName, char* Files[])
+uint32_t Video_Player_View::Storage_GetDirectoryBitmapFiles (const char* DirName, char* Files[])
 {
   uint32_t index = 0;
 

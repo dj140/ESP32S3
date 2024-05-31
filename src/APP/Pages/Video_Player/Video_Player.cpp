@@ -1,4 +1,4 @@
-#include "Template.h"
+#include "Video_Player.h"
 #include "stdio.h"
 using namespace Page;
 
@@ -44,26 +44,26 @@ static void show_video_task(void *arg)
     }
 }
 
-Template::Template()
+Video_Player::Video_Player()
     : timer(nullptr)
 {
 }
 
-Template::~Template()
+Video_Player::~Video_Player()
 {
 
 }
 
-void Template::onCustomAttrConfig()
+void Video_Player::onCustomAttrConfig()
 {
     LV_LOG_USER("begin");
     // SetCustomCacheEnable(true);
     // SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_BOTTOM, 1000, lv_anim_path_bounce);
 }
 
-void Template::onViewLoad()
+void Video_Player::onViewLoad()
 {
-    printf("Template begin \n");
+    printf("Video_Player begin \n");
     View.Create(_root);
     AttachEvent(_root);
     AttachEvent(View.ui.cont);
@@ -91,13 +91,13 @@ void Template::onViewLoad()
     }
 }
 
-void Template::onViewDidLoad()
+void Video_Player::onViewDidLoad()
 {
     LV_LOG_USER("begin");
 }
 
 
-void Template::onViewWillAppear()
+void Video_Player::onViewWillAppear()
 {
     LV_LOG_USER("begin");
     mjpegFile = LittleFS.open(MJPEG_FILENAME, "r");
@@ -122,18 +122,18 @@ void Template::onViewWillAppear()
     // vTaskResume(Task1Task_Handler);	//恢复任务1
 }
 
-void Template::onViewDidAppear()
+void Video_Player::onViewDidAppear()
 {
     LV_LOG_USER("begin");
     //  xTaskCreate(show_video_task, "video task", 8196, NULL, 4, &Task1Task_Handler);
 }
 
-void Template::onViewWillDisappear()
+void Video_Player::onViewWillDisappear()
 {
     LV_LOG_USER("begin");
 }
 
-void Template::onViewDidDisappear()
+void Video_Player::onViewDidDisappear()
 {
     LV_LOG_USER("begin");
     lv_timer_del(timer);
@@ -153,23 +153,23 @@ void Template::onViewDidDisappear()
     // vTaskSuspend(Task1Task_Handler);
 }
 
-void Template::onViewUnload()
+void Video_Player::onViewUnload()
 {
     LV_LOG_USER("begin");
 }
 
-void Template::onViewDidUnload()
+void Video_Player::onViewDidUnload()
 {
     LV_LOG_USER("begin");
 }
 
-void Template::AttachEvent(lv_obj_t* obj)
+void Video_Player::AttachEvent(lv_obj_t* obj)
 {
     lv_obj_set_user_data(obj, this);
     lv_obj_add_event_cb(obj, onEvent, LV_EVENT_ALL, this);
 }
 
-void Template::Update()
+void Video_Player::Update()
 {
     if (mjpegFile.available() && mjpeg.readMjpegBuf())
     {
@@ -204,16 +204,16 @@ void Template::Update()
 
 }
 
-void Template::onTimerUpdate(lv_timer_t* timer)
+void Video_Player::onTimerUpdate(lv_timer_t* timer)
 {
-    Template* instance = (Template*)timer->user_data;
+    Video_Player* instance = (Video_Player*)timer->user_data;
 
     instance->Update();
 }
 
-void Template::onEvent(lv_event_t* event)
+void Video_Player::onEvent(lv_event_t* event)
 {
-    Template* instance = (Template*)lv_event_get_user_data(event);
+    Video_Player* instance = (Video_Player*)lv_event_get_user_data(event);
     LV_ASSERT_NULL(instance);
 
     lv_obj_t* obj = lv_event_get_current_target_obj(event);

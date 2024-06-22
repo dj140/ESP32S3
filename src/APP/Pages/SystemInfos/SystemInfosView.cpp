@@ -3,7 +3,7 @@
 
 using namespace Page;
 
-#define ITEM_HEIGHT_MIN   100
+#define ITEM_HEIGHT_MIN   120
 #define ITEM_PAD          ((TFT_VER_RES - ITEM_HEIGHT_MIN) / 2)
 
 void SystemInfosView::Create(lv_obj_t* root)
@@ -13,6 +13,7 @@ void SystemInfosView::Create(lv_obj_t* root)
     LauncherData_t.is_long_row = true;  
     lv_obj_t* appPanel = lv_obj_create(root);
     lv_obj_remove_style_all(appPanel);
+    lv_obj_add_flag(appPanel, LV_OBJ_FLAG_SCROLLABLE);     /// Flags
 
     lv_obj_set_size(appPanel, TFT_HOR_RES, TFT_VER_RES);
     //lv_obj_clear_flag(root, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
@@ -28,18 +29,19 @@ void SystemInfosView::Create(lv_obj_t* root)
     lv_obj_add_flag(appPanel, LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM);
     lv_obj_set_scrollbar_mode(appPanel, LV_SCROLLBAR_MODE_ON);
     lv_obj_set_scroll_dir(appPanel, LV_DIR_VER);
-        /* Update bubble config */
-    _bubble_cfg.iconColMax = 400 / 108;
-    _bubble_cfg.iconRowMax = 400 / 108;
+    /* Update bubble config */
+    _bubble_cfg.iconColMax = TFT_HOR_RES / ITEM_HEIGHT_MIN;
+
+    _bubble_cfg.iconRowMax = TFT_VER_RES / ITEM_HEIGHT_MIN;
     _bubble_cfg.iconColNum = (13 - 1) / _bubble_cfg.iconRowMax;
     if (((13 - 1) % _bubble_cfg.iconRowMax) != 0) {
         _bubble_cfg.iconColNum++;
     }
-    _bubble_cfg.iconSpaceX = 400 / _bubble_cfg.iconColMax;
-    lv_coord_t gap_between_icon = (400 - 108 * _bubble_cfg.iconColMax) / (_bubble_cfg.iconColMax + 1);
-    _bubble_cfg.iconSpaceY = 108 - (gap_between_icon / 2);
-    _bubble_cfg.iconXoffset = -(400 / 2) + (_bubble_cfg.iconSpaceX / 2);
-    _bubble_cfg.iconYoffset = -(400 / 2) + (_bubble_cfg.iconSpaceY / 2) + gap_between_icon;
+    _bubble_cfg.iconSpaceX = TFT_HOR_RES / _bubble_cfg.iconColMax;
+    lv_coord_t gap_between_icon = (TFT_HOR_RES - ITEM_HEIGHT_MIN * _bubble_cfg.iconColMax) / (_bubble_cfg.iconColMax + 1);
+    _bubble_cfg.iconSpaceY = ITEM_HEIGHT_MIN - (gap_between_icon / 2);
+    _bubble_cfg.iconXoffset = -(TFT_HOR_RES / 2) + (_bubble_cfg.iconSpaceX / 2);
+    _bubble_cfg.iconYoffset = -(TFT_VER_RES / 2) + (_bubble_cfg.iconSpaceY / 2) + gap_between_icon;
     /* Item Sport */
     Item_Create(&ui.app1, appPanel, "app1", "app_icon_Instagram");
     Item_Create(&ui.app2, appPanel, "app2", "app_icon_LinkedIn");
@@ -85,10 +87,10 @@ void SystemInfosView::updateAppIconZoom(lv_obj_t* obj)
 {
     /* Zoom the Icons when reach edge */
     lv_coord_t scroll_bar_y = lv_obj_get_scroll_y(obj);
-    lv_coord_t zoom_area_half_height = 400 / 4;
-    lv_coord_t zoom_area_edge_t = scroll_bar_y + 400 / 4;
-    lv_coord_t zoom_area_edge_m = scroll_bar_y + 400 / 2;
-    lv_coord_t zoom_area_edge_b = scroll_bar_y + 400 / 4 * 3;
+    lv_coord_t zoom_area_half_height = TFT_HOR_RES / 4;
+    lv_coord_t zoom_area_edge_t = scroll_bar_y + TFT_HOR_RES / 4;
+    lv_coord_t zoom_area_edge_m = scroll_bar_y + TFT_HOR_RES / 2;
+    lv_coord_t zoom_area_edge_b = scroll_bar_y + TFT_HOR_RES / 4 * 3;
     lv_coord_t icon_y = 0;
     int icon_zoom = 256;
 
@@ -194,8 +196,8 @@ void SystemInfosView::Item_Create(
     lv_obj_center(app);
 
     lv_img_set_src(app, ResourcePool::GetImage(img_src));
-    lv_obj_set_width(app, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(app, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_width(app, 120);   /// 1
+    lv_obj_set_height(app, 120);    /// 1
     //lv_obj_set_align(app, LV_ALIGN_CENTER);
     item->cont = app;
 

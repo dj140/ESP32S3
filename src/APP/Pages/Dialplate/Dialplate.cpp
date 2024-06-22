@@ -141,24 +141,5 @@ void Dialplate::onEvent(lv_event_t* event)
             instance->_Manager->Replace("Pages/Watch_analog");
         }
     }
-//    if (code == LV_EVENT_LONG_PRESSED)
-//    {
-//        instance->_Manager->Replace("Pages/Watch_analog");
-//    }
-//    if (code == LV_EVENT_SHORT_CLICKED)
-//    {
-//        instance->onBtnClicked(obj);
-//    }
 
-//    if (obj == instance->View.ui.btnCont.btnRec)
-//    {
-//        if (code == LV_EVENT_SHORT_CLICKED)
-//        {
-//            instance->onRecord(false);
-//        }
-//        else if (code == LV_EVENT_LONG_PRESSED)
-//        {
-//            instance->onRecord(true);
-//        }
-//    }
 }

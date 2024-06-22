@@ -92,6 +92,12 @@ do{\
         IMPORT_IMG(image1);
         IMPORT_IMG(image2);
         IMPORT_IMG(image3);
+        IMPORT_IMG(stopwatch);
+        IMPORT_IMG(stopwatch_add);
+        IMPORT_IMG(stopwatch_pause);
+        IMPORT_IMG(stopwatch_start);
+        IMPORT_IMG(stopwatch_reset);
+
     }
 
 } /* extern "C" */

@@ -33,7 +33,7 @@ void HAL::Clock_GetInfo(Clock_Info_t* info)
   info->minute = rtc.getMinute();
   info->second = rtc.getSecond();
   info->millisecond = rtc.getMillis();
-  Serial.println(rtc.getTime("%A, %B %d %Y %H:%M:%S"));   // (String) returns time with specified format 
+  // Serial.println(rtc.getTime("%A, %B %d %Y %H:%M:%S"));   // (String) returns time with specified format 
   // struct tm timeinfo = rtc.getTimeStruct();
 }
 

@@ -30,10 +30,19 @@ static unsigned long start_ms, curr_ms;
 static int16_t x = -1, y = -1, w = -1, h = -1;
 
 File mjpegFile;
-extern LGFX display;
 uint8_t *mjpeg_buf;
 uint16_t *output_buf;
 TaskHandle_t Task1Task_Handler;
+
+// pixel drawing callback
+static int jpegDrawCallback(JPEGDRAW *pDraw)
+{
+   //Serial.printf("Draw pos = %d,%d. size = %d x %d\n", pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight);
+    unsigned long start = millis();
+    memcpy(&output_buf[pDraw->y* pDraw->iWidth], pDraw->pPixels, pDraw->iWidth * pDraw->iHeight * 2);
+    total_show_video += millis() - start;
+    return 1;
+}
 
 static void show_video_task(void *arg)
 {
@@ -111,12 +120,14 @@ void Video_Player::onViewWillAppear()
 
         start_ms = millis();
         curr_ms = millis();
-        if (!mjpeg.setup(
-                &mjpegFile, mjpeg_buf,
-                output_buf, MJPEG_OUTPUT_SIZE, true /* useBigEndian */))
-        {
-            Serial.println(F("mjpeg.setup() failed!"));
-        }
+        // if (!mjpeg.setup(
+        //         &mjpegFile, mjpeg_buf,
+        //         output_buf, MJPEG_OUTPUT_SIZE, true /* useBigEndian */))
+        // {
+        //     Serial.println(F("mjpeg.setup() failed!"));
+        // }
+        mjpeg.setup(&mjpegFile, mjpeg_buf, jpegDrawCallback, false , 0 , 0 , 368, 448 );
+
     }
     timer = lv_timer_create(onTimerUpdate, 10, this);
     // vTaskResume(Task1Task_Handler);	//恢复任务1
@@ -138,18 +149,18 @@ void Video_Player::onViewDidDisappear()
     LV_LOG_USER("begin");
     lv_timer_del(timer);
     mjpegFile.close();
-    // int time_used = millis() - start_ms;
-    // Serial.println(F("MJPEG end"));
+    int time_used = millis() - start_ms;
+    Serial.println(F("MJPEG end"));
 
-    // float fps = 1000.0 * total_frames / time_used;
-    // Serial.printf("Arduino_GFX ESP32 SIMD MJPEG decoder\n\n");
+    float fps = 1000.0 * total_frames / time_used;
+    Serial.printf("Arduino_GFX ESP32 SIMD MJPEG decoder\n\n");
     // Serial.printf("Frame size: %d x %d\n", mjpeg.getWidth(), mjpeg.getHeight());
-    // Serial.printf("Total frames: %d\n", total_frames);
-    // Serial.printf("Time used: %d ms\n", time_used);
-    // Serial.printf("Average FPS: %0.1f\n", fps);
-    // Serial.printf("Read MJPEG: %lu ms (%0.1f %%)\n", total_read_video, 100.0 * total_read_video / time_used);
-    // Serial.printf("Decode video: %lu ms (%0.1f %%)\n", total_decode_video, 100.0 * total_decode_video / time_used);
-    // Serial.printf("Show video: %lu ms (%0.1f %%)\n", total_show_video, 100.0 * total_show_video / time_used);
+    Serial.printf("Total frames: %d\n", total_frames);
+    Serial.printf("Time used: %d ms\n", time_used);
+    Serial.printf("Average FPS: %0.1f\n", fps);
+    Serial.printf("Read MJPEG: %lu ms (%0.1f %%)\n", total_read_video, 100.0 * total_read_video / time_used);
+    Serial.printf("Decode video: %lu ms (%0.1f %%)\n", total_decode_video, 100.0 * total_decode_video / time_used);
+    Serial.printf("Show video: %lu ms (%0.1f %%)\n", total_show_video, 100.0 * total_show_video / time_used);
     // vTaskSuspend(Task1Task_Handler);
 }
 
@@ -171,14 +182,17 @@ void Video_Player::AttachEvent(lv_obj_t* obj)
 
 void Video_Player::Update()
 {
-    if (mjpegFile.available() && mjpeg.readMjpegBuf())
-    {
+    
+    if (mjpegFile.available())
+    { 
+        mjpeg.readMjpegBuf();
         // Read video
         total_read_video += millis() - curr_ms;
         curr_ms = millis();
 
         // Play video
-        mjpeg.decodeJpg();
+        // mjpeg.decodeJpg();
+        mjpeg.drawJpg();
         total_decode_video += millis() - curr_ms;
         curr_ms = millis();
 
@@ -201,7 +215,12 @@ void Video_Player::Update()
         curr_ms = millis();
         total_frames++;
     }
-
+    else
+    {
+        Serial.printf("finish start looping\n\n");
+        mjpegFile = LittleFS.open(MJPEG_FILENAME, "r"); 
+        mjpeg.setup(&mjpegFile, mjpeg_buf, jpegDrawCallback, false , 0 , 0 , 368, 448 );
+    }
 }
 
 void Video_Player::onTimerUpdate(lv_timer_t* timer)
@@ -225,14 +244,5 @@ void Video_Player::onEvent(lv_event_t* event)
 
         instance->_Manager->Push("Pages/Dialplate");
     }
-
-//     if (code == LV_EVENT_GESTURE)
-//     {
-// //      LV_LOG_USER("LV_EVENT_GESTURE %d", code);
-
-//       if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
-//           instance->_Manager->Push("Pages/Dialplate");
-//       }
-//     }
 
 }

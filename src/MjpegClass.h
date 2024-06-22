@@ -1,42 +1,46 @@
 /*******************************************************************************
- * ESP32_JPEG Wrapper Class
+ * JPEGDEC Wrapper Class
  *
  * Dependent libraries:
- * ESP32_JPEG: https://github.com/esp-arduino-libs/ESP32_JPEG.git
+ * JPEGDEC: https://github.com/bitbank2/JPEGDEC.git
  ******************************************************************************/
-#pragma once
+#ifndef _MJPEGCLASS_H_
+#define _MJPEGCLASS_H_
 
-#if defined(ESP32)
-
-#define READ_BUFFER_SIZE 1024
+#define READ_BUFFER_SIZE 4096
 #define MAXOUTPUTSIZE (MAX_BUFFERED_PIXELS / 16 / 16)
 
+/* Wio Terminal */
+#if defined(ARDUINO_ARCH_SAMD) && defined(SEEED_GROVE_UI_WIRELESS)
+#include <Seeed_FS.h>
+#elif defined(ESP32) || defined(ESP8266)
 #include <FS.h>
+#else
+#include <SD.h>
+#endif
 
-#include <ESP32_JPEG_Library.h>
+#include <JPEGDEC.h>
 
 class MjpegClass
 {
 public:
   bool setup(
-      Stream *input, uint8_t *mjpeg_buf,
-      uint16_t *output_buf, size_t output_buf_size, bool useBigEndian)
+      Stream *input, uint8_t *mjpeg_buf, JPEG_DRAW_CALLBACK *pfnDraw, bool useBigEndian,
+      int x, int y, int widthLimit, int heightLimit)
   {
     _input = input;
     _mjpeg_buf = mjpeg_buf;
-    _output_buf = (uint8_t *)output_buf;
-    _output_buf_size = output_buf_size;
+    _pfnDraw = pfnDraw;
     _useBigEndian = useBigEndian;
+    _x = x;
+    _y = y;
+    _widthLimit = widthLimit;
+    _heightLimit = heightLimit;
     _inputindex = 0;
 
     if (!_read_buf)
     {
       _read_buf = (uint8_t *)malloc(READ_BUFFER_SIZE);
-    }
-
-    if (!_read_buf)
-    {
-      return false;
     }
 
     return true;
@@ -130,77 +134,76 @@ public:
     return false;
   }
 
-  bool decodeJpg()
+  bool drawJpg()
   {
     _remain = _mjpeg_buf_offset;
-
-    // Generate default configuration
-    jpeg_dec_config_t config = {
-        .output_type = JPEG_RAW_TYPE_RGB565_LE,
-        .rotate = JPEG_ROTATE_0D,
-    };
-    // Create jpeg_dec
-    _jpeg_dec = jpeg_dec_open(&config);
-
-    // Create io_callback handle
-    _jpeg_io = (jpeg_dec_io_t *)calloc(1, sizeof(jpeg_dec_io_t));
-
-    // Create out_info handle
-    _out_info = (jpeg_dec_header_info_t *)calloc(1, sizeof(jpeg_dec_header_info_t));
-
-    // Set input buffer and buffer len to io_callback
-    _jpeg_io->inbuf = _mjpeg_buf;
-    _jpeg_io->inbuf_len = _remain;
-
-    jpeg_dec_parse_header(_jpeg_dec, _jpeg_io, _out_info);
-
-    _w = _out_info->width;
-    _h = _out_info->height;
-
-    if ((_w * _h * 2) > _output_buf_size)
+    _jpeg.openRAM(_mjpeg_buf, _remain, _pfnDraw);
+    if (_scale == -1)
     {
-      return false;
+      // scale to fit height
+      int iMaxMCUs;
+      int w = _jpeg.getWidth();
+      int h = _jpeg.getHeight();
+      float ratio = (float)h / _heightLimit;
+      if (ratio <= 1)
+      {
+        _scale = 0;
+        iMaxMCUs = _widthLimit / 16;
+      }
+      else if (ratio <= 2)
+      {
+        _scale = JPEG_SCALE_HALF;
+        iMaxMCUs = _widthLimit / 8;
+        w /= 2;
+        h /= 2;
+      }
+      else if (ratio <= 4)
+      {
+        _scale = JPEG_SCALE_QUARTER;
+        iMaxMCUs = _widthLimit / 4;
+        w /= 4;
+        h /= 4;
+      }
+      else
+      {
+        _scale = JPEG_SCALE_EIGHTH;
+        iMaxMCUs = _widthLimit / 2;
+        w /= 8;
+        h /= 8;
+      }
+      _jpeg.setMaxOutputSize(iMaxMCUs);
+      _x = (w > _widthLimit) ? 0 : ((_widthLimit - w) / 2);
+      _y = (_heightLimit - h) / 2;
     }
-    _jpeg_io->outbuf = _output_buf;
-
-    jpeg_dec_process(_jpeg_dec, _jpeg_io);
-    jpeg_dec_close(_jpeg_dec);
-
-    free(_jpeg_io);
-    free(_out_info);
+    if (_useBigEndian)
+    {
+      _jpeg.setPixelType(RGB565_BIG_ENDIAN);
+    }
+    _jpeg.decode(_x, _y, _scale);
+    _jpeg.close();
 
     return true;
-  }
-
-  int16_t getWidth()
-  {
-    return _w;
-  }
-
-  int16_t getHeight()
-  {
-    return _h;
   }
 
 private:
   Stream *_input;
   uint8_t *_mjpeg_buf;
-  uint8_t *_output_buf;
-  size_t _output_buf_size;
+  JPEG_DRAW_CALLBACK *_pfnDraw;
   bool _useBigEndian;
+  int _x;
+  int _y;
+  int _widthLimit;
+  int _heightLimit;
 
   uint8_t *_read_buf;
   int32_t _mjpeg_buf_offset = 0;
 
-  jpeg_dec_handle_t *_jpeg_dec;
-  jpeg_dec_io_t *_jpeg_io;
-  jpeg_dec_header_info_t *_out_info;
-
-  int16_t _w = 0, _h = 0;
+  JPEGDEC _jpeg;
+  int _scale = -1;
 
   int32_t _inputindex = 0;
   int32_t _buf_read;
   int32_t _remain = 0;
 };
 
-#endif // defined(ESP32)
+#endif // _MJPEGCLASS_H_

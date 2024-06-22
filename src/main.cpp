@@ -24,7 +24,7 @@ void setup(void)
   lv_init(); 
   lv_port_disp_init();
   lv_port_indev_init();
-  //lv_demo_benchmark();
+  // lv_demo_benchmark();
   //lv_demo_music();
   //lv_demo_vector_graphic();
   // lv_demo_multilang();

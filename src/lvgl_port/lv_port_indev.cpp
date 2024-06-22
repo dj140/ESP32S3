@@ -340,7 +340,7 @@ static void touchpad_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
     else {
         data->state = LV_INDEV_STATE_REL;
     }
-    // Serial.printf("x:%d, y:%d \n", tp_data.x, tp_data.y);
+     Serial.printf("x:%d, y:%d \n", tp_data.x, tp_data.y);
     // /*Set the last pressed coordinates*/
     // data->point.x = last_x;
     // data->point.y = last_y;

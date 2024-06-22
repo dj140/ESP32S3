@@ -14,17 +14,19 @@ SystemInfos::~SystemInfos()
 
 void SystemInfos::onCustomAttrConfig()
 {
-
+    LV_LOG_USER("begin");
+    SetCustomCacheEnable(true);
+    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_LEFT, 200, lv_anim_path_linear);
 }
 
 void SystemInfos::onViewLoad()
 {
     Model.Init();
     View.Create(_root);
-    //AttachEvent(_root);
+    AttachEvent(_root);
     //lv_obj_add_event_cb(View.LauncherData_t.appPanel, onEvent, LV_EVENT_SCROLL, this);
 
-    AttachEvent(View.LauncherData_t.appPanel);
+     AttachEvent(View.LauncherData_t.appPanel);
     //AttachEvent(View.ui.sport.cont);
 
    SystemInfosView::item_t* item_grp = ((SystemInfosView::item_t*)&View.ui);
@@ -55,6 +57,7 @@ void SystemInfos::onViewDidAppear()
     //lv_group_t* group = lv_group_get_default();
     //LV_ASSERT_NULL(group);
     //View.onFocus(group);
+    View.updateAppIconZoom(View.LauncherData_t.appPanel);
 }
 
 void SystemInfos::onViewWillDisappear()
@@ -142,13 +145,17 @@ void SystemInfos::onEvent(lv_event_t* event)
         {
             instance->_Manager->Push("Pages/Image_Player");
         }
-                if (obj == instance->View.ui.app3.cont)
+        if (obj == instance->View.ui.app3.cont)
+        {
+            instance->_Manager->Push("Pages/Test_Page");
+        }
+        if (obj == instance->View.ui.app4.cont)
         {
             instance->_Manager->BackHome();
         }
-                if (obj == instance->View.ui.app4.cont)
+        if (obj == instance->View.ui.app5.cont)
         {
-            instance->_Manager->BackHome();
+            instance->_Manager->Push("Pages/StopWatch");
         }
 //                if (obj == instance->View.ui.gps.cont)
 //        {
@@ -156,19 +163,5 @@ void SystemInfos::onEvent(lv_event_t* event)
 //        }
 
     }
-    //if (code == LV_EVENT_PRESSED)
-    //{
-    //    if (lv_obj_has_state(obj, LV_STATE_FOCUSED))
-    //    {
-    //        instance->_Manager->Pop();
-    //    }
-    //}
 
-    //if (obj == instance->_root)
-    //{
-    //    if (code == LV_EVENT_LEAVE)
-    //    {
-    //        instance->_Manager->Pop();
-    //    }
-    //}
 }

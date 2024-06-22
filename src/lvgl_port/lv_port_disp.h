@@ -110,7 +110,7 @@ class LGFX : public lgfx::LGFX_Device {
             gpio_set_direction(GPIO_NUM_4, GPIO_MODE_OUTPUT);
             gpio_set_pull_mode(GPIO_NUM_4, GPIO_PULLUP_PULLDOWN);
             gpio_set_level(GPIO_NUM_4, 1);
-            // vTaskDelay(pdMS_TO_TICKS(10));
+            vTaskDelay(pdMS_TO_TICKS(10));
 
             /* TE pin */
             gpio_reset_pin(GPIO_NUM_2);
@@ -121,6 +121,7 @@ class LGFX : public lgfx::LGFX_Device {
             return lgfx::LGFX_Device::init();
         }
 };
+
 
 /*********************
  *      DEFINES

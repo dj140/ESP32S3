@@ -32,6 +32,9 @@
 #include "Watch_analog/Watch_analog.h"
 #include "Watch_cxk/Watch_cxk.h"
 #include "Image_Player/Image_Player.h"
+// #include "Menu/Menu.h"
+#include "Test_Page/Test_Page.h"
+#include "StopWatch/StopWatch.h"
 
 #define APP_CLASS_MATCH(className)\
 do{\
@@ -53,6 +56,8 @@ PageBase* AppFactory::CreatePage(const char* name)
     APP_CLASS_MATCH(Setting);
     APP_CLASS_MATCH(Watch_cxk);
     APP_CLASS_MATCH(Image_Player);
+    APP_CLASS_MATCH(Test_Page);
+    APP_CLASS_MATCH(StopWatch);
 
     return nullptr;
 }

@@ -1,4 +1,3 @@
-
 #include "Arduino.h"
 #include "lvgl.h"
 #include "APP/APP.h"
@@ -24,10 +23,10 @@ void setup(void)
   lv_init(); 
   lv_port_disp_init();
   lv_port_indev_init();
-  // lv_demo_benchmark();
+  //lv_demo_benchmark();
   //lv_demo_music();
   //lv_demo_vector_graphic();
-  // lv_demo_multilang();
+  //lv_demo_multilang();
   lv_tick_set_cb(my_tick_get_cb);
   App_Init();
   
@@ -36,5 +35,6 @@ void setup(void)
 void loop()
 { 
   lv_timer_handler(); /* let the GUI do its work */
+  HAL::HAL_Update();
   vTaskDelay(pdMS_TO_TICKS(2));
 }

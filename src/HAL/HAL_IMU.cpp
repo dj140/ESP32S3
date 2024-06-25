@@ -8,7 +8,13 @@ static void* UserData = nullptr;
 bool HAL::IMU_Init()
 {
     Serial.print("IMU: init...");
+    // Force INT1 of LSM6DSR low in order to enable I2C
+    pinMode(38, OUTPUT);
 
+    digitalWrite(38, LOW);
+
+    Wire.begin(HAL_PIN_I2C_SDA, HAL_PIN_I2C_SCL);
+    imu.begin(Wire, LSM6DSM_I2C_ADDRESS);
     bool success = imu.Init();
 
     Serial.println(success ? "success" : "failed");

@@ -142,9 +142,15 @@
 #define GYR_SCALE_1000_DPS      (0x02 << 2)
 #define GYR_SCALE_2000_DPS      (0x03 << 2)
 
+int LSM6DSM::begin(TwoWire &port, uint8_t addr)
+{
+    _i2cPort = &port; //Grab which port the user wants us to use
+    Address = addr;
+    return 0;
+}
+
 bool LSM6DSM::Init(uint8_t addr)
 {
-    Address = addr;
 
     SoftReset();
     delay(50);
@@ -164,7 +170,7 @@ bool LSM6DSM::Init(uint8_t addr)
 
 bool LSM6DSM::IsConnected()
 {
-    return (ReadReg(WHO_AM_I) == 0x6A);
+    return (ReadReg(WHO_AM_I) == 0x6B);
 }
 
 void LSM6DSM::ConfigAcc(uint8_t acc_odr, uint8_t acc_scale)
@@ -267,7 +273,7 @@ void LSM6DSM::DisableTapDetection(void)
 void LSM6DSM::EnablePedometer(uint16_t debounce_time, uint8_t debounce_step)
 {
     WriteReg(FUNC_CFG_ACCESS, 0x80);                            // Enable access to embedded functions registers (bank A)
-    WriteReg(CONFIG_PEDO_THS_MIN, 0x8e);                    // PEDO_FS = ¡À4 g and configure pedometer minimum threshold value
+    WriteReg(CONFIG_PEDO_THS_MIN, 0x8e);                    // PEDO_FS = ï¿½ï¿½4 g and configure pedometer minimum threshold value
     WriteReg(PEDO_DEB_REG, ((uint8_t)(debounce_time / 80) << 3) | (debounce_step & 0x07));
     WriteReg(FUNC_CFG_ACCESS, 0x00);                            // Disable access to embedded functions registers (bank A)
     SetRegisterBits(CTRL10_C, 0x10, true);                     // Enable embedded functions and pedometer algorithm
@@ -296,37 +302,37 @@ void LSM6DSM::DisablePedometer(void)
 
 void LSM6DSM::WriteReg(uint8_t reg, uint8_t data)
 {
-    Wire.beginTransmission(Address);
-    Wire.write(reg);
-    Wire.write(data);
-    Wire.endTransmission();
+    _i2cPort->beginTransmission(Address);
+    _i2cPort->write(reg);
+    _i2cPort->write(data);
+    _i2cPort->endTransmission();
 }
 
 uint8_t LSM6DSM::ReadReg(uint8_t reg)
 {
-    Wire.beginTransmission(Address);
-    Wire.write(reg);
-    Wire.endTransmission();
+    _i2cPort->beginTransmission(Address);
+    _i2cPort->write(reg);
+    _i2cPort->endTransmission();
 
-    Wire.requestFrom(Address, 1);
-    uint8_t data = Wire.read();
-    Wire.endTransmission();
+    _i2cPort->requestFrom(Address, 1);
+    uint8_t data = _i2cPort->read();
+    _i2cPort->endTransmission();
 
     return data;
 }
 
 void LSM6DSM::ReadRegs(uint8_t reg, uint8_t* buf, uint16_t len)
 {
-    Wire.beginTransmission(Address);
-    Wire.write(reg);
-    Wire.endTransmission();
+    _i2cPort->beginTransmission(Address);
+    _i2cPort->write(reg);
+    _i2cPort->endTransmission();
 
-    Wire.requestFrom(Address, len);
+    _i2cPort->requestFrom(Address, len);
     for(int i = 0; i < len; i++)
     {
-        buf[i] = Wire.read();
+        buf[i] = _i2cPort->read();
     }
-    Wire.endTransmission();
+    _i2cPort->endTransmission();
 }
 
 void LSM6DSM::SetRegisterBits(uint8_t reg, uint8_t data, bool setBits)

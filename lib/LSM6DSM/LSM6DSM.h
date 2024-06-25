@@ -1,16 +1,23 @@
 #ifndef __LSM6DSM_H
 #define __LSM6DSM_H
 
-#include "Arduino.h"
-
-#define LSM6DSM_I2C_ADDRESS    0x6A
+#ifdef ARDUINO
+#include <Arduino.h>
+#include <Wire.h>
+#else
+#include <stdint.h>
+#include <string.h>
+#endif
+#define LSM6DSM_I2C_ADDRESS    0x6B
 
 class LSM6DSM
 {
 public:
     LSM6DSM(){}
     ~LSM6DSM(){}
-
+#ifdef ARDUINO
+    int begin(TwoWire &port = Wire, uint8_t addr = LSM6DSM_I2C_ADDRESS);
+#endif
     bool Init(uint8_t addr = LSM6DSM_I2C_ADDRESS);
 
     bool IsConnected();
@@ -38,6 +45,9 @@ public:
     void DisablePedometer();
 
 private:
+#ifdef ARDUINO
+    TwoWire *_i2cPort;
+#endif
     uint8_t Address;
     void WriteReg(uint8_t reg, uint8_t dat);
     uint8_t ReadReg(uint8_t reg);

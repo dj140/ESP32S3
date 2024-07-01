@@ -24,11 +24,12 @@
 
 #if ARDUINO >= 100
 #include "Arduino.h"
+#include "Wire.h"
 #else
 #include "WProgram.h"
 #endif
 
-#include <Adafruit_I2CDevice.h>
+// #include <Adafruit_I2CDevice.h>
 
 #define DRV2605_ADDR 0x5A ///< Device I2C address
 
@@ -82,6 +83,8 @@
 #define DRV2605_REG_VBAT 0x21     ///< Vbat voltage-monitor register
 #define DRV2605_REG_LRARESON 0x22 ///< LRA resonance-period register
 
+typedef uint32_t (*drv_com_fptr_t)(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint8_t len); //! 类型错误：int
+
 /**************************************************************************/
 /*!
   @brief The DRV2605 driver class.
@@ -90,9 +93,11 @@
 class Adafruit_DRV2605 {
 public:
   Adafruit_DRV2605(void);
-  bool begin(TwoWire *theWire = &Wire);
-
+#ifdef ARDUINO
+  int begin(TwoWire &port = Wire, uint8_t addr = DRV2605_ADDR);
+#endif
   bool init();
+  int begin(drv_com_fptr_t read_cb, drv_com_fptr_t write_cb, uint8_t addr = DRV2605_ADDR);
   void writeRegister8(uint8_t reg, uint8_t val);
   uint8_t readRegister8(uint8_t reg);
   void setWaveform(uint8_t slot, uint8_t w);
@@ -107,7 +112,15 @@ public:
   void useLRA();
 
 private:
-  Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface
+#ifdef ARDUINO
+    TwoWire *_i2cPort;
+#endif
+  uint8_t _address;
+  int _readByte(uint8_t reg, uint8_t nbytes, uint8_t *data);
+  int _writeByte(uint8_t reg, uint8_t nbytes, uint8_t *data);
+  // Adafruit_I2CDevice *i2c_dev = NULL; ///< Pointer to I2C bus interface
+  drv_com_fptr_t _read_cb = nullptr;
+  drv_com_fptr_t _write_cb = nullptr;
 };
 
 #endif

@@ -105,12 +105,10 @@ void Buzz_init();
 void Buzz_SetEnable(bool en);
 void Buzz_Tone(uint32_t freq, int32_t duration = -1);
 
-/* Encoder */
-void Encoder_Init();
-void Encoder_Update();
-int32_t Encoder_GetDiff();
-bool Encoder_GetIsPush();
-void Encoder_SetEnable(bool en);
+/* Motor */
+void Motor_Init();
+void Motor_Update();
+
 
 /* Audio */
 void Audio_Init();

@@ -57,10 +57,21 @@ Adafruit_DRV2605::Adafruit_DRV2605() {}
   @return Return value from init()
 */
 /**************************************************************************/
-bool Adafruit_DRV2605::begin(TwoWire *theWire) {
-  if (i2c_dev)
-    delete i2c_dev;
-  i2c_dev = new Adafruit_I2CDevice(DRV2605_ADDR, theWire);
+int Adafruit_DRV2605::begin(TwoWire &port, uint8_t addr) 
+{
+  _i2cPort = &port; //Grab which port the user wants us to use
+  _address = addr;
+
+  return init();
+}
+
+int Adafruit_DRV2605::begin(drv_com_fptr_t read_cb, drv_com_fptr_t write_cb, uint8_t addr)
+{
+  if (read_cb == nullptr || write_cb == nullptr)
+    return -1;
+  _read_cb = read_cb;
+  _write_cb = write_cb;
+  _address = addr;
   return init();
 }
 
@@ -71,10 +82,10 @@ bool Adafruit_DRV2605::begin(TwoWire *theWire) {
 */
 /**************************************************************************/
 bool Adafruit_DRV2605::init() {
-  if (!i2c_dev->begin())
-    return false;
-  // uint8_t id = readRegister8(DRV2605_REG_STATUS);
-  // Serial.print("Status 0x"); Serial.println(id, HEX);
+  // if (!i2c_dev->begin())
+  //   return false;
+  uint8_t id = readRegister8(DRV2605_REG_STATUS);
+  Serial.print("Status 0x"); Serial.println(id, HEX);
 
   writeRegister8(DRV2605_REG_MODE, 0x00); // out of standby
 
@@ -99,7 +110,7 @@ bool Adafruit_DRV2605::init() {
   writeRegister8(DRV2605_REG_CONTROL3,
                  readRegister8(DRV2605_REG_CONTROL3) | 0x20);
 
-  return true;
+  return 0;
 }
 
 /**************************************************************************/
@@ -182,10 +193,32 @@ void Adafruit_DRV2605::setRealtimeValue(uint8_t rtp) {
   @return 8-bit value of the register.
 */
 /**************************************************************************/
-uint8_t Adafruit_DRV2605::readRegister8(uint8_t reg) {
-  uint8_t buffer[1] = {reg};
-  i2c_dev->write_then_read(buffer, 1, buffer, 1);
-  return buffer[0];
+uint8_t Adafruit_DRV2605::readRegister8(uint8_t reg)
+{
+  uint8_t data;
+  _readByte(reg, 1, &data);
+  return data;
+}
+int Adafruit_DRV2605::_readByte(uint8_t reg, uint8_t nbytes, uint8_t *data)
+{
+  if (_read_cb != nullptr)
+  {
+    return _read_cb(_address, reg, data, nbytes);
+  }
+#ifdef ARDUINO
+    if (nbytes == 0 || !data)
+        return -1;
+    _i2cPort->beginTransmission(_address);
+    _i2cPort->write(reg);
+    if (_i2cPort->endTransmission() != 0) {
+        return -1;
+    }
+    _i2cPort->requestFrom(_address, nbytes);
+    uint8_t index = 0;
+    while (_i2cPort->available())
+        data[index++] = _i2cPort->read();
+#endif
+  return 0;
 }
 
 /**************************************************************************/
@@ -196,10 +229,28 @@ uint8_t Adafruit_DRV2605::readRegister8(uint8_t reg) {
 */
 /**************************************************************************/
 void Adafruit_DRV2605::writeRegister8(uint8_t reg, uint8_t val) {
-  uint8_t buffer[2] = {reg, val};
-  i2c_dev->write(buffer, 2);
+  uint8_t write_data[8];
+  write_data[0] = val;
+  _writeByte(reg, 1, write_data);
 }
-
+int Adafruit_DRV2605::_writeByte(uint8_t reg, uint8_t nbytes, uint8_t *data)
+{
+  if (_write_cb != nullptr)
+  {
+    return _write_cb(_address, reg, data, nbytes);
+  }
+  #ifdef ARDUINO
+    if (nbytes == 0 || !data)
+        return -1;
+    _i2cPort->beginTransmission(_address);
+    _i2cPort->write(reg);
+    for (uint8_t i = 0; i < nbytes; i++) {
+        _i2cPort->write(data[i]);
+    }
+    return _i2cPort->endTransmission();
+#endif
+  return 0;
+}
 /**************************************************************************/
 /*!
   @brief Use ERM (Eccentric Rotating Mass) mode.

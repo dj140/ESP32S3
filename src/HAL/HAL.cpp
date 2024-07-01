@@ -17,7 +17,7 @@ static void HAL_Sensor_Init()
 //#if CONFIG_SENSOR_IMU_ENABLE
    if(HAL::IMU_Init())
    {
-       taskManager.Register(HAL::IMU_Update, 1000);
+       taskManager.Register(HAL::IMU_Update, 10);
    }
 //#endif
 
@@ -40,7 +40,9 @@ void HAL::HAL_Init()
     Power_Init();
     Clock_Init();
     HAL_Sensor_Init();
-    taskManager.Register(Power_Update, 2000);
+    Motor_Init();
+    // taskManager.Register(Power_Update, 2000);
+    taskManager.Register(Motor_Update, 2000);
 }
 
 void HAL::HAL_Update()

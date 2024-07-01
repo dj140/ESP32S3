@@ -70,6 +70,9 @@ void HAL::Power_Init()
     axp.setShutdownTime(AXP_POWER_OFF_TIME_4S);
     axp.setVWarningLevel1(3200);
     axp.setVWarningLevel2(3100);
+    axp.setChargingTargetVoltage(AXP202_TARGET_VOL_4_2V);
+    axp.ClearCoulombcounter();
+    axp.EnableCoulombcounter();
     uint16_t level1 = axp.getVWarningLevel1();
     uint16_t level2 = axp.getVWarningLevel2();
     Serial.printf("getVWarningLevel1:%u mV \n", level1 );
@@ -147,6 +150,7 @@ void HAL::Power_Update()
     }
     Serial.println();
     Serial.println();
+    // axp.debugCharging();
 }
 
 void HAL::Power_GetInfo(Power_Info_t* info)

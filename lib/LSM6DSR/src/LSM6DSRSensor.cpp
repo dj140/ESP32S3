@@ -1121,6 +1121,14 @@ LSM6DSRStatusTypeDef LSM6DSRSensor::Get_G_Axes(int32_t *AngularRate)
   return LSM6DSR_OK;
 }
 
+LSM6DSRStatusTypeDef LSM6DSRSensor::GetCurrentStep(uint8_t *Step)
+{
+    // uint8_t tempL, tempH;
+    lsm6dsr_number_of_steps_get(&reg_ctx, Step);
+    // lsm6dsr_read_reg(&reg_ctx, LSM6DSR_STEP_COUNTER_H, &Step[1], 1);
+
+    return LSM6DSR_OK;
+}
 
 /**
  * @brief  Get the LSM6DSR GYRO data ready bit value

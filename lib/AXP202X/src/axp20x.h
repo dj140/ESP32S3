@@ -47,7 +47,7 @@ github:https://github.com/lewisxhe/AXP202X_Libraries
 #include <string.h>
 #endif
 
-// #define AXP_DEBUG_PORT  Serial
+#define AXP_DEBUG_PORT  Serial
 #ifdef AXP_DEBUG_PORT
 #ifdef ARDUINO
 #define AXP_DEBUG(fmt, ...)         AXP_DEBUG_PORT.printf_P((PGM_P)PSTR(fmt), ##__VA_ARGS__)

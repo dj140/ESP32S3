@@ -17,9 +17,9 @@
 #ifndef LV_CONF_H
 #define LV_CONF_H
 
-#define TFT_HOR_RES 368
+#define TFT_HOR_RES 410
 
-#define TFT_VER_RES 448
+#define TFT_VER_RES 502
 
 /*If you need to include anything here, do it inside the `__ASSEMBLY__` guard */
 #if  0 && defined(__ASSEMBLY__)

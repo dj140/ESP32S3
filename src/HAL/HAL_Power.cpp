@@ -56,7 +56,7 @@ void HAL::Power_Init()
     if (ret) {
         /* There was a problem detecting the AXP202/192 ... check your connections */
         Serial.println("Ooops, AXP202 power chip detected ... Check your wiring!");
-        while (1);
+        // while (1);
     }
 
     /*Enable AXP ADC function*/
@@ -83,7 +83,9 @@ void HAL::Power_Init()
     axp.setPowerOutPut(AXP202_LDO3,  AXP202_OFF);
     axp.setPowerOutPut(AXP202_EXTEN, AXP202_OFF);
     axp.setDCDC3Voltage(3300);
-    axp.setLDO2Voltage(1800);
+    //VDDI
+    axp.setLDO2Voltage(3300);
+    //VCI
     axp.setLDO4Voltage(AXP202_LDO4_3300MV);
     printPowerChannel();
 }

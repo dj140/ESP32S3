@@ -4,7 +4,7 @@
 
 using namespace Page;
 
-extern LGFX display;
+// extern LGFX display;
 
 Test_Page::Test_Page()
     : timer(nullptr)
@@ -126,7 +126,7 @@ void Test_Page::brightness_handler(lv_event_t* event)
 
     if(code == LV_EVENT_VALUE_CHANGED) {
           printf("slider: %d \n", (uint8_t)lv_slider_get_value(obj));
-          display.setBrightness((uint8_t)lv_slider_get_value(obj));
+        //   display.setBrightness((uint8_t)lv_slider_get_value(obj));
     }
 }
 void Test_Page::onEvent(lv_event_t* event)

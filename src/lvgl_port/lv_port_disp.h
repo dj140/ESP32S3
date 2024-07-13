@@ -24,6 +24,7 @@
 #include "lvgl/lvgl.h"
 #endif
 #include <LovyanGFX.hpp>
+#include "HAL/HAL_Config.h"
 
 
 static const char* TAG = "LVGL";
@@ -55,11 +56,11 @@ class LGFX : public lgfx::LGFX_Device {
                 cfg.use_lock   = true;        // トランザクションロックを使用する場合はtrueを設定
                 cfg.dma_channel = SPI_DMA_CH_AUTO; // 使用するDMAチャンネルを設定 (0=DMA不使用 / 1=1ch / 2=ch / SPI_DMA_CH_AUTO=自動設 定)
 
-                cfg.pin_sclk    = 7;
-                cfg.pin_io0     = 9;
-                cfg.pin_io1     = 8;
-                cfg.pin_io2     = 5;
-                cfg.pin_io3     = 6;
+                cfg.pin_sclk    = AMOLED_CLK_PIN;
+                cfg.pin_io0     = AMOLED_D0_PIN;
+                cfg.pin_io1     = AMOLED_D1_PIN;
+                cfg.pin_io2     = AMOLED_D2_PIN;
+                cfg.pin_io3     = AMOLED_D3_PIN;
                 // cfg.pin_dc      = -1;
 
                 _bus_instance.config(cfg);    // 設定値をバスに反映します。
@@ -69,14 +70,14 @@ class LGFX : public lgfx::LGFX_Device {
             { // 表示パネル制御の設定を行います。
                 auto cfg = _panel_instance.config();    // 表示パネル設定用の構造体を取得します。
 
-                cfg.pin_cs           =    13;  // CSが接続されているピン番号   (-1 = disable)
-                cfg.pin_rst          =    1;  // RSTが接続されているピン番号  (-1 = disable)
+                cfg.pin_cs           =    AMOLED_CS_PIN;  // CSが接続されているピン番号   (-1 = disable)
+                cfg.pin_rst          =    AMOLED_RESET_PIN;  // RSTが接続されているピン番号  (-1 = disable)
                 cfg.pin_busy         =    -1;  // BUSYが接続されているピン番号 (-1 = disable)
 
                 // ※ 以下の設定値はパネル毎に一般的な初期値が設定されていますので、不明な項目はコメントアウトして試してみてください。
 
-                cfg.panel_width      =   368;  // 実際に表示可能な幅
-                cfg.panel_height     =   448;  // 実際に表示可能な高さ
+                cfg.panel_width      =   410;  // 実際に表示可能な幅
+                cfg.panel_height     =   502;  // 実際に表示可能な高さ
 
                 // cfg.panel_width      =   320;  // 実際に表示可能な幅
                 // cfg.panel_height     =   240;  // 実際に表示可能な高さ
@@ -106,15 +107,15 @@ class LGFX : public lgfx::LGFX_Device {
         inline bool init(void) {
             
             /* PEN pin */
-            gpio_reset_pin(GPIO_NUM_4);
-            gpio_set_direction(GPIO_NUM_4, GPIO_MODE_OUTPUT);
-            gpio_set_pull_mode(GPIO_NUM_4, GPIO_PULLUP_PULLDOWN);
-            gpio_set_level(GPIO_NUM_4, 1);
+            gpio_reset_pin(AMOLED_VCI_EN_PIN);
+            gpio_set_direction(AMOLED_VCI_EN_PIN, GPIO_MODE_OUTPUT);
+            gpio_set_pull_mode(AMOLED_VCI_EN_PIN, GPIO_PULLUP_PULLDOWN);
+            gpio_set_level(AMOLED_VCI_EN_PIN, 1);
             vTaskDelay(pdMS_TO_TICKS(10));
 
             /* TE pin */
-            gpio_reset_pin(GPIO_NUM_2);
-            gpio_set_direction(GPIO_NUM_2, GPIO_MODE_INPUT);
+            gpio_reset_pin(AMOLED_TE_PIN);
+            gpio_set_direction(AMOLED_TE_PIN, GPIO_MODE_INPUT);
             // vTaskDelay(pdMS_TO_TICKS(10));
 
             /* Lgfx */

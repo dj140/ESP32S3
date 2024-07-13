@@ -75,7 +75,7 @@ void lv_port_disp_init(void)
     //  * Both LV_DISPLAY_RENDER_MODE_DIRECT and LV_DISPLAY_RENDER_MODE_FULL works, see their comments*/
     // static lv_color_t buf_3_1[MY_DISP_HOR_RES * MY_DISP_VER_RES];
     // static lv_color_t buf_3_2[MY_DISP_HOR_RES * MY_DISP_VER_RES];
-     lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * TFT_VER_RES * 2, LV_DISPLAY_RENDER_MODE_PARTIAL);
+     lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * TFT_VER_RES * 2, LV_DISPLAY_RENDER_MODE_FULL);
 
 }
 
@@ -122,7 +122,7 @@ static void disp_flush(lv_display_t * disp_drv, const lv_area_t * area, uint8_t 
         uint32_t w = (area->x2 - area->x1 + 1);
         uint32_t h = (area->y2 - area->y1 + 1);
         display.startWrite();
-        display.setWindow(area->x1, area->y1, area->x2, area->y2);
+        // display.setWindow(area->x1, area->y1, area->x2, area->y2);
         display.pushPixels((uint16_t *)px_map, w * h, true);
         display.endWrite();
         // gfx->draw16bitBeRGBBitmap(area->x1, area->y1, (uint16_t *)px_map, w, h);

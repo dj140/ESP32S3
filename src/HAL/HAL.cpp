@@ -39,10 +39,10 @@ void HAL::HAL_Init()
     Serial.println("Version: " VERSION_SOFTWARE);
     Power_Init();
     Clock_Init();
-    HAL_Sensor_Init();
-    Motor_Init();
-    // taskManager.Register(Power_Update, 2000);
-    taskManager.Register(Motor_Update, 2000);
+    // HAL_Sensor_Init();
+    // Motor_Init();
+    taskManager.Register(Power_Update, 2000);
+    // taskManager.Register(Motor_Update, 2000);
 }
 
 void HAL::HAL_Update()

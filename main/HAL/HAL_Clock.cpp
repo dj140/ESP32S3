@@ -18,31 +18,6 @@ void HAL::Clock_Init()
 {
 
 
-  /*##-2- Check if Data stored in BackUp register1: No Need to reconfigure RTC#*/
-  /* Read the Back Up Register 1 Data */
-//  if (HAL_RTCEx_BKUPRead(&RtcHandle, RTC_BKP_DR1) != 0x32F2)
-//  {
-//    /* Configure RTC Calendar */
-//    RTC_CalendarConfig();
-//  }
-//  else
-//  {
-//    /* Check if the Power On Reset flag is set */
-//    if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST) != RESET)
-//    {
-//      /* Turn on LED2: Power on reset occurred */
-////      BSP_LED_On(LED2);
-//    }
-//    /* Check if Pin Reset flag is set */
-//    if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST) != RESET)
-//    {
-//      /* Turn on LED1: External reset occurred */
-////      BSP_LED_On(LED1);
-//    }
-//    /* Clear source Reset Flag */
-//    __HAL_RCC_CLEAR_RESET_FLAGS();
-//  }
-
 }
 
 void HAL::Clock_GetInfo(Clock_Info_t* info)

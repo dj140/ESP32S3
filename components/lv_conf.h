@@ -18,8 +18,8 @@
 #define LV_CONF_H
 
 #include <stdint.h>
-#define TFT_HOR_RES    368
-#define TFT_VER_RES    448
+#define TFT_HOR_RES    410
+#define TFT_VER_RES    502
 /*====================
    COLOR SETTINGS
  *====================*/
@@ -28,7 +28,7 @@
 #define LV_COLOR_DEPTH 16
 
 /*Swap the 2 bytes of RGB565 color. Useful if the display has an 8-bit interface (e.g. SPI)*/
-#define LV_COLOR_16_SWAP 0
+#define LV_COLOR_16_SWAP 1
 
 /*Enable features to draw on transparent background.
  *It's required if opa, and transform_* style properties are used.
@@ -272,7 +272,7 @@
  *-----------*/
 
 /*1: Show CPU usage and FPS count*/
-#define LV_USE_PERF_MONITOR 0
+#define LV_USE_PERF_MONITOR 1
 #if LV_USE_PERF_MONITOR
     #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_RIGHT
 #endif

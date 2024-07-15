@@ -11,10 +11,19 @@
  *********************/
 #include "lv_port_indev.h"
 #include "HAL_Config.h"
+#include "esp_log.h"
 
+#define TOUCH_MODULES_CST_SELF
+#include "TouchLib.h"
+extern "C" {
 
-TP_FT3168 FT3168;
-static TouchPoint_t tp_data;
+#include "i2c_port.h"
+
+}
+
+TouchLib touch;
+
+static const char *TAG = "CST820";
 
 /*********************
  *      DEFINES
@@ -91,10 +100,14 @@ void lv_port_indev_init(void)
 static void touchpad_init(void)
 {
     /*Your code comes here*/
-     auto cfg = FT3168.config();
-    cfg.pull_up_en = false;
-    FT3168.config(cfg);
-    FT3168.tp_init(HAL_PIN_I2C_SDA, HAL_PIN_I2C_SCL, HAL_PIN_TP_RST, HAL_PIN_TP_INTR, true, 400000);
+    gpio_reset_pin(GPIO_NUM_10);
+    gpio_set_direction(GPIO_NUM_10, GPIO_MODE_OUTPUT);
+    gpio_set_pull_mode(GPIO_NUM_10, GPIO_PULLUP_PULLDOWN);
+    gpio_set_level(GPIO_NUM_10, 0);
+    vTaskDelay(pdMS_TO_TICKS(200));
+    gpio_set_level(GPIO_NUM_10, 1);
+    vTaskDelay(pdMS_TO_TICKS(200));
+    touch.begin(CTS820_SLAVE_ADDRESS, -1, twi_read, twi_write);
 }
 
 /*Will be called by the library to read the touchpad*/
@@ -103,17 +116,18 @@ static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
     static lv_coord_t last_x = 0;
     static lv_coord_t last_y = 0;
 
-    FT3168.getTouchRaw(tp_data);
-
-    /*Save the pressed coordinates and the state*/
-    if(tp_data.x != -1) {
+    if(touch.read()) { 
+        TP_Point tp_data = touch.getPoint(0);
         data->point.x = tp_data.x;
         data->point.y = tp_data.y;
         data->state = LV_INDEV_STATE_PR;
+        ESP_LOGI(TAG,"x:%d, y:%d\n", tp_data.x, tp_data.y);
     }
     else {
         data->state = LV_INDEV_STATE_REL;
     }
+
+
 }
 
 /*Return true is the touchpad is pressed*/
@@ -129,8 +143,8 @@ static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 {
     /*Your code comes here*/
 
-    (*x) = 0;
-    (*y) = 0;
+    // (*x) = 0;
+    // (*y) = 0;
 }
 
 

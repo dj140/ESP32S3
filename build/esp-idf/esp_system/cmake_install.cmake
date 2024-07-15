@@ -1,4 +1,4 @@
-# Install script for directory: D:/Espressif_5.0.6/v5.0.6/esp-idf/components/esp_system
+# Install script for directory: C:/Espressif/frameworks/esp-idf-v5.1.2/components/esp_system
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,11 +34,11 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "D:/Espressif_5.0.6_Tool/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-objdump.exe")
+  set(CMAKE_OBJDUMP "C:/Espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-objdump.exe")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("D:/For_study/ESP32S3/build/esp-idf/esp_system/port/cmake_install.cmake")
+  include("C:/My_project/ESP32S3/build/esp-idf/esp_system/port/cmake_install.cmake")
 endif()
 

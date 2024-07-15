@@ -23,7 +23,7 @@ set(LVGL_PORT_INCS
     lvgl_port/
 )
 
-idf_component_register(SRCS "main.cpp" ${HAL_SRCS} ${APP_SRCS} ${LVGL_PORT_SRCS}
+idf_component_register(SRCS "main.cpp""i2c_port.c" ${HAL_SRCS} ${APP_SRCS} ${LVGL_PORT_SRCS}
                     INCLUDE_DIRS "." ${HAL_INCS} ${APP_INCS} ${LVGL_PORT_INCS})
                     
 component_compile_options(-Wno-error=format= -Wno-format)

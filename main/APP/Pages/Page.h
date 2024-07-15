@@ -24,6 +24,7 @@
 #define __PAGE_H
 
 #include "lvgl.h"
+#include "lv_conf.h"
 #include "APP/Utils/PageManager/PageManager.h"
 #include "APP/Utils/lv_ext/lv_obj_ext_func.h"
 #include "APP/Utils/lv_ext/lv_anim_timeline_wrapper.h"

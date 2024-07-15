@@ -24,7 +24,7 @@
 
  * Automatically generated file. DO NOT EDIT.
 
- * Espressif IoT Development Framework (ESP-IDF) Configuration Header
+ * Espressif IoT Development Framework (ESP-IDF) 5.1.2 Configuration Header
 
  */
        
@@ -111,7 +111,7 @@ MEMORY
    * RTC fast memory (executable). Persists over deep sleep.
 
    */
-  rtc_iram_seg(RWX) : org = 0x600fe000, len = 0x2000 - ((0x0) + (24))
+  rtc_iram_seg(RWX) : org = 0x600fe000, len = 0x2000 - (0 + (24))
   /* We reduced the size of rtc_iram_seg by RESERVE_RTC_MEM value.
 
      It reserves the amount of RTC fast memory that we use for this memory segment.
@@ -125,7 +125,7 @@ MEMORY
      The aim of this is to keep data that will not be moved around and have a fixed address.
 
   */
-  rtc_reserved_seg(RW) : org = 0x600fe000 + 0x2000 - ((0x0) + (24)), len = ((0x0) + (24))
+  rtc_reserved_seg(RW) : org = 0x600fe000 + 0x2000 - (0 + (24)), len = (0 + (24))
   /**
 
    * RTC slow memory (data accessible). Persists over deep sleep.

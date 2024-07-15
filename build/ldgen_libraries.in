@@ -8,6 +8,7 @@ $<TARGET_FILE:__idf_esp_app_format>
 $<TARGET_FILE:__idf_bootloader_support>
 $<TARGET_FILE:__idf_esp_partition>
 $<TARGET_FILE:__idf_app_update>
+$<TARGET_FILE:__idf_esp_mm>
 $<TARGET_FILE:__idf_spi_flash>
 $<TARGET_FILE:__idf_pthread>
 $<TARGET_FILE:__idf_esp_system>
@@ -30,6 +31,7 @@ $<TARGET_FILE:__idf_vfs>
 $<TARGET_FILE:__idf_lwip>
 $<TARGET_FILE:__idf_esp_netif>
 $<TARGET_FILE:__idf_wpa_supplicant>
+$<TARGET_FILE:__idf_esp_coex>
 $<TARGET_FILE:__idf_esp_wifi>
 $<TARGET_FILE:__idf_unity>
 $<TARGET_FILE:__idf_cmock>
@@ -44,11 +46,11 @@ $<TARGET_FILE:__idf_tcp_transport>
 $<TARGET_FILE:__idf_esp_http_client>
 $<TARGET_FILE:__idf_esp_http_server>
 $<TARGET_FILE:__idf_esp_https_ota>
+$<TARGET_FILE:__idf_esp_psram>
 $<TARGET_FILE:__idf_esp_lcd>
 $<TARGET_FILE:__idf_protobuf-c>
 $<TARGET_FILE:__idf_protocomm>
 $<TARGET_FILE:__idf_esp_local_ctrl>
-$<TARGET_FILE:__idf_esp_psram>
 $<TARGET_FILE:__idf_espcoredump>
 $<TARGET_FILE:__idf_wear_levelling>
 $<TARGET_FILE:__idf_sdmmc>
@@ -62,8 +64,9 @@ $<TARGET_FILE:__idf_ulp>
 $<TARGET_FILE:__idf_usb>
 $<TARGET_FILE:__idf_wifi_provisioning>
 $<TARGET_FILE:__idf_main>
-$<TARGET_FILE:__idf_ESP32_JPEG>
-$<TARGET_FILE:__idf_JPEGDEC>
+$<TARGET_FILE:__idf_AXP202X_Library>
 $<TARGET_FILE:__idf_LovyanGFX>
-$<TARGET_FILE:__idf_esp_littlefs>
+$<TARGET_FILE:__idf_MillisTaskManager>
+$<TARGET_FILE:__idf_TouchLib>
+$<TARGET_FILE:__idf_esp_oled_sh8601>
 $<TARGET_FILE:__idf_lvgl>

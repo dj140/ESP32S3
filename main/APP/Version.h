@@ -25,10 +25,8 @@
 
 /* Firmware Version */
 #define VERSION_FIRMWARE_NAME   "SHM"
-#define VERSION_SOFTWARE        "v2.7"
+#define VERSION_SOFTWARE        "v1.0"
 #define VERSION_HARDWARE        "v1.0"
-#define VERSION_AUTHOR_NAME     "_VIFEXTech"
-#define VERSION_PROJECT_LINK    "https://github.com/FASTSHIFT/X-TRACK"
 
 /* Number to string macro */
 #define _VERSION_NUM_TO_STR_(n)  #n

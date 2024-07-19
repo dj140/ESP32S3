@@ -54,25 +54,25 @@ do{\
 //        IMPORT_IMG(bg1_png);
 //        IMPORT_IMG(bg2_png);
 //        IMPORT_IMG(bg3_png);
-        IMPORT_IMG(clockwise_hour_png);
-        IMPORT_IMG(clockwise_min_png);
-        IMPORT_IMG(clockwise_sec_png);
+        IMPORT_IMG(clockwise_hour);
+        IMPORT_IMG(clockwise_min);
+        IMPORT_IMG(clockwise_sec);
         IMPORT_IMG(sec_dot_png);
 //        IMPORT_IMG(app_icon_hdpi_boxing_png);
 //        IMPORT_IMG(app_icon_hdpi_pingpong_png);
 //        IMPORT_IMG(app_icon_hdpi_settings_png);
         IMPORT_IMG(wave1_png);
         IMPORT_IMG(wave2_png);
-        IMPORT_IMG(bg_digital_392x392);
-        IMPORT_IMG(dot_alpha_8x8);
-        IMPORT_IMG(icn_flash_blue_alpha_17x21);
-        IMPORT_IMG(icn_message_alpha_25x25);
-        IMPORT_IMG(icn_sport_alpha_12x24);
-        IMPORT_IMG(icn_step_red_alpha_17x21);
-        IMPORT_IMG(icn_weather_1_alpha_41x33);
-        IMPORT_IMG(menu_alpha_11x117);
-        IMPORT_IMG(text_message_alpha_70x70);
-        IMPORT_IMG(text_sport_alpha_50x50);
+        // IMPORT_IMG(bg_digital_392x392);
+        // IMPORT_IMG(dot_alpha_8x8);
+        // IMPORT_IMG(icn_flash_blue_alpha_17x21);
+        // IMPORT_IMG(icn_message_alpha_25x25);
+        // IMPORT_IMG(icn_sport_alpha_12x24);
+        // IMPORT_IMG(icn_step_red_alpha_17x21);
+        // IMPORT_IMG(icn_weather_1_alpha_41x33);
+        // IMPORT_IMG(menu_alpha_11x117);
+        // IMPORT_IMG(text_message_alpha_70x70);
+        // IMPORT_IMG(text_sport_alpha_50x50);
         IMPORT_IMG(app_icon_Instagram);
         IMPORT_IMG(app_icon_LinkedIn);
         IMPORT_IMG(app_icon_Meta);
@@ -85,6 +85,21 @@ do{\
         IMPORT_IMG(cxk_hour);
         IMPORT_IMG(cxk_min);
         IMPORT_IMG(cxk_sec);
+        IMPORT_IMG(setting_menu);
+        IMPORT_IMG(watch_face2);
+        IMPORT_IMG(SHM_Logo);
+        IMPORT_IMG(bg_day);
+        IMPORT_IMG(image1);
+        IMPORT_IMG(image2);
+        IMPORT_IMG(image3);
+        IMPORT_IMG(stopwatch);
+        IMPORT_IMG(stopwatch_add);
+        IMPORT_IMG(stopwatch_pause);
+        IMPORT_IMG(stopwatch_start);
+        IMPORT_IMG(stopwatch_reset);
+        IMPORT_IMG(wifi_icon);
+        IMPORT_IMG(Ping_icon);
+
     }
 
 } /* extern "C" */

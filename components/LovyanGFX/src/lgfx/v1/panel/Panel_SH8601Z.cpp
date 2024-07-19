@@ -56,23 +56,31 @@ namespace lgfx
         _width = _cfg.panel_width;
         _height = _cfg.panel_height;
 
-
         startWrite();
 
-        /* Sleep out */
+       /* Set Page */
         cs_control(false);
-        write_cmd(0x11);
+        write_cmd(0xFE);
+        _bus->writeCommand(0x00, 8);
         _bus->wait();
         cs_control(true);
-        delay(150);
 
+        /* Set QSPI */
         cs_control(false);
-        write_cmd(0x44);
-        _bus->writeCommand(0x01, 8);
-        _bus->writeCommand(0x66, 8);
+        write_cmd(0xC4);
+        _bus->writeCommand(0x80, 8);
         _bus->wait();
         cs_control(true);
-        delay(1);
+
+
+
+        // cs_control(false);
+        // write_cmd(0x44);
+        // _bus->writeCommand(0x01, 8);
+        // _bus->writeCommand(0x66, 8);
+        // _bus->wait();
+        // cs_control(true);
+        // delay(1);
 
         /* TE on */
         cs_control(false);
@@ -104,6 +112,13 @@ namespace lgfx
         _bus->wait();
         cs_control(true);
         delay(10);
+        
+        /* Sleep out */
+        cs_control(false);
+        write_cmd(0x11);
+        _bus->wait();
+        cs_control(true);
+        delay(150);
 
         /* Display on */
         cs_control(false);
@@ -119,6 +134,12 @@ namespace lgfx
         _bus->wait();
         cs_control(true);
         delay(1);
+
+        // cs_control(false);
+        // write_cmd(0xBA);
+        // _bus->writeCommand(0x81, 8);
+        // _bus->wait();
+        // cs_control(true);
 
         endWrite();
 
@@ -359,20 +380,20 @@ namespace lgfx
         /* Set Column Start Address */
         cs_control(false);
         write_cmd(0x2A);
-        _bus->writeCommand(xs >> 8, 8);
-        _bus->writeCommand(xs & 0xFF, 8);
-        _bus->writeCommand(xe >> 8, 8);
-        _bus->writeCommand(xe & 0xFF, 8);
+        _bus->writeCommand(0x00, 8);
+        _bus->writeCommand(0x16, 8);
+        _bus->writeCommand(0x01, 8);
+        _bus->writeCommand(0xAF, 8);
         _bus->wait();
         cs_control(true);
         
         /* Set Row Start Address */
         cs_control(false);
         write_cmd(0x2B);
-        _bus->writeCommand(ys >> 8, 8);
-        _bus->writeCommand(ys & 0xFF, 8);
-        _bus->writeCommand(ye >> 8, 8);
-        _bus->writeCommand(ye & 0xFF, 8);
+        _bus->writeCommand(0x00, 8);
+        _bus->writeCommand(0x00, 8);
+        _bus->writeCommand(0x01, 8);
+        _bus->writeCommand(0xF5, 8);
         _bus->wait();
         cs_control(true);
 

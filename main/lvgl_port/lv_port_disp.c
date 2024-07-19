@@ -54,7 +54,7 @@ static const char *TAG = "LVGL";
  **********************/
 static void disp_init(void);
 
-static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p);
+static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map);
 //static void gpu_fill(lv_disp_drv_t * disp_drv, lv_color_t * dest_buf, lv_coord_t dest_width,
 //        const lv_area_t * fill_area, lv_color_t color);
 
@@ -71,14 +71,15 @@ static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_colo
  **********************/
 static bool example_notify_lvgl_flush_ready(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_io_event_data_t *edata, void *user_ctx)
 {
-    lv_disp_drv_t *disp_driver = (lv_disp_drv_t *)user_ctx;
+    lv_display_t *disp_driver = (lv_display_t *)user_ctx;
     lv_disp_flush_ready(disp_driver);
     return false;
 }
 
-static void example_lvgl_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area, lv_color_t *color_map)
+static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map)
 {
-    esp_lcd_panel_handle_t panel_handle = (esp_lcd_panel_handle_t) drv->user_data;
+    esp_lcd_panel_handle_t panel_handle = (esp_lcd_panel_handle_t)lv_display_get_user_data(disp);
+
     const int offsetx1 = area->x1;
     const int offsetx2 = area->x2;
     const int offsety1 = area->y1;
@@ -103,56 +104,13 @@ static void example_lvgl_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area, lv_
 #endif
 
     // copy a buffer's content to a specific area of the display
-    esp_lcd_panel_draw_bitmap(panel_handle, offsetx1 , offsety1, offsetx2 + 1, offsety2 + 1, color_map);
-}
+    //RRRRR GGG | GGG BBBBB  ---->  GGG BBBBB | RRRRR GGG
+    lv_draw_sw_rgb565_swap(px_map, (offsetx2 - offsetx1 + 1) * (offsety2 - offsety1 + 1));
+    // esp_lcd_panel_draw_bitmap(panel_handle, offsetx1 , offsety1, offsetx2 + 1, offsety2 + 1, px_map);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 0, 410, 252, &px_map[0]);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 252, 410, 503, &px_map[410 * 252 * 2]);
+    lv_disp_flush_ready(disp);
 
-/* Rotate display and touch, when rotated screen in LVGL. Called when driver parameters are updated. */
-static void example_lvgl_update_cb(lv_disp_drv_t *drv)
-{
-    esp_lcd_panel_handle_t panel_handle = (esp_lcd_panel_handle_t) drv->user_data;
-
-    switch (drv->rotated) {
-    case LV_DISP_ROT_NONE:
-        // Rotate LCD display
-        esp_lcd_panel_swap_xy(panel_handle, false);
-        esp_lcd_panel_mirror(panel_handle, true, false);
-#if CONFIG_EXAMPLE_LCD_TOUCH_ENABLED
-        // Rotate LCD touch
-        esp_lcd_touch_set_mirror_y(tp, false);
-        esp_lcd_touch_set_mirror_x(tp, false);
-#endif
-        break;
-    case LV_DISP_ROT_90:
-        // Rotate LCD display
-        esp_lcd_panel_swap_xy(panel_handle, true);
-        esp_lcd_panel_mirror(panel_handle, true, true);
-#if CONFIG_EXAMPLE_LCD_TOUCH_ENABLED
-        // Rotate LCD touch
-        esp_lcd_touch_set_mirror_y(tp, false);
-        esp_lcd_touch_set_mirror_x(tp, false);
-#endif
-        break;
-    case LV_DISP_ROT_180:
-        // Rotate LCD display
-        esp_lcd_panel_swap_xy(panel_handle, false);
-        esp_lcd_panel_mirror(panel_handle, false, true);
-#if CONFIG_EXAMPLE_LCD_TOUCH_ENABLED
-        // Rotate LCD touch
-        esp_lcd_touch_set_mirror_y(tp, false);
-        esp_lcd_touch_set_mirror_x(tp, false);
-#endif
-        break;
-    case LV_DISP_ROT_270:
-        // Rotate LCD display
-        esp_lcd_panel_swap_xy(panel_handle, true);
-        esp_lcd_panel_mirror(panel_handle, false, false);
-#if CONFIG_EXAMPLE_LCD_TOUCH_ENABLED
-        // Rotate LCD touch
-        esp_lcd_touch_set_mirror_y(tp, false);
-        esp_lcd_touch_set_mirror_x(tp, false);
-#endif
-        break;
-    }
 }
 
 void example_lvgl_rounder_cb(struct _lv_disp_drv_t *disp_drv, lv_area_t *area)
@@ -175,17 +133,11 @@ void example_lvgl_rounder_cb(struct _lv_disp_drv_t *disp_drv, lv_area_t *area)
 void lv_port_disp_init(void)
 {
     disp_init();
-    static lv_disp_draw_buf_t disp_buf; // contains internal graphic buffer(s) called draw buffer(s)
-    static lv_disp_drv_t disp_drv;      // contains callback functions
+    lv_display_t * disp = lv_display_create(TFT_HOR_RES, TFT_VER_RES);
+    lv_display_set_flush_cb(disp, disp_flush);
     ESP_LOGI(TAG,"Deafult free size: %d\n", heap_caps_get_free_size(MALLOC_CAP_DEFAULT));
     ESP_LOGI(TAG,"PSRAM free size: %d\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
-    // ESP_LOGI(TAG,"Flash size: %d bytes\n", getFlashChipSize());
-        // ESP_LOGI(TAG, "before free PSRAM: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
     ESP_LOGI(TAG, "before free MALLOC_CAP_DMA: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
-    gpio_reset_pin(GPIO_NUM_3);
-    gpio_set_direction(GPIO_NUM_3, GPIO_MODE_OUTPUT);
-    gpio_set_pull_mode(GPIO_NUM_3, GPIO_PULLUP_PULLDOWN);
-    gpio_set_level(GPIO_NUM_3, 1);
     ESP_LOGI(TAG, "Initialize SPI bus");
 
     const spi_bus_config_t buscfg = SH8601_PANEL_BUS_QSPI_CONFIG(EXAMPLE_PIN_NUM_LCD_PCLK,
@@ -193,7 +145,7 @@ void lv_port_disp_init(void)
                                                                 EXAMPLE_PIN_NUM_LCD_DATA1,
                                                                 EXAMPLE_PIN_NUM_LCD_DATA2,
                                                                 EXAMPLE_PIN_NUM_LCD_DATA3,
-                                                                EXAMPLE_LCD_H_RES * EXAMPLE_LCD_V_RES * 24 / 8);
+                                                                EXAMPLE_LCD_H_RES * EXAMPLE_LCD_V_RES * 16 / 8);
 
      ESP_ERROR_CHECK(spi_bus_initialize(LCD_HOST, &buscfg, SPI_DMA_CH_AUTO));
 
@@ -202,7 +154,7 @@ void lv_port_disp_init(void)
 
     const esp_lcd_panel_io_spi_config_t io_config = SH8601_PANEL_IO_QSPI_CONFIG(EXAMPLE_PIN_NUM_LCD_CS,
                                                                                 example_notify_lvgl_flush_ready,
-                                                                                &disp_drv);
+                                                                                &disp);
     sh8601_vendor_config_t vendor_config = {
         .flags = {
             .use_qspi_interface = 1,
@@ -213,6 +165,7 @@ void lv_port_disp_init(void)
     ESP_ERROR_CHECK(esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)LCD_HOST, &io_config, &io_handle));
 
     esp_lcd_panel_handle_t panel_handle = NULL;
+
     const esp_lcd_panel_dev_config_t panel_config = {
         .reset_gpio_num = EXAMPLE_PIN_NUM_LCD_RST,
         .rgb_ele_order = LCD_RGB_ELEMENT_ORDER_RGB,
@@ -230,45 +183,26 @@ void lv_port_disp_init(void)
     // user can flush pre-defined pattern to the screen before we turn on the screen or backlight
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, true));
 
-
-    // ESP_LOGI(TAG, "Turn on LCD backlight");
-    // gpio_set_level(EXAMPLE_PIN_NUM_BK_LIGHT, EXAMPLE_LCD_BK_LIGHT_ON_LEVEL);
-
     ESP_LOGI(TAG, "Initialize LVGL library");
-    lv_init();
-    // alloc draw buffers used by LVGL
-    // it's recommended to choose the size of the draw buffer(s) to be at least 1/10 screen sized
-    lv_color_t *buf1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * 400 * 2, MALLOC_CAP_SPIRAM);
-    assert(buf1);
-    lv_color_t *buf2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * 400 * 2, MALLOC_CAP_SPIRAM);
-    assert(buf2);
-    // static lv_color_t buf1[TFT_HOR_RES * 170];            /*A screen sized buffer*/
-    //  static lv_color_t buf2[TFT_HOR_RES * 170];            /*Another screen sized buffer*/
-    // static lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
-    // static lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
-        /* If failed */
-    if ((buf1 == NULL) || (buf2 == NULL)) {
+
+    // lv_display_add_event_cb(disp, lvgl_port_rounder_callback, LV_EVENT_RENDER_START, NULL);
+    lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
+    lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
+
+    /* If failed */
+    if ((buf_3_1 == NULL) || (buf_3_2 == NULL)) {
         ESP_LOGE(TAG, "malloc buffer from PSRAM fialed");
         while (1);
     } else {
         ESP_LOGI(TAG, "malloc buffer from PSRAM successful");
-        ESP_LOGI(TAG, "free PSRAM: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
-        ESP_LOGI(TAG, "free MALLOC_CAP_DMA: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
+
+        ESP_LOGI(TAG, "free PSRAM: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
     }
-    // initialize LVGL draw buffers
-    lv_disp_draw_buf_init(&disp_buf, buf1, buf2, TFT_HOR_RES * 400);
-    // lv_display_set_buffers(&disp_buf, buf1, buf2, TFT_HOR_RES * TFT_VER_RES * 2, LV_DISPLAY_RENDER_MODE_FULL);
+
+    lv_display_set_user_data(disp, panel_handle);
+    lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * TFT_VER_RES * 2, LV_DISPLAY_RENDER_MODE_FULL);
 
     ESP_LOGI(TAG, "Register display driver to LVGL");
-    lv_disp_drv_init(&disp_drv);
-    disp_drv.hor_res = EXAMPLE_LCD_H_RES;
-    disp_drv.ver_res = EXAMPLE_LCD_V_RES;
-    disp_drv.flush_cb = example_lvgl_flush_cb;
-    disp_drv.rounder_cb = example_lvgl_rounder_cb;
-    disp_drv.drv_update_cb = example_lvgl_update_cb;
-    disp_drv.draw_buf = &disp_buf;
-    disp_drv.user_data = panel_handle;
-    lv_disp_t *disp = lv_disp_drv_register(&disp_drv);
 }
 
 /**********************

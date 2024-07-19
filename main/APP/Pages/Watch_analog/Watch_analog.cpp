@@ -22,6 +22,7 @@ void Watch_analog::onCustomAttrConfig()
 void Watch_analog::onViewLoad()
 {
     LV_LOG_USER("begin");
+    Model.Init();
     View.Create(_root);
     AttachEvent(_root);
     AttachEvent(View.ui.cont);
@@ -34,15 +35,17 @@ void Watch_analog::onViewDidLoad()
 
 void Watch_analog::onViewWillAppear()
 {
-    LV_LOG_USER("begin");
-    timer = lv_timer_create(onTimerUpdate, 3000, this);
+    LV_LOG_USER("begin"); 
+    Update();
     View.AppearAnimStart();
-
+//    lv_obj_set_style_opa(_root, LV_OPA_TRANSP, 0);
+//    lv_obj_fade_in(_root, 500, 0);
 }
 
 void Watch_analog::onViewDidAppear()
 {
-    LV_LOG_USER("begin");
+    LV_LOG_USER("begin"); 
+    timer = lv_timer_create(onTimerUpdate, 1000, this);
 }
 
 void Watch_analog::onViewWillDisappear()
@@ -54,12 +57,15 @@ void Watch_analog::onViewDidDisappear()
 {
     LV_LOG_USER("begin");
     lv_timer_del(timer);
+    View.Delete();
+
 }
 
 void Watch_analog::onViewUnload()
 {
     LV_LOG_USER("begin");
     View.Delete();
+    Model.Deinit();
 }
 
 void Watch_analog::onViewDidUnload()
@@ -75,7 +81,19 @@ void Watch_analog::AttachEvent(lv_obj_t* obj)
 
 void Watch_analog::Update()
 {
+    HAL::Clock_Info_t clockInfo;
+    Model.GetClockinfo(&clockInfo);
+    
+    lv_label_set_text_fmt(View.ui.ui_clock, "%02d   %02d", clockInfo.hour, clockInfo.minute);
+    lv_label_set_text_fmt(View.ui.ui_year, "%04d", clockInfo.year);
+    lv_label_set_text_fmt(View.ui.ui_month, "%03S", clockInfo.month);
 
+    //LV_LOG_USER("month: %d", clockInfo.month);
+    //LV_LOG_USER("week: %d", clockInfo.week);
+
+    lv_img_set_angle(View.ui.ui_hour, clockInfo.hour * 300);
+    lv_img_set_angle(View.ui.ui_min, clockInfo.minute * 60);
+    lv_img_set_angle(View.ui.ui_sec, clockInfo.second * 60);
 
 }
 
@@ -91,7 +109,7 @@ void Watch_analog::onEvent(lv_event_t* event)
     Watch_analog* instance = (Watch_analog*)lv_event_get_user_data(event);
     LV_ASSERT_NULL(instance);
 
-    lv_obj_t* obj = lv_event_get_current_target(event);
+    lv_obj_t* obj = lv_event_get_current_target_obj(event);
     lv_event_code_t code = lv_event_get_code(event);
 
 
@@ -108,19 +126,19 @@ void Watch_analog::onEvent(lv_event_t* event)
         if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
             instance->_Manager->Push("Pages/SystemInfos");
         }
-        if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
-            instance->_Manager->Push("Pages/Blood_oxy");
-        }
+       if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
+           instance->_Manager->Push("Pages/Blood_oxy");
+       }
         if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_BOTTOM) {
             instance->_Manager->Push("Pages/Setting");
         }
-        if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
-            instance->_Manager->Replace("Pages/Watch_cxk");
-        }
+        // if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+        //     instance->_Manager->Replace("Pages/Watch_cxk");
+        // }
     }
-    if (code == LV_EVENT_LONG_PRESSED)
+    else if (code == LV_EVENT_LONG_PRESSED)
     {
-        instance->_Manager->Replace("Pages/Watch_cxk");
+        instance->_Manager->Replace("Pages/WatchFace_Select");
 
     }
 }

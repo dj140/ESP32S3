@@ -13,9 +13,8 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
-#include <stdint.h>
-#include <stddef.h>
-#include <stdbool.h>
+#include "../lv_conf_internal.h"
+#include "lv_types.h"
 
 /*********************
  *      DEFINES
@@ -76,11 +75,16 @@ void * _lv_ll_ins_tail(lv_ll_t * ll_p);
  */
 void _lv_ll_remove(lv_ll_t * ll_p, void * node_p);
 
+void _lv_ll_clear_custom(lv_ll_t * ll_p, void(*cleanup)(void *));
+
 /**
  * Remove and free all elements from a linked list. The list remain valid but become empty.
  * @param ll_p pointer to linked list
  */
-void _lv_ll_clear(lv_ll_t * ll_p);
+static inline void _lv_ll_clear(lv_ll_t * ll_p)
+{
+    _lv_ll_clear_custom(ll_p, NULL);
+}
 
 /**
  * Move a node to a new linked list
@@ -138,7 +142,7 @@ void lv_ll_swap(lv_ll_t * ll_p, void * n1_p, void * n2_p);
  */
 
 /**
- * Move a node before an other node in the same linked list
+ * Move a node before another node in the same linked list
  * @param ll_p pointer to a linked list
  * @param n_act pointer to node to move
  * @param n_after pointer to a node which should be after `n_act`

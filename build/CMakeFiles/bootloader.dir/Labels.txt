@@ -1,13 +1,13 @@
 # Target labels
  bootloader
 # Source files and their labels
-C:/My_project/ESP32S3/build/CMakeFiles/bootloader
-C:/My_project/ESP32S3/build/CMakeFiles/bootloader.rule
-C:/My_project/ESP32S3/build/CMakeFiles/bootloader-complete.rule
-C:/My_project/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
-C:/My_project/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
-C:/My_project/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
-C:/My_project/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
-C:/My_project/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
-C:/My_project/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
-C:/My_project/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+D:/For_study/New_folder/ESP32S3/build/CMakeFiles/bootloader
+D:/For_study/New_folder/ESP32S3/build/CMakeFiles/bootloader.rule
+D:/For_study/New_folder/ESP32S3/build/CMakeFiles/bootloader-complete.rule
+D:/For_study/New_folder/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+D:/For_study/New_folder/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+D:/For_study/New_folder/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+D:/For_study/New_folder/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+D:/For_study/New_folder/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+D:/For_study/New_folder/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+D:/For_study/New_folder/ESP32S3/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

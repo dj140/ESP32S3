@@ -23,6 +23,7 @@
 #include "Account.h"
 #include "DataCenter.h"
 #include "DataCenterLog.h"
+#include "cstring"
 
 #define ACCOUNT_DISCARD_READ_DATA   1
 
@@ -49,7 +50,7 @@ Account::Account(
 
     if (bufSize != 0)
     {
-        uint8_t* buffer = (uint8_t*)lv_mem_alloc(bufSize * sizeof(uint8_t) * 2);
+        uint8_t* buffer = (uint8_t*)lv_malloc(bufSize * sizeof(uint8_t) * 2);
 
         if (!buffer)
         {
@@ -84,7 +85,7 @@ Account::~Account()
     /* Release cache */
     if(priv.BufferSize)
     {
-        lv_mem_free(priv.BufferManager.buffer[0]);
+        lv_free(priv.BufferManager.buffer[0]);
     }
 
     /* Delete timer */

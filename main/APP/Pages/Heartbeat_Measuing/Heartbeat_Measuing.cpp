@@ -16,7 +16,7 @@ void Heartbeat_Measuing::onCustomAttrConfig()
 {
     LV_LOG_USER("begin");
     SetCustomCacheEnable(true);
-    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_TOP, 1000, lv_anim_path_bounce);
+    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_TOP, 300, lv_anim_path_overshoot);
 }
 
 void Heartbeat_Measuing::onViewLoad()
@@ -57,6 +57,7 @@ void Heartbeat_Measuing::onViewDidDisappear()
 void Heartbeat_Measuing::onViewUnload()
 {
     LV_LOG_USER("begin");
+    View.Delete();
 }
 
 void Heartbeat_Measuing::onViewDidUnload()
@@ -90,7 +91,7 @@ void Heartbeat_Measuing::onEvent(lv_event_t* event)
     Heartbeat_Measuing* instance = (Heartbeat_Measuing*)lv_event_get_user_data(event);
     LV_ASSERT_NULL(instance);
 
-    lv_obj_t* obj = lv_event_get_current_target(event);
+    lv_obj_t* obj = lv_event_get_current_target_obj(event);
     lv_event_code_t code = lv_event_get_code(event);
 
 

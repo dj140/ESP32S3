@@ -309,8 +309,8 @@ lv_obj_t* Page::StatusBar_Create(lv_obj_t* par)
     img = lv_img_create(cont);
     lv_img_set_src(img, ResourcePool::GetImage("battery"));
     lv_obj_align(img, LV_ALIGN_RIGHT_MID, -35, 0);
-    lv_img_t* img_ext = (lv_img_t*)img;
-    lv_obj_set_size(img, img_ext->w, img_ext->h);
+    // lv_img_t* img_ext = (lv_img_t*)img;
+    // lv_obj_set_size(img, img_ext->w, img_ext->h);
     ui.battery.img = img;
 
     lv_obj_t* obj = lv_obj_create(img);

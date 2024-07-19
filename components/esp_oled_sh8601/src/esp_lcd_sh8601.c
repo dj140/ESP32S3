@@ -198,7 +198,7 @@ static const sh8601_lcd_init_cmd_t vendor_specific_init_default[] = {
     {0x44, (uint8_t []){0x00, 0xc8}, 2, 0},
     {0x35, (uint8_t []){0x00}, 1, 0},
     {0x53, (uint8_t []){0x20}, 1, 25},
-    {0x51, (uint8_t []){0xFF}, 1, 0},
+    {0x51, (uint8_t []){0x40}, 1, 0},
     {0x2A, (uint8_t []){0x00,0x16,0x01,0xAF}, 4, 1},
     {0x2B, (uint8_t []){0x00,0x00,0x01,0xF5}, 4, 1},
     {0x11, (uint8_t []){0x00}, 0, 60},
@@ -261,7 +261,7 @@ static esp_err_t panel_sh8601_init(esp_lcd_panel_t *panel)
 static esp_err_t panel_sh8601_draw_bitmap(esp_lcd_panel_t *panel, int x_start, int y_start, int x_end, int y_end, const void *color_data)
 {
     sh8601_panel_t *sh8601 = __containerof(panel, sh8601_panel_t, base);
-    assert((x_start < x_end) && (y_start < y_end) && "start position must be smaller than end position");
+    // assert((x_start < x_end) && (y_start < y_end) && "start position must be smaller than end position");
     esp_lcd_panel_io_handle_t io = sh8601->io;
 
     x_start += sh8601->x_gap;

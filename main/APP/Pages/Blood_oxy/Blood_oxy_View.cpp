@@ -340,3 +340,11 @@ void Blood_oxy_View::Create(lv_obj_t* root)
     //lv_obj_add_event_cb(ui_blood_oxy, ui_event_blood_oxy, LV_EVENT_ALL, NULL);
 
 }
+void Blood_oxy_View::Delete()
+{
+  lv_obj_del(ui.cont);
+//    lv_style_reset(cui_title);
+//    lv_style_reset(&style.info);
+//    lv_style_reset(&style.data);
+//    lv_style_reset(&style.focus);
+}

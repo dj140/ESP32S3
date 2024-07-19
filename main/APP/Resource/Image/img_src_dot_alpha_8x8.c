@@ -69,11 +69,10 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG__DOT_ALPH
 };
 
 const lv_img_dsc_t img_src_dot_alpha_8x8 = {
-  .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
-  .header.always_zero = 0,
-  .header.reserved = 0,
+  .header.cf = LV_COLOR_FORMAT_RGB565,
+  .header.magic = LV_IMAGE_HEADER_MAGIC,
   .header.w = 8,
   .header.h = 8,
-  .data_size = 64 * LV_IMG_PX_SIZE_ALPHA_BYTE,
+  .data_size = 64 * 2,
   .data = _dot_alpha_8x8_map,
 };

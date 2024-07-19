@@ -94,7 +94,7 @@ void Watch_cxk::onEvent(lv_event_t* event)
     Watch_cxk* instance = (Watch_cxk*)lv_event_get_user_data(event);
     LV_ASSERT_NULL(instance);
 
-    lv_obj_t* obj = lv_event_get_current_target(event);
+    lv_obj_t* obj = lv_event_get_current_target_obj(event);
     lv_event_code_t code = lv_event_get_code(event);
 
 
@@ -111,19 +111,19 @@ void Watch_cxk::onEvent(lv_event_t* event)
         if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
             instance->_Manager->Push("Pages/SystemInfos");
         }
-        if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
-            instance->_Manager->Push("Pages/Blood_oxy");
-        }
+       if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
+           instance->_Manager->Push("Pages/Blood_oxy");
+       }
         if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_BOTTOM) {
             instance->_Manager->Push("Pages/Setting");
         }
-        if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
-            instance->_Manager->Replace("Pages/Dialplate");
-        }
+        // if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+        //     instance->_Manager->Replace("Pages/Dialplate");
+        // }
     }
-    if (code == LV_EVENT_LONG_PRESSED)
+    else if (code == LV_EVENT_LONG_PRESSED)
     {
-        instance->_Manager->Replace("Pages/Dialplate");
+        instance->_Manager->Replace("Pages/WatchFace_Select");
 
     }
 }

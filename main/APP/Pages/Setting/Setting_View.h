@@ -15,7 +15,12 @@ public:
     struct
     {
         lv_obj_t* cont;
-        lv_obj_t* ui_bg_1;
+        lv_obj_t* icon1;
+        lv_obj_t* icon2;
+        lv_obj_t* icon3;
+        lv_obj_t* icon4;
+        lv_obj_t* icon5;
+
         lv_obj_t* button;
     } ui;
 

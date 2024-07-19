@@ -1,4 +1,4 @@
-file(GLOB_RECURSE SOURCES ${LVGL_ROOT_DIR}/src/*.c)
+file(GLOB_RECURSE SOURCES ${LVGL_ROOT_DIR}/src/*.c ${LVGL_ROOT_DIR}/src/*.cpp)
 
 idf_build_get_property(LV_MICROPYTHON LV_MICROPYTHON)
 
@@ -18,27 +18,43 @@ else()
     set_source_files_properties(${EXAMPLE_SOURCES} COMPILE_FLAGS "-Wno-unused-variable -Wno-format")
   endif()
 
-  if(CONFIG_LV_USE_DEMO_WIDGETS)
+
     file(GLOB_RECURSE DEMO_WIDGETS_SOURCES ${LVGL_ROOT_DIR}/demos/widgets/*.c)
     list(APPEND DEMO_SOURCES ${DEMO_WIDGETS_SOURCES})
-  endif()
+
   if(CONFIG_LV_USE_DEMO_KEYPAD_AND_ENCODER)
     file(GLOB_RECURSE DEMO_KEYPAD_AND_ENCODER_SOURCES ${LVGL_ROOT_DIR}/demos/keypad_encoder/*.c)
     list(APPEND DEMO_SOURCES ${DEMO_KEYPAD_AND_ENCODER_SOURCES})
   endif()
-  if(CONFIG_LV_USE_DEMO_BENCHMARK)
+
     file(GLOB_RECURSE DEMO_BENCHMARK_SOURCES ${LVGL_ROOT_DIR}/demos/benchmark/*.c)
     list(APPEND DEMO_SOURCES ${DEMO_BENCHMARK_SOURCES})
-  endif()
+
   if(CONFIG_LV_USE_DEMO_STRESS)
     file(GLOB_RECURSE DEMO_STRESS_SOURCES ${LVGL_ROOT_DIR}/demos/stress/*.c)
     list(APPEND DEMO_SOURCES ${DEMO_STRESS_SOURCES})
   endif()
-  if(CONFIG_LV_USE_DEMO_MUSIC)
+
+    file(GLOB_RECURSE DEMO_TRANSFORM_SOURCES ${LVGL_ROOT_DIR}/demos/transform/*.c)
+    list(APPEND DEMO_SOURCES ${DEMO_TRANSFORM_SOURCES})
+
+  if(CONFIG_LV_USE_DEMO_MULTILANG)
+    file(GLOB_RECURSE DEMO_MULTILANG_SOURCES ${LVGL_ROOT_DIR}/demos/multilang/*.c)
+    list(APPEND DEMO_SOURCES ${DEMO_MULTILANG_SOURCES})
+  endif()
+  if(CONFIG_LV_USE_DEMO_FLEX_LAYOUT)
+    file(GLOB_RECURSE DEMO_FLEX_LAYOUT_SOURCES ${LVGL_ROOT_DIR}/demos/flex_layout/*.c)
+    list(APPEND DEMO_SOURCES ${DEMO_FLEX_LAYOUT_SOURCES})
+  endif()
+  if(CONFIG_LV_USE_DEMO_SCROLL)
+    file(GLOB_RECURSE DEMO_SCROLL_SOURCES ${LVGL_ROOT_DIR}/demos/scroll/*.c)
+    list(APPEND DEMO_SOURCES ${DEMO_SCROLL_SOURCES})
+  endif()
+
     file(GLOB_RECURSE DEMO_MUSIC_SOURCES ${LVGL_ROOT_DIR}/demos/music/*.c)
     list(APPEND DEMO_SOURCES ${DEMO_MUSIC_SOURCES})
-    set_source_files_properties(${DEMO_MUSIC_SOURCES} COMPILE_FLAGS "-Wno-format")
-  endif()
+    # set_source_files_properties(${DEMO_MUSIC_SOURCES} COMPILE_FLAGS "-Wno-format")
+
 
   idf_component_register(SRCS ${SOURCES} ${EXAMPLE_SOURCES} ${DEMO_SOURCES}
       INCLUDE_DIRS ${LVGL_ROOT_DIR} ${LVGL_ROOT_DIR}/src ${LVGL_ROOT_DIR}/../

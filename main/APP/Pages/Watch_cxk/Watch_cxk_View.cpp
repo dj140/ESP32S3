@@ -74,6 +74,7 @@ void Watch_cxk_View::Watch_Create(lv_obj_t* par)
     ui.ui_bg = ui_bg_cxk;
   
     lv_obj_t* ui_clock_group = lv_obj_create(ui_Watch_cxk);
+    lv_obj_remove_style_all(ui_clock_group);
     lv_obj_set_width(ui_clock_group, 350);
     lv_obj_set_height(ui_clock_group, 350);
     lv_obj_set_align(ui_clock_group, LV_ALIGN_CENTER);
@@ -141,7 +142,7 @@ void Watch_cxk_View::Delete()
 {
     if (ui.anim_timeline)
     {
-        lv_anim_timeline_del(ui.anim_timeline);
+        lv_anim_timeline_delete(ui.anim_timeline);
         ui.anim_timeline = nullptr;
     }
 }

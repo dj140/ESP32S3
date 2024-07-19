@@ -2,6 +2,7 @@
 #define __HAL_DEF_H
 
 #include <stdint.h>
+#include <driver/i2c.h>
 
 namespace HAL
 {
@@ -90,6 +91,29 @@ typedef struct
     bool isCharging;
 } Power_Info_t;
 
+// typedef struct{
+//     int pin_scl     = -1;
+//     int pin_sda     = -1;
+//     int pin_rst     = -1;
+//     int pin_int     = -1;
+//     bool pull_up_en = true;
+
+//     i2c_port_t i2c_port = 0;
+//     uint32_t clk_speed = 100000;
+
+//     uint8_t dev_addr = 0x38;
+// }TP_Config;
+
+
+// typedef struct{
+//     uint8_t event = 0;
+//     uint8_t id = 0;
+//     int x = -1;
+//     int y = -1;
+// }TouchPoint_t;
+
 }
+
+
 
 #endif

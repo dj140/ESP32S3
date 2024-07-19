@@ -13,7 +13,7 @@ using namespace Page;
 #include "multi_heap.h"
 
 
-#include <LovyanGFX.hpp>
+// #include <LovyanGFX.hpp>
 #include "lvgl_port/lv_port_disp.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -118,7 +118,7 @@ void Template::onEvent(lv_event_t* event)
     Template* instance = (Template*)lv_event_get_user_data(event);
     LV_ASSERT_NULL(instance);
 
-    lv_obj_t* obj = lv_event_get_current_target(event);
+    lv_obj_t* obj = lv_event_get_current_target_obj(event);
     lv_event_code_t code = lv_event_get_code(event);
 //  printf("lv_event_code_t: %d ", code);
 

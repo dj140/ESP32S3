@@ -76,7 +76,7 @@ void App_Init()
     lv_obj_set_style_bg_opa(lv_scr_act(), LV_OPA_COVER, 0);
     lv_obj_set_style_bg_color(lv_scr_act(), lv_color_black(), 0);
     lv_obj_clear_flag(scr, LV_OBJ_FLAG_SCROLLABLE);
-    lv_disp_set_bg_color(lv_disp_get_default(), lv_color_black());
+    // lv_disp_set_bg_color(lv_disp_get_default(), lv_color_black());
 
     /* Set root default style */
     static lv_style_t rootStyle;
@@ -96,8 +96,7 @@ void App_Init()
     Page::StatusBar_Create(lv_layer_top());
 
 //    /* Initialize pages */
-    manager.Install("Template",    "Pages/_Template");
-//    manager.Install("LiveMap",     "Pages/LiveMap");
+    manager.Install("Video_Player",    "Pages/Video_Player");
     manager.Install("Dialplate",   "Pages/Dialplate");
     manager.Install("SystemInfos", "Pages/SystemInfos");
     manager.Install("Startup",     "Pages/Startup");
@@ -106,6 +105,11 @@ void App_Init()
     manager.Install("Heartbeat_Measuing", "Pages/Heartbeat_Measuing");
     manager.Install("Setting", "Pages/Setting");
     manager.Install("Watch_cxk", "Pages/Watch_cxk");
+    manager.Install("Image_Player", "Pages/Image_Player");
+    // manager.Install("Setting_Menu", "Pages/Setting_Menu");
+    manager.Install("Test_Page", "Pages/Test_Page");
+    manager.Install("StopWatch", "Pages/StopWatch");
+    manager.Install("WatchFace_Select", "Pages/WatchFace_Select");
 
     manager.SetGlobalLoadAnimType(PageManager::LOAD_ANIM_OVER_TOP);
 

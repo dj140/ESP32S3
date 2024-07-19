@@ -152,11 +152,10 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_LARGE_CONST LV_ATTRIBUTE_IMG_HOUR uint
 };
 
 const lv_img_dsc_t img_src_cxk_hour = {
-  .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
-  .header.always_zero = 0,
-  .header.reserved = 0,
+  .header.cf = LV_COLOR_FORMAT_RGB565,
+  .header.magic = LV_IMAGE_HEADER_MAGIC,
   .header.w = 240,
   .header.h = 29,
-  .data_size = 6960 * LV_IMG_PX_SIZE_ALPHA_BYTE,
+  .data_size = 6960 * 2,
   .data = hour_map,
 };

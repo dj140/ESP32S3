@@ -45,7 +45,7 @@ void lv_poly_line::refresh_line()
     for (size_t i = 0; i < size; i++)
     {
         single_line_t* single_line = &poly_line[i];
-        const lv_point_t* points = get_points(single_line);
+        const lv_point_precise_t* points = get_points(single_line);
         lv_line_set_points(single_line->line, points, (uint16_t)single_line->points.size());
     }
 }
@@ -67,7 +67,7 @@ void lv_poly_line::start()
     lv_line_set_points(single_line->line, nullptr, 0);
 }
 
-void lv_poly_line::append(const lv_point_t* point)
+void lv_poly_line::append(const lv_point_precise_t* point)
 {
     if (poly_line.size() == 0)
     {
@@ -79,7 +79,7 @@ void lv_poly_line::append(const lv_point_t* point)
     poly_line[current_index].points.push_back(*point);
 }
 
-void lv_poly_line::append_to_end(const lv_point_t* point)
+void lv_poly_line::append_to_end(const lv_point_precise_t* point)
 {
     single_line_t* single_line = get_end_line();
     if (single_line == nullptr)
@@ -92,7 +92,7 @@ void lv_poly_line::append_to_end(const lv_point_t* point)
 
     LV_LOG_INFO("end_line: (%d, %d), size = %d", point->x, point->y, single_line->points.size());
 
-    const lv_point_t* points = get_points(single_line);
+    const lv_point_precise_t* points = get_points(single_line);
     lv_line_set_points(single_line->line, points, (uint16_t)single_line->points.size());
 }
 
@@ -105,7 +105,7 @@ void lv_poly_line::stop()
     }
 
     single_line_t* single_line = &poly_line[current_index];
-    const lv_point_t* points = get_points(single_line);
+    const lv_point_precise_t* points = get_points(single_line);
     lv_line_set_points(single_line->line, points, (uint16_t)single_line->points.size());
 
     LV_LOG_INFO("poly_line[%d] size = %d", current_index, single_line->points.size());
@@ -144,9 +144,9 @@ lv_poly_line::single_line_t* lv_poly_line::get_end_line()
     return &poly_line[current_index - 1];
 }
 
-const lv_point_t* lv_poly_line::get_points(single_line_t* single_line)
+const lv_point_precise_t* lv_poly_line::get_points(single_line_t* single_line)
 {
-    const lv_point_t* points =  nullptr;
+    const lv_point_precise_t* points =  nullptr;
 
     if (single_line->points.size())
     {
@@ -160,7 +160,7 @@ const lv_point_t* lv_poly_line::get_points(single_line_t* single_line)
     return points;
 }
 
-bool lv_poly_line::get_end_point(lv_point_t* point)
+bool lv_poly_line::get_end_point(lv_point_precise_t* point)
 {
     single_line_t* single_line = get_end_line();
     if (single_line == nullptr)

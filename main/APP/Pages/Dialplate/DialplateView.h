@@ -9,8 +9,9 @@ namespace Page
 class DialplateView
 {
 
-
 public:
+    uint8_t* dog_lottile_buf;
+    uint8_t* sun_lottile_buf;
     struct
     {
         struct

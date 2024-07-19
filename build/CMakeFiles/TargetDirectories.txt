@@ -648,6 +648,13 @@ D:/For_study/New_folder/ESP32S3/build/esp-idf/AXP202X_Library/CMakeFiles/list_in
 D:/For_study/New_folder/ESP32S3/build/esp-idf/AXP202X_Library/CMakeFiles/install.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/AXP202X_Library/CMakeFiles/install/local.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/AXP202X_Library/CMakeFiles/install/strip.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/__idf_JPEGDEC.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/edit_cache.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/rebuild_cache.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/list_install_components.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/install.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/install/local.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/install/strip.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/LovyanGFX/CMakeFiles/__idf_LovyanGFX.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/LovyanGFX/CMakeFiles/edit_cache.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/LovyanGFX/CMakeFiles/rebuild_cache.dir
@@ -669,6 +676,13 @@ D:/For_study/New_folder/ESP32S3/build/esp-idf/TouchLib/CMakeFiles/list_install_c
 D:/For_study/New_folder/ESP32S3/build/esp-idf/TouchLib/CMakeFiles/install.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/TouchLib/CMakeFiles/install/local.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/TouchLib/CMakeFiles/install/strip.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_littlefs/CMakeFiles/__idf_esp_littlefs.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_littlefs/CMakeFiles/edit_cache.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_littlefs/CMakeFiles/rebuild_cache.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_littlefs/CMakeFiles/list_install_components.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_littlefs/CMakeFiles/install.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_littlefs/CMakeFiles/install/local.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_littlefs/CMakeFiles/install/strip.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_oled_sh8601/CMakeFiles/__idf_esp_oled_sh8601.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_oled_sh8601/CMakeFiles/edit_cache.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_oled_sh8601/CMakeFiles/rebuild_cache.dir

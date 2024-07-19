@@ -111,8 +111,8 @@ static void touchpad_init(void)
 /*Will be called by the library to read the touchpad*/
 static void touchpad_read(lv_indev_t * indev, lv_indev_data_t * data)
 {
-    static int32_t last_x = 0;
-    static int32_t last_y = 0;
+    // static int32_t last_x = 0;
+    // static int32_t last_y = 0;
 
     if(touch.read()) { 
         TP_Point tp_data = touch.getPoint(0);

@@ -419,6 +419,11 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("D:/For_study/New_folder/ESP32S3/build/esp-idf/LovyanGFX/cmake_install.cmake")
 endif()
 
@@ -430,6 +435,11 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
   include("D:/For_study/New_folder/ESP32S3/build/esp-idf/TouchLib/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("D:/For_study/New_folder/ESP32S3/build/esp-idf/esp_littlefs/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)

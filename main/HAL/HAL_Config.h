@@ -26,14 +26,6 @@
 /*=========================
    Hardware Configuration
  *=========================*/
-/* I2C peripheral */
-#define HAL_PIN_I2C_PORT    0
-#define HAL_PIN_I2C_SCL     10
-#define HAL_PIN_I2C_SDA     11
-
-/* Touch pad */
-#define HAL_PIN_TP_RST      3
-#define HAL_PIN_TP_INTR     12
 
 /* Sensors */
 #define CONFIG_SENSOR_ENABLE        1
@@ -45,17 +37,20 @@
 
 #define NULL_PIN                    PD0
 
-/* Screen */
-#define CONFIG_SCREEN_CS_PIN        PB0
-#define CONFIG_SCREEN_DC_PIN        PA4
-#define CONFIG_SCREEN_RST_PIN       PA6
-#define CONFIG_SCREEN_SCK_PIN       PA5
-#define CONFIG_SCREEN_MOSI_PIN      PA7
-#define CONFIG_SCREEN_BLK_PIN       PB1  // TIM3
-#define CONFIG_SCREEN_SPI           SPI
+/* AMOLED */
+#define AMOLED_RESET_PIN      4
+#define AMOLED_VCI_EN_PIN     GPIO_NUM_3
+#define AMOLED_TE_PIN         GPIO_NUM_7
+#define AMOLED_CS_PIN         9
+#define AMOLED_CLK_PIN        14
+#define AMOLED_D0_PIN         11
+#define AMOLED_D1_PIN         12
+#define AMOLED_D2_PIN         2
+#define AMOLED_D3_PIN         13  
 
-#define CONFIG_SCREEN_HOR_RES       240
-#define CONFIG_SCREEN_VER_RES       240
+
+#define AMOLED_HOR_RES       410
+#define AMOLED_VER_RES       502
 
 /* Battery */
 #define CONFIG_BAT_DET_PIN          PA1
@@ -115,5 +110,14 @@
 #if CONFIG_WATCH_DOG_ENABLE
 #  define CONFIG_WATCH_DOG_TIMEOUT (10 * 1000) // [ms]
 #endif
+
+/* I2C peripheral */
+#define HAL_PIN_I2C_PORT    0
+#define HAL_PIN_I2C_SCL     8
+#define HAL_PIN_I2C_SDA     6
+
+/* Touch pad */
+#define HAL_PIN_TP_RST      10
+#define HAL_PIN_TP_INTR     5
 
 #endif

@@ -68,11 +68,11 @@ esp_err_t esp_lcd_new_panel_sh8601(const esp_lcd_panel_io_handle_t io, const esp
         .quadwp_io_num = -1,                                    \
         .max_transfer_sz = max_trans_sz,                        \
     }
-#define SH8601_PANEL_BUS_QSPI_CONFIG(sclk, d0, d1, d2, d3, max_trans_sz) \
+#define SH8601_PANEL_BUS_QSPI_CONFIG( d0, d1, sclk, d2, d3, max_trans_sz) \
     {                                                           \
-        .sclk_io_num = sclk,                                    \
         .data0_io_num = d0,                                     \
         .data1_io_num = d1,                                     \
+        .sclk_io_num = sclk,                                    \
         .data2_io_num = d2,                                     \
         .data3_io_num = d3,                                     \
         .max_transfer_sz = max_trans_sz,                        \

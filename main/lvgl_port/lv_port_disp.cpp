@@ -72,7 +72,7 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
 static bool example_notify_lvgl_flush_ready(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_io_event_data_t *edata, void *user_ctx)
 {
     lv_display_t *disp_driver = (lv_display_t *)user_ctx;
-    lv_disp_flush_ready(disp_driver);
+    //lv_disp_flush_ready(disp_driver);
     return false;
 }
 
@@ -109,7 +109,7 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
     // esp_lcd_panel_draw_bitmap(panel_handle, offsetx1 , offsety1, offsetx2 + 1, offsety2 + 1, px_map);
     esp_lcd_panel_draw_bitmap(panel_handle, 0 , 0, 410, 252, &px_map[0]);
     esp_lcd_panel_draw_bitmap(panel_handle, 0 , 252, 410, 503, &px_map[410 * 252 * 2]);
-    lv_disp_flush_ready(disp);
+   lv_disp_flush_ready(disp);
 
 }
 
@@ -140,9 +140,9 @@ void lv_port_disp_init(void)
     ESP_LOGI(TAG, "before free MALLOC_CAP_DMA: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
     ESP_LOGI(TAG, "Initialize SPI bus");
 
-    const spi_bus_config_t buscfg = SH8601_PANEL_BUS_QSPI_CONFIG(EXAMPLE_PIN_NUM_LCD_PCLK,
-                                                                EXAMPLE_PIN_NUM_LCD_DATA0,
+    const spi_bus_config_t buscfg = SH8601_PANEL_BUS_QSPI_CONFIG( EXAMPLE_PIN_NUM_LCD_DATA0,
                                                                 EXAMPLE_PIN_NUM_LCD_DATA1,
+                                                                EXAMPLE_PIN_NUM_LCD_PCLK,
                                                                 EXAMPLE_PIN_NUM_LCD_DATA2,
                                                                 EXAMPLE_PIN_NUM_LCD_DATA3,
                                                                 EXAMPLE_LCD_H_RES * EXAMPLE_LCD_V_RES * 16 / 8);

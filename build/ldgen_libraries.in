@@ -65,7 +65,9 @@ $<TARGET_FILE:__idf_usb>
 $<TARGET_FILE:__idf_wifi_provisioning>
 $<TARGET_FILE:__idf_main>
 $<TARGET_FILE:__idf_AXP202X_Library>
+$<TARGET_FILE:__idf_DRV2605>
 $<TARGET_FILE:__idf_JPEGDEC>
+$<TARGET_FILE:__idf_LSM6DSR>
 $<TARGET_FILE:__idf_LovyanGFX>
 $<TARGET_FILE:__idf_MillisTaskManager>
 $<TARGET_FILE:__idf_TouchLib>

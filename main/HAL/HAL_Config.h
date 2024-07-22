@@ -38,15 +38,15 @@
 #define NULL_PIN                    PD0
 
 /* AMOLED */
-#define AMOLED_RESET_PIN      4
+#define AMOLED_RESET_PIN      GPIO_NUM_4
 #define AMOLED_VCI_EN_PIN     GPIO_NUM_3
 #define AMOLED_TE_PIN         GPIO_NUM_7
-#define AMOLED_CS_PIN         9
-#define AMOLED_CLK_PIN        14
-#define AMOLED_D0_PIN         11
-#define AMOLED_D1_PIN         12
-#define AMOLED_D2_PIN         2
-#define AMOLED_D3_PIN         13  
+#define AMOLED_CS_PIN         GPIO_NUM_9
+#define AMOLED_CLK_PIN        GPIO_NUM_14
+#define AMOLED_D0_PIN         GPIO_NUM_11
+#define AMOLED_D1_PIN         GPIO_NUM_12
+#define AMOLED_D2_PIN         GPIO_NUM_2
+#define AMOLED_D3_PIN         GPIO_NUM_13  
 
 
 #define AMOLED_HOR_RES       410

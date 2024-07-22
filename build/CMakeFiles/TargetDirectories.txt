@@ -648,6 +648,13 @@ D:/For_study/New_folder/ESP32S3/build/esp-idf/AXP202X_Library/CMakeFiles/list_in
 D:/For_study/New_folder/ESP32S3/build/esp-idf/AXP202X_Library/CMakeFiles/install.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/AXP202X_Library/CMakeFiles/install/local.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/AXP202X_Library/CMakeFiles/install/strip.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/DRV2605/CMakeFiles/__idf_DRV2605.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/DRV2605/CMakeFiles/edit_cache.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/DRV2605/CMakeFiles/rebuild_cache.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/DRV2605/CMakeFiles/list_install_components.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/DRV2605/CMakeFiles/install.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/DRV2605/CMakeFiles/install/local.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/DRV2605/CMakeFiles/install/strip.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/__idf_JPEGDEC.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/edit_cache.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/rebuild_cache.dir
@@ -655,6 +662,13 @@ D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/list_install_co
 D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/install.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/install/local.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/CMakeFiles/install/strip.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/LSM6DSR/CMakeFiles/__idf_LSM6DSR.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/LSM6DSR/CMakeFiles/edit_cache.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/LSM6DSR/CMakeFiles/rebuild_cache.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/LSM6DSR/CMakeFiles/list_install_components.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/LSM6DSR/CMakeFiles/install.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/LSM6DSR/CMakeFiles/install/local.dir
+D:/For_study/New_folder/ESP32S3/build/esp-idf/LSM6DSR/CMakeFiles/install/strip.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/LovyanGFX/CMakeFiles/__idf_LovyanGFX.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/LovyanGFX/CMakeFiles/edit_cache.dir
 D:/For_study/New_folder/ESP32S3/build/esp-idf/LovyanGFX/CMakeFiles/rebuild_cache.dir

@@ -65,7 +65,9 @@ D:/For_study/New_folder/ESP32S3/build/esp-idf/usb/libusb.a
 D:/For_study/New_folder/ESP32S3/build/esp-idf/wifi_provisioning/libwifi_provisioning.a
 D:/For_study/New_folder/ESP32S3/build/esp-idf/main/libmain.a
 D:/For_study/New_folder/ESP32S3/build/esp-idf/AXP202X_Library/libAXP202X_Library.a
+D:/For_study/New_folder/ESP32S3/build/esp-idf/DRV2605/libDRV2605.a
 D:/For_study/New_folder/ESP32S3/build/esp-idf/JPEGDEC/libJPEGDEC.a
+D:/For_study/New_folder/ESP32S3/build/esp-idf/LSM6DSR/libLSM6DSR.a
 D:/For_study/New_folder/ESP32S3/build/esp-idf/LovyanGFX/libLovyanGFX.a
 D:/For_study/New_folder/ESP32S3/build/esp-idf/MillisTaskManager/libMillisTaskManager.a
 D:/For_study/New_folder/ESP32S3/build/esp-idf/TouchLib/libTouchLib.a

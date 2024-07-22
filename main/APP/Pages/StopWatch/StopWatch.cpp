@@ -194,7 +194,7 @@ void StopWatch::onEvent(lv_event_t* event)
         else if (obj == instance->View.ui.button_add)
         {
             lv_obj_t* list_btn;
-            lv_obj_t* label;
+            // lv_obj_t* label;
             uint16_t Min = 0, Sec = 0, Msec = 0;
 
             if (HistoryRecCnt < 10 && !SW_IsPause)

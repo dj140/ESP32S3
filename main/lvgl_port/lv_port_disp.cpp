@@ -24,30 +24,11 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "esp_lcd_sh8601.h"
+#include "HAL_Config.h"
 
 #define LCD_HOST    SPI3_HOST
 static const char *TAG = "LVGL";
 #define LCD_BIT_PER_PIXEL       (16)
-#define EXAMPLE_LCD_H_RES              410
-#define EXAMPLE_LCD_V_RES              502
-/*********************
- *      DEFINES
- *********************/
-#define EXAMPLE_LCD_BK_LIGHT_ON_LEVEL  1
-#define EXAMPLE_LCD_BK_LIGHT_OFF_LEVEL !EXAMPLE_LCD_BK_LIGHT_ON_LEVEL
-#define EXAMPLE_PIN_NUM_LCD_CS            (GPIO_NUM_9)
-#define EXAMPLE_PIN_NUM_LCD_PCLK          (GPIO_NUM_14)
-#define EXAMPLE_PIN_NUM_LCD_DATA0         (GPIO_NUM_11)
-#define EXAMPLE_PIN_NUM_LCD_DATA1         (GPIO_NUM_12)
-#define EXAMPLE_PIN_NUM_LCD_DATA2         (GPIO_NUM_2)
-#define EXAMPLE_PIN_NUM_LCD_DATA3         (GPIO_NUM_13)
-#define EXAMPLE_PIN_NUM_LCD_RST           (GPIO_NUM_4)
-#define EXAMPLE_PIN_NUM_BK_LIGHT          (GPIO_NUM_0)
-
-
-/**********************
- *      TYPEDEFS
- **********************/
 
 /**********************
  *  STATIC PROTOTYPES
@@ -55,16 +36,7 @@ static const char *TAG = "LVGL";
 static void disp_init(void);
 
 static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map);
-//static void gpu_fill(lv_disp_drv_t * disp_drv, lv_color_t * dest_buf, lv_coord_t dest_width,
-//        const lv_area_t * fill_area, lv_color_t color);
 
-/**********************
- *  STATIC VARIABLES
- **********************/
-
-/**********************
- *      MACROS
- **********************/
 
 /**********************
  *   GLOBAL FUNCTIONS
@@ -85,31 +57,13 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
     const int offsety1 = area->y1;
     const int offsety2 = area->y2;
 
-#if LCD_BIT_PER_PIXEL == 24
-    uint8_t *to = (uint8_t *)color_map;
-    uint8_t temp = 0;
-    uint16_t pixel_num = (offsetx2 - offsetx1 + 1) * (offsety2 - offsety1 + 1);
-
-    // Special dealing for first pixel
-    temp = color_map[0].ch.blue;
-    *to++ = color_map[0].ch.red;
-    *to++ = color_map[0].ch.green;
-    *to++ = temp;
-    // Normal dealing for other pixels
-    for (int i = 1; i < pixel_num; i++) {
-        *to++ = color_map[i].ch.red;
-        *to++ = color_map[i].ch.green;
-        *to++ = color_map[i].ch.blue;
-    }
-#endif
-
     // copy a buffer's content to a specific area of the display
     //RRRRR GGG | GGG BBBBB  ---->  GGG BBBBB | RRRRR GGG
     lv_draw_sw_rgb565_swap(px_map, (offsetx2 - offsetx1 + 1) * (offsety2 - offsety1 + 1));
     // esp_lcd_panel_draw_bitmap(panel_handle, offsetx1 , offsety1, offsetx2 + 1, offsety2 + 1, px_map);
     esp_lcd_panel_draw_bitmap(panel_handle, 0 , 0, 410, 252, &px_map[0]);
     esp_lcd_panel_draw_bitmap(panel_handle, 0 , 252, 410, 503, &px_map[410 * 252 * 2]);
-   lv_disp_flush_ready(disp);
+    lv_disp_flush_ready(disp);
 
 }
 
@@ -140,19 +94,19 @@ void lv_port_disp_init(void)
     ESP_LOGI(TAG, "before free MALLOC_CAP_DMA: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
     ESP_LOGI(TAG, "Initialize SPI bus");
 
-    const spi_bus_config_t buscfg = SH8601_PANEL_BUS_QSPI_CONFIG( EXAMPLE_PIN_NUM_LCD_DATA0,
-                                                                EXAMPLE_PIN_NUM_LCD_DATA1,
-                                                                EXAMPLE_PIN_NUM_LCD_PCLK,
-                                                                EXAMPLE_PIN_NUM_LCD_DATA2,
-                                                                EXAMPLE_PIN_NUM_LCD_DATA3,
-                                                                EXAMPLE_LCD_H_RES * EXAMPLE_LCD_V_RES * 16 / 8);
+    const spi_bus_config_t buscfg = SH8601_PANEL_BUS_QSPI_CONFIG(AMOLED_D0_PIN,
+                                                                AMOLED_D1_PIN,
+                                                                AMOLED_CLK_PIN,
+                                                                AMOLED_D2_PIN,
+                                                                AMOLED_D3_PIN,
+                                                                TFT_HOR_RES * TFT_VER_RES * LCD_BIT_PER_PIXEL / 8);
 
      ESP_ERROR_CHECK(spi_bus_initialize(LCD_HOST, &buscfg, SPI_DMA_CH_AUTO));
 
     ESP_LOGI(TAG, "Install panel IO");
     esp_lcd_panel_io_handle_t io_handle = NULL;
 
-    const esp_lcd_panel_io_spi_config_t io_config = SH8601_PANEL_IO_QSPI_CONFIG(EXAMPLE_PIN_NUM_LCD_CS,
+    const esp_lcd_panel_io_spi_config_t io_config = SH8601_PANEL_IO_QSPI_CONFIG(AMOLED_CS_PIN,
                                                                                 example_notify_lvgl_flush_ready,
                                                                                 &disp);
     sh8601_vendor_config_t vendor_config = {
@@ -167,7 +121,7 @@ void lv_port_disp_init(void)
     esp_lcd_panel_handle_t panel_handle = NULL;
 
     const esp_lcd_panel_dev_config_t panel_config = {
-        .reset_gpio_num = EXAMPLE_PIN_NUM_LCD_RST,
+        .reset_gpio_num = AMOLED_RESET_PIN,
         .rgb_ele_order = LCD_RGB_ELEMENT_ORDER_RGB,
         .bits_per_pixel = LCD_BIT_PER_PIXEL,
         .vendor_config = &vendor_config,
@@ -195,7 +149,6 @@ void lv_port_disp_init(void)
         while (1);
     } else {
         ESP_LOGI(TAG, "malloc buffer from PSRAM successful");
-
         ESP_LOGI(TAG, "free PSRAM: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
     }
 

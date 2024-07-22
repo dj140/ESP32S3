@@ -27,3 +27,4 @@ idf_component_register(SRCS "main.cpp""i2c_port.c" ${HAL_SRCS} ${APP_SRCS} ${LVG
                     INCLUDE_DIRS "." ${HAL_INCS} ${APP_INCS} ${LVGL_PORT_INCS})
                     
 component_compile_options(-Wno-error=format= -Wno-format)
+component_compile_options(-Wno-deprecated-enum-enum-conversion)

@@ -15,8 +15,8 @@ SystemInfos::~SystemInfos()
 void SystemInfos::onCustomAttrConfig()
 {
     LV_LOG_USER("begin");
-    SetCustomCacheEnable(true);
-    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_LEFT, 200, lv_anim_path_linear);
+    // SetCustomCacheEnable(true);
+    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_LEFT, 50, lv_anim_path_linear);
 }
 
 void SystemInfos::onViewLoad()
@@ -48,8 +48,8 @@ void SystemInfos::onViewWillAppear()
     lv_timer_ready(timer);
 
     //View.SetScrollToY(_root, -LV_VER_RES, LV_ANIM_OFF);
-    lv_obj_set_style_opa(_root, LV_OPA_TRANSP, 0);
-    lv_obj_fade_in(_root, 300, 0);
+    // lv_obj_set_style_opa(_root, LV_OPA_TRANSP, 0);
+    // lv_obj_fade_in(_root, 300, 0);
 }
 
 void SystemInfos::onViewDidAppear()

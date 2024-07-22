@@ -19,8 +19,8 @@ Test_Page::~Test_Page()
 void Test_Page::onCustomAttrConfig()
 {
     LV_LOG_USER("begin");
-    SetCustomCacheEnable(true);
-    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_LEFT, 300, lv_anim_path_linear);
+    // SetCustomCacheEnable(true);
+    // SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_LEFT, 300, lv_anim_path_linear);
 }
 
 void Test_Page::onViewLoad()

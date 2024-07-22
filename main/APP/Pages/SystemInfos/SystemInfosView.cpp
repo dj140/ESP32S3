@@ -26,8 +26,8 @@ void SystemInfosView::Create(lv_obj_t* root)
     lv_obj_set_style_border_opa(appPanel, 0, LV_STATE_DEFAULT);
 
     /* Add scroll flags */
-    lv_obj_add_flag(appPanel, LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM);
-    lv_obj_set_scrollbar_mode(appPanel, LV_SCROLLBAR_MODE_ON);
+    // lv_obj_add_flag(appPanel, LV_OBJ_FLAG_SCROLL_ELASTIC | LV_OBJ_FLAG_SCROLL_MOMENTUM);
+    // lv_obj_set_scrollbar_mode(appPanel, LV_SCROLLBAR_MODE_ON);
     lv_obj_set_scroll_dir(appPanel, LV_DIR_VER);
     /* Update bubble config */
     _bubble_cfg.iconColMax = TFT_HOR_RES / ITEM_HEIGHT_MIN;

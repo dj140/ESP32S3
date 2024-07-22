@@ -40,8 +40,8 @@ void HAL::Power_Init()
 
     axp.adc1Enable(0xFF, true);
     // 两个警告等级（类似于手机20%一提醒，10%一提醒）和一个关机电压（类似于手机3%关机，实际显示0%）
-    axp.setVWarningLevel1(3450);
-    axp.setVWarningLevel2(3400);
+    axp.setVWarningLevel1(3150);
+    axp.setVWarningLevel2(3000);
     axp.setPowerDownVoltage(2600);
     uint16_t level1 = axp.getVWarningLevel1();
     uint16_t level2 = axp.getVWarningLevel2();
@@ -146,7 +146,7 @@ void HAL::Power_Init()
 
 void HAL::Power_Update()
 {
-        ESP_LOGI(TAG, "VbusCurrent:%.2f", axp.getVbusCurrent());
+    ESP_LOGI(TAG, "VbusCurrent:%.2f", axp.getVbusCurrent());
 }
 
 void HAL::Power_GetInfo(Power_Info_t* info)

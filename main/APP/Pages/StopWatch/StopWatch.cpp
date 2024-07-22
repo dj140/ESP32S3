@@ -57,8 +57,8 @@ void StopWatch::SW_Reset()
 void StopWatch::onCustomAttrConfig()
 {
     LV_LOG_USER("begin");
-     SetCustomCacheEnable(true);
-     SetCustomLoadAnimType(PageManager::LOAD_ANIM_FADE_ON, 300, lv_anim_path_ease_out);
+    // SetCustomCacheEnable(true);
+    // SetCustomLoadAnimType(PageManager::LOAD_ANIM_FADE_ON, 300, lv_anim_path_ease_out);
 }
 
 void StopWatch::onViewLoad()

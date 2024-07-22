@@ -43,7 +43,7 @@ void HAL::HAL_Init()
 {
     Power_Init();
     Clock_Init();
-    // taskManager.Register(Power_Update, 1000);
+    taskManager.Register(Power_Update, 1500);
 }
 
 void HAL::HAL_Update()

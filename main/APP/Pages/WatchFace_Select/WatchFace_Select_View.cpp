@@ -20,6 +20,7 @@ void WatchFace_Select_View::init_face_select(lv_obj_t* par)
 	lv_obj_update_snap(ui_faceSelect, LV_ANIM_ON);
 	lv_obj_set_flex_align(ui_faceSelect, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 	lv_obj_clear_flag(ui_faceSelect, LV_OBJ_FLAG_SNAPPABLE); /// Flags
+	lv_obj_add_flag(ui_faceSelect, LV_OBJ_FLAG_SCROLL_ONE);
 	lv_obj_set_scrollbar_mode(ui_faceSelect, LV_SCROLLBAR_MODE_OFF);
 	lv_obj_set_scroll_snap_x(ui_faceSelect, LV_SCROLL_SNAP_CENTER);
 	lv_obj_set_style_radius(ui_faceSelect, 0, LV_PART_MAIN | LV_STATE_DEFAULT);

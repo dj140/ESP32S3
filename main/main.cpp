@@ -35,6 +35,7 @@ void uiTask(void *pvParameters)
       if (pdTRUE == xSemaphoreTake(xGuiSemaphore, portMAX_DELAY))
       {
          lv_timer_handler();
+         HAL::HAL_Update();
          xSemaphoreGive(xGuiSemaphore);
       }
    }

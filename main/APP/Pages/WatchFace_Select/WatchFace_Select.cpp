@@ -13,7 +13,7 @@ WatchFace_Select::~WatchFace_Select()
 
 void WatchFace_Select::onCustomAttrConfig()
 {
-    SetCustomLoadAnimType(PageManager::LOAD_ANIM_FADE_ON, 200, lv_anim_path_ease_in);
+    SetCustomLoadAnimType(PageManager::LOAD_ANIM_FADE_ON, 50, lv_anim_path_ease_in);
 }
 
 void WatchFace_Select::onViewLoad()

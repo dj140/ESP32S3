@@ -16,7 +16,7 @@ void Watch_analog::onCustomAttrConfig()
 {
     LV_LOG_USER("begin");
     SetCustomCacheEnable(true);
-    SetCustomLoadAnimType(PageManager::LOAD_ANIM_FADE_ON, 1000, lv_anim_path_ease_in);
+    SetCustomLoadAnimType(PageManager::LOAD_ANIM_FADE_ON, 100, lv_anim_path_ease_in);
 }
 
 void Watch_analog::onViewLoad()

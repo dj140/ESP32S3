@@ -15,8 +15,8 @@ Watch_cxk::~Watch_cxk()
 void Watch_cxk::onCustomAttrConfig()
 {
     LV_LOG_USER("begin");
-    SetCustomCacheEnable(true);
-    SetCustomLoadAnimType(PageManager::LOAD_ANIM_OVER_RIGHT, 200, lv_anim_path_ease_in);
+    // SetCustomCacheEnable(true);
+    SetCustomLoadAnimType(PageManager::LOAD_ANIM_FADE_ON, 100, lv_anim_path_ease_in);
 }
 
 void Watch_cxk::onViewLoad()

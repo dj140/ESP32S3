@@ -1046,12 +1046,12 @@ uint16_t AXP20X_Class::getLDO3Voltage(void)
 
     if (_chip_id == AXP202_CHIP_ID) {
         _readByte(AXP202_LDO3OUT_VOL, 1, &rVal);
-        if (rVal & 0x80) {
-            //! According to the hardware N_VBUSEN Pin selection
-            return getVbusVoltage() * 1000;
-        } else {
+        // if (rVal & 0x80) {
+        //     //! According to the hardware N_VBUSEN Pin selection
+        //     return getVbusVoltage() * 1000;
+        // } else {
             return (rVal & 0x7F) * 25 + 700;
-        }
+        // }
     } else if (_chip_id == AXP192_CHIP_ID || _chip_id == AXP173_CHIP_ID) {
         _readByte(AXP192_LDO23OUT_VOL, 1, &rVal);
         rVal &= 0x0F;
@@ -1796,7 +1796,7 @@ int AXP20X_Class::_axp202_gpio_irq_set(axp_gpio_t gpio, axp_gpio_irq_t irq)
         return AXP_NOT_SUPPORT;
     }
     _readByte(reg, 1, &val);
-    val = mask == 0 ? (val & 0b00111111) : (val | mask);
+    // val = mask == 0 ? (val & 0b00111111) : (val | mask);
     _writeByte(reg, 1, &val);
     return AXP_PASS;
 }

@@ -23,7 +23,7 @@ void uiTask(void *pvParameters)
     ESP_LOGI(TAG, "lvgl ui task");
     // lv_demo_benchmark();
     // lv_demo_widgets();      /* A widgets example. This is what you get out of the box */
-   //  lv_demo_music();        /* A modern, smartphone-like music player demo. */
+    // lv_demo_music();        /* A modern, smartphone-like music player demo. */
     // lv_demo_stress();       /* A stress test for LVGL. */
     // lv_demo_benchmark();    /* A demo to measure the performance of LVGL or to compare different settings. */
    while (1)
@@ -48,6 +48,6 @@ extern "C" void app_main(void)
   lv_port_disp_init();
   lv_port_indev_init();
   lv_tick_set_cb(my_tick_get_cb);
-  App_Init();
+   App_Init();
   xTaskCreatePinnedToCore(uiTask, "lv_ui_Task", 1024 * 48, NULL, 5, NULL, 1);
 }

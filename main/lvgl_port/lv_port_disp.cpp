@@ -61,8 +61,9 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
     //RRRRR GGG | GGG BBBBB  ---->  GGG BBBBB | RRRRR GGG
     lv_draw_sw_rgb565_swap(px_map, (offsetx2 - offsetx1 + 1) * (offsety2 - offsety1 + 1));
     // esp_lcd_panel_draw_bitmap(panel_handle, offsetx1 , offsety1, offsetx2 + 1, offsety2 + 1, px_map);
-    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 0, 410, 252, &px_map[0]);
-    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 252, 410, 503, &px_map[410 * 252 * 2]);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 0, 410, 168, &px_map[0]);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 168, 410, 336, &px_map[410 * 168 * 2]);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 336, 410, 502, &px_map[410 * 336 * 2]);
     lv_disp_flush_ready(disp);
 
 }

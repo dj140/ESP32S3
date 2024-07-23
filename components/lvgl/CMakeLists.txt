@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.12.4)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-
 if(NOT ESP_PLATFORM)
   if(NOT (CMAKE_C_COMPILER_ID STREQUAL "MSVC"))
     project(lvgl LANGUAGES C CXX ASM HOMEPAGE_URL https://github.com/lvgl/lvgl)
@@ -11,7 +10,6 @@ if(NOT ESP_PLATFORM)
 endif()
 
 set(LVGL_ROOT_DIR ${CMAKE_CURRENT_LIST_DIR})
-
 if(ESP_PLATFORM)
   include(${CMAKE_CURRENT_LIST_DIR}/env_support/cmake/esp.cmake)
 elseif(ZEPHYR_BASE)

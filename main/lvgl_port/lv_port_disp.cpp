@@ -60,10 +60,10 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
     // copy a buffer's content to a specific area of the display
     //RRRRR GGG | GGG BBBBB  ---->  GGG BBBBB | RRRRR GGG
     lv_draw_sw_rgb565_swap(px_map, (offsetx2 - offsetx1 + 1) * (offsety2 - offsety1 + 1));
-    // esp_lcd_panel_draw_bitmap(panel_handle, offsetx1 , offsety1, offsetx2 + 1, offsety2 + 1, px_map);
-    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 0, 410, 168, &px_map[0]);
-    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 168, 410, 336, &px_map[410 * 168 * 2]);
-    esp_lcd_panel_draw_bitmap(panel_handle, 0 , 336, 410, 502, &px_map[410 * 336 * 2]);
+    esp_lcd_panel_draw_bitmap(panel_handle, offsetx1 , offsety1, offsetx2 + 1, offsety2 + 1, px_map);
+    // esp_lcd_panel_draw_bitmap(panel_handle, 0 , 0, 410, 168, &px_map[0]);
+    // esp_lcd_panel_draw_bitmap(panel_handle, 0 , 168, 410, 336, &px_map[410 * 168 * 2]);
+    // esp_lcd_panel_draw_bitmap(panel_handle, 0 , 336, 410, 502, &px_map[410 * 336 * 2]);
     lv_disp_flush_ready(disp);
 
 }
@@ -141,8 +141,8 @@ void lv_port_disp_init(void)
     ESP_LOGI(TAG, "Initialize LVGL library");
 
     // lv_display_add_event_cb(disp, lvgl_port_rounder_callback, LV_EVENT_RENDER_START, NULL);
-    lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
-    lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
+    lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * 100 * 2, MALLOC_CAP_DMA);
+    lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * 100 * 2, MALLOC_CAP_DMA);
 
     /* If failed */
     if ((buf_3_1 == NULL) || (buf_3_2 == NULL)) {
@@ -154,7 +154,7 @@ void lv_port_disp_init(void)
     }
 
     lv_display_set_user_data(disp, panel_handle);
-    lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * TFT_VER_RES * 2, LV_DISPLAY_RENDER_MODE_FULL);
+    lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * 100 * 2, LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     ESP_LOGI(TAG, "Register display driver to LVGL");
 }

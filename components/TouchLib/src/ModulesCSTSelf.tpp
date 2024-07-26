@@ -125,6 +125,6 @@ public:
 
 protected:
   bool initImpl() { return true; }
-  uint8_t raw_data[13] = {0};
+  uint8_t raw_data[20] = {0};
   uint8_t rotation = 0;
 };

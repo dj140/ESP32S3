@@ -21,9 +21,9 @@ void uiTask(void *pvParameters)
 {
     xGuiSemaphore = xSemaphoreCreateMutex();
     ESP_LOGI(TAG, "lvgl ui task");
-    // lv_demo_benchmark();
+   //  lv_demo_benchmark();
     // lv_demo_widgets();      /* A widgets example. This is what you get out of the box */
-    // lv_demo_music();        /* A modern, smartphone-like music player demo. */
+   //  lv_demo_music();        /* A modern, smartphone-like music player demo. */
     // lv_demo_stress();       /* A stress test for LVGL. */
     // lv_demo_benchmark();    /* A demo to measure the performance of LVGL or to compare different settings. */
    while (1)
@@ -43,11 +43,13 @@ void uiTask(void *pvParameters)
 
 extern "C" void app_main(void)
 {  
-  HAL::HAL_Init();
-  lv_init(); 
-  lv_port_disp_init();
-  lv_port_indev_init();
-  lv_tick_set_cb(my_tick_get_cb);
+   HAL::HAL_Init();
+   lv_init(); 
+   lv_port_disp_init();
+   lv_port_indev_init();
+   lv_tick_set_cb(my_tick_get_cb);
    App_Init();
-  xTaskCreatePinnedToCore(uiTask, "lv_ui_Task", 1024 * 48, NULL, 5, NULL, 1);
+   ESP_LOGI(TAG, "free PSRAM: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+   ESP_LOGI(TAG, "free MALLOC_CAP_DMA: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
+   xTaskCreatePinnedToCore(uiTask, "lv_ui_Task", 1024 * 48, NULL, 5, NULL, 1);
 }

@@ -7,7 +7,7 @@
 #ifndef _MJPEGCLASS_H_
 #define _MJPEGCLASS_H_
 
-#define READ_BUFFER_SIZE 1024
+#define READ_BUFFER_SIZE 4096
 #define MAXOUTPUTSIZE (MAX_BUFFERED_PIXELS / 16 / 16)
 
 // #include <FS.h>
@@ -45,7 +45,7 @@ public:
     if (_inputindex == 0)
     {
       // _buf_read = _input->readBytes(_read_buf, READ_BUFFER_SIZE);
-      _buf_read = fread(_read_buf, sizeof(_read_buf), READ_BUFFER_SIZE, _input);
+      _buf_read = fread(_read_buf, 1, READ_BUFFER_SIZE, _input);
       _inputindex += _buf_read;
     }
     _mjpeg_buf_offset = 0;
@@ -58,7 +58,7 @@ public:
       {
         if ((_read_buf[i] == 0xFF) && (_read_buf[i + 1] == 0xD8)) // JPEG header
         {
-          // Serial.printf("Found FFD8 at: %d.\n", i);
+          // printf("Found FFD8 at: %d.\n", i);
           found_FFD8 = true;
         }
         ++i;
@@ -70,7 +70,7 @@ public:
       else
       {
         // _buf_read = _input->readBytes(_read_buf, READ_BUFFER_SIZE);
-              _buf_read = fread(_read_buf, sizeof(_read_buf), READ_BUFFER_SIZE, _input);
+              _buf_read = fread(_read_buf, 1, READ_BUFFER_SIZE, _input);
 
       }
     }
@@ -109,7 +109,7 @@ public:
           // Serial.printf("o: %d\n", o);
           memcpy(_read_buf, _p + i, o);
           // _buf_read = _input->readBytes(_read_buf + o, READ_BUFFER_SIZE - o);
-                _buf_read = fread(_read_buf + o, sizeof(_read_buf), READ_BUFFER_SIZE - o, _input);
+                _buf_read = fread(_read_buf + o, 1, READ_BUFFER_SIZE - o, _input);
 
           _p = _read_buf;
           _inputindex += _buf_read;
@@ -119,7 +119,7 @@ public:
         else
         {
           // _buf_read = _input->readBytes(_read_buf, READ_BUFFER_SIZE);
-                _buf_read = fread(_read_buf, sizeof(_read_buf), READ_BUFFER_SIZE, _input);
+                _buf_read = fread(_read_buf, 1, READ_BUFFER_SIZE, _input);
 
           _p = _read_buf;
           _inputindex += _buf_read;

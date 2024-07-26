@@ -18,7 +18,7 @@ using namespace Page;
 static const char *TAG = "littlefs";
 
 #define MJPEG_FILENAME "/earth.mjpeg"
-#define MJPEG_OUTPUT_SIZE (368 * 448 * 2)          // memory for a output image frame
+#define MJPEG_OUTPUT_SIZE ((TFT_HOR_RES + 6) * TFT_VER_RES * 2)          // memory for a output image frame
 #define MJPEG_BUFFER_SIZE (MJPEG_OUTPUT_SIZE) // memory for a single JPEG frame
 
 static MjpegClass mjpeg;
@@ -117,7 +117,7 @@ void Video_Player::onViewLoad()
     printf("PSRAM free size: %d\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
     if (output_buf!=NULL && mjpeg_buf!=NULL)
     {    
-        lv_canvas_set_buffer(View.ui.canvas, (uint8_t*)output_buf, 368, 448, LV_COLOR_FORMAT_RGB565);
+        lv_canvas_set_buffer(View.ui.canvas, (uint8_t*)output_buf, TFT_HOR_RES + 6, TFT_VER_RES, LV_COLOR_FORMAT_RGB565);
         printf("input/output_buf malloc successful!");
     }
     else
@@ -142,7 +142,7 @@ void Video_Player::onViewWillAppear()
         ESP_LOGE(TAG, "Failed to open file");
         return;
     }
-    mjpeg.setup(mjpegFile, mjpeg_buf, jpegDrawCallback, false , 0 , 0 , 368, 448 );
+    mjpeg.setup(mjpegFile, mjpeg_buf, jpegDrawCallback, false , 0 , 0 , TFT_HOR_RES + 6, TFT_VER_RES );
     timer = lv_timer_create(onTimerUpdate, 10, this);
 
 }

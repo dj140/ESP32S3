@@ -141,8 +141,8 @@ void lv_port_disp_init(void)
     ESP_LOGI(TAG, "Initialize LVGL library");
 
     // lv_display_add_event_cb(disp, lvgl_port_rounder_callback, LV_EVENT_RENDER_START, NULL);
-    lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * 100 * 2, MALLOC_CAP_DMA);
-    lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * 100 * 2, MALLOC_CAP_DMA);
+    lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
+    lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
 
     /* If failed */
     if ((buf_3_1 == NULL) || (buf_3_2 == NULL)) {
@@ -154,7 +154,7 @@ void lv_port_disp_init(void)
     }
 
     lv_display_set_user_data(disp, panel_handle);
-    lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * 100 * 2, LV_DISPLAY_RENDER_MODE_PARTIAL);
+    lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * TFT_VER_RES * 2, LV_DISPLAY_RENDER_MODE_FULL);
 
     ESP_LOGI(TAG, "Register display driver to LVGL");
 }

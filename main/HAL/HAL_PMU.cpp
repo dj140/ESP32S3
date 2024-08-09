@@ -38,7 +38,12 @@ void HAL::Power_Init()
     }
     ESP_LOGI(TAG, "Success init axp20x !!!");
 
-    axp.adc1Enable(0xFF, true);
+    axp.adc1Enable(AXP202_VBUS_VOL_ADC1 |
+                   AXP202_VBUS_CUR_ADC1 |
+                   AXP202_BATT_CUR_ADC1 |
+                   AXP202_BATT_VOL_ADC1 |
+                   AXP202_TS_PIN_ADC1,
+                   true);
     // 两个警告等级（类似于手机20%一提醒，10%一提醒）和一个关机电压（类似于手机3%关机，实际显示0%）
     axp.setVWarningLevel1(3150);
     axp.setVWarningLevel2(3000);
@@ -63,6 +68,7 @@ void HAL::Power_Init()
     // axp.setPowerOutPut(AXP202_LDO3, AXP202_ON);
 
     axp.setPowerOutPut(AXP202_EXTEN, AXP202_ON);
+    axp.EnableCoulombcounter();
 
     if (axp.isDCDC2Enable())
     {
@@ -118,6 +124,10 @@ void HAL::Power_Init()
         ESP_LOGI(TAG, "Exten: DISABLE");
     }
 
+    if (axp.isBatteryConnect())
+    {
+        ESP_LOGI(TAG, "BatteryConnect!!");
+    }
     // When the chip is axp192 / 173, the allowed values are 0 ~ 15,
     // corresponding to the axp1xx_charge_current_t enumeration
     //  axp.setChargeControlCur(AXP1XX_CHARGE_CUR_550MA);
@@ -146,11 +156,19 @@ void HAL::Power_Init()
 
 void HAL::Power_Update()
 {
-    ESP_LOGI(TAG, "VbusCurrent:%.2f", axp.getVbusCurrent());
-}
+    ESP_LOGI(TAG, "VbusCurrent:%.2f mV", axp.getVbusCurrent());
+    ESP_LOGI(TAG, "BattChargeCurrent:%.2f mV", axp.getBattChargeCurrent());
+    ESP_LOGI(TAG, "BattDischargeCurrent:%.2f mV", axp.getBattDischargeCurrent());
+    ESP_LOGI(TAG, "BattPercentage: %d %%", axp.getBattPercentage());
+    ESP_LOGI(TAG, "BattVoltage:%.2f mV", axp.getBattVoltage());
+    ESP_LOGI(TAG, "TSVoltage:%.2f mV", axp.getTSTemp());
+    ESP_LOGI(TAG, "CoreTemp:%.2f C", axp.getTemp());
+    ESP_LOGI(TAG, "CoulombData:%.2f mAh", axp.getCoulombData());
+} 
 
 void HAL::Power_GetInfo(Power_Info_t* info)
 {
-
+    info->voltage = axp.getBattVoltage();
+    info->Percentage = axp.getBattPercentage();
 }
 

@@ -53,6 +53,13 @@ typedef struct
     int16_t steps;
 } IMU_Info_t;
 
+/* Button */
+typedef struct
+{
+    bool PRESS;
+    bool RELEASED;
+} Button_Info_t;
+
 /* SportStatus */
 typedef struct
 {
@@ -87,7 +94,7 @@ typedef struct
 typedef struct
 {
     uint16_t voltage;
-    uint8_t usage;
+    uint8_t Percentage;
     bool isCharging;
 } Power_Info_t;
 

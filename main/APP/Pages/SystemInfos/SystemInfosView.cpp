@@ -16,9 +16,10 @@ void SystemInfosView::Create(lv_obj_t* root)
     lv_obj_add_flag(appPanel, LV_OBJ_FLAG_SCROLLABLE);     /// Flags
 
     lv_obj_set_size(appPanel, TFT_HOR_RES, TFT_VER_RES);
+    // lv_obj_center(appPanel);
     //lv_obj_clear_flag(root, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_clear_flag(appPanel, LV_OBJ_FLAG_GESTURE_BUBBLE);      /// Flags
-    lv_obj_align(appPanel, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_align(appPanel, LV_ALIGN_CENTER, 0, 0);
     LauncherData_t.appPanel = appPanel;
     /* Ser style */
     lv_obj_set_style_radius(appPanel, 0, LV_STATE_DEFAULT);
@@ -194,6 +195,7 @@ void SystemInfosView::Item_Create(
 
     lv_obj_t* app = lv_img_create(par);
     lv_obj_center(app);
+    lv_obj_clear_flag(app, LV_OBJ_FLAG_GESTURE_BUBBLE);      /// Flags
 
     lv_img_set_src(app, ResourcePool::GetImage(img_src));
     lv_obj_set_width(app, 120);   /// 1
@@ -231,5 +233,6 @@ void SystemInfosView::Item_Create(
     lv_obj_add_flag(app, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_set_style_img_recolor(app, lv_color_hex(0x000000), LV_STATE_PRESSED);
     lv_obj_set_style_img_recolor_opa(app, 50, LV_STATE_PRESSED);
+    
 }
 

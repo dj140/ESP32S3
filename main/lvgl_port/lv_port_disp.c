@@ -44,7 +44,7 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
 static bool example_notify_lvgl_flush_ready(esp_lcd_panel_io_handle_t panel_io, esp_lcd_panel_io_event_data_t *edata, void *user_ctx)
 {
     lv_display_t *disp_driver = (lv_display_t *)user_ctx;
-    //lv_disp_flush_ready(disp_driver);
+    // lv_disp_flush_ready(disp_driver);
     return false;
 }
 
@@ -68,8 +68,10 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
 
 }
 
-void example_lvgl_rounder_cb(struct _lv_disp_drv_t *disp_drv, lv_area_t *area)
+void lvgl_rounder_cb(lv_event_t *e)
 {
+    lv_area_t *area = (lv_area_t *)lv_event_get_param(e);
+
     uint16_t x1 = area->x1;
     uint16_t x2 = area->x2;
 
@@ -141,8 +143,8 @@ void lv_port_disp_init(void)
     ESP_LOGI(TAG, "Initialize LVGL library");
 
     // lv_display_add_event_cb(disp, lvgl_port_rounder_callback, LV_EVENT_RENDER_START, NULL);
-    lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
-    lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
+    lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * 100 * 2, MALLOC_CAP_DMA);
+    lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * 100 * 2, MALLOC_CAP_DMA);
 
     /* If failed */
     if ((buf_3_1 == NULL) || (buf_3_2 == NULL)) {
@@ -154,7 +156,8 @@ void lv_port_disp_init(void)
     }
 
     lv_display_set_user_data(disp, panel_handle);
-    lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * TFT_VER_RES * 2, LV_DISPLAY_RENDER_MODE_FULL);
+    lv_display_add_event_cb(disp, lvgl_rounder_cb, LV_EVENT_INVALIDATE_AREA, NULL);
+    lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * 100 * 2, LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     ESP_LOGI(TAG, "Register display driver to LVGL");
 }
@@ -162,7 +165,25 @@ void lv_port_disp_init(void)
 /**********************
  *   STATIC FUNCTIONS
  **********************/
+static QueueHandle_t gpio_evt_queue = NULL;
 
+
+static void IRAM_ATTR gpio_isr_handler(void* arg)
+{
+    uint32_t gpio_num = (uint32_t) arg;
+    xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
+}
+
+static void gpio_task_example(void* arg)
+{
+    uint32_t io_num;
+    ESP_LOGI(TAG, "gpio_task_example");
+    for (;;) {
+        if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
+            printf("GPIO[%"PRIu32"] intr, val: %d\n", io_num, gpio_get_level(io_num));
+        }
+    }
+}
 /*Initialize your display and the required peripherals.*/
 static void disp_init(void)
 {
@@ -172,6 +193,27 @@ static void disp_init(void)
     gpio_set_pull_mode(GPIO_NUM_3, GPIO_PULLUP_PULLDOWN);
     gpio_set_level(GPIO_NUM_3, 1);
     vTaskDelay(pdMS_TO_TICKS(10));
+
+    gpio_config_t io_conf;
+    //interrupt of rising edge
+    io_conf.intr_type = GPIO_INTR_POSEDGE;
+    //bit mask of the pins, use GPIO4/5 here
+    io_conf.pin_bit_mask = GPIO_NUM_7;
+    //set as input mode
+    io_conf.mode = GPIO_MODE_INPUT;
+    //enable pull-up mode
+    io_conf.pull_up_en = 0;
+    gpio_config(&io_conf);
+    
+    gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
+
+    xTaskCreate(gpio_task_example, "gpio_task_example", 2048, NULL, 10, NULL);
+
+    // Install ISR service
+    gpio_install_isr_service(0);
+
+    // Add GPIO interrupt handler
+    gpio_isr_handler_add(GPIO_NUM_7, gpio_isr_handler, (void*)GPIO_NUM_7);
 }
 
 

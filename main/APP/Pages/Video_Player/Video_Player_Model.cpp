@@ -2,7 +2,28 @@
 
 using namespace Page;
 
-uint32_t Video_Player_Model::GetData()
+void Video_Player_Model::Init()
 {
-    return lv_tick_get();
+    account = new Account("Video_Player_Model", DataProc::Center(), 0, this);
+
+    account->Subscribe("Button");
+
+}
+
+void Video_Player_Model::Deinit()
+{
+    if (account)
+    {
+        delete account;
+        account = nullptr;
+    }
+}
+
+void Video_Player_Model::GetButtonInfo(bool* status)
+{
+
+    HAL::Button_Info_t Button = { 0 };
+    account->Pull("Button", &Button, sizeof(Button));
+    *status = Button.PRESS;
+
 }

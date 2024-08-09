@@ -107,9 +107,12 @@ void SystemInfos::onEvent(lv_event_t* event)
     lv_event_code_t code = lv_event_get_code(event);
     //LV_LOG_USER("LV_EVENT_GESTURE %d", code);
 
+    // printf("SystemInfos LV_EVENT_GESTURE: %d\r\n", code);
+
     if (code == LV_EVENT_GESTURE)
     {
         LV_LOG_USER("LV_EVENT_GESTURE %d", code);
+        printf("LV_EVENT_GESTURE: %d\r\n", code);
 
 //        if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
 //            instance->_Manager->Pop();

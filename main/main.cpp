@@ -51,5 +51,5 @@ extern "C" void app_main(void)
    App_Init();
    ESP_LOGI(TAG, "free PSRAM: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
    ESP_LOGI(TAG, "free MALLOC_CAP_DMA: %d\r\n", heap_caps_get_free_size(MALLOC_CAP_DMA));
-   xTaskCreatePinnedToCore(uiTask, "lv_ui_Task", 1024 * 48, NULL, 5, NULL, 1);
+   xTaskCreatePinnedToCore(uiTask, "lv_ui_Task", 1024 * 10, NULL, 5, NULL, 1);
 }

@@ -68,7 +68,7 @@ void HAL::Clock_GetInfo(Clock_Info_t* info)
   info->second = timeinfo.tm_sec;
   info->millisecond = time_us;
 
-  ESP_LOGI(TAG, "The current date/time in Shanghai is: %s", strftime_buf);
+  // ESP_LOGI(TAG, "The current date/time in Shanghai is: %s", strftime_buf);
 }
 
 void HAL::Clock_SetInfo(const Clock_Info_t* info)

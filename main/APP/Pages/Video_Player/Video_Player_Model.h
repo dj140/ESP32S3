@@ -2,6 +2,7 @@
 #define __Video_Player_MODEL_H
 
 #include "lvgl.h"
+#include "APP/Common/DataProc/DataProc.h"
 
 namespace Page
 {
@@ -9,9 +10,12 @@ namespace Page
 class Video_Player_Model
 {
 public:
-    uint32_t TickSave;
-    uint32_t GetData();
+    void Init();
+    void Deinit();
+    void GetButtonInfo(bool* status);
+
 private:
+    Account* account;
 
 };
 

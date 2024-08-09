@@ -38,15 +38,15 @@
 #define NULL_PIN                    PD0
 
 /* AMOLED */
-#define AMOLED_RESET_PIN      GPIO_NUM_4
-#define AMOLED_VCI_EN_PIN     GPIO_NUM_3
-#define AMOLED_TE_PIN         GPIO_NUM_7
-#define AMOLED_CS_PIN         GPIO_NUM_9
-#define AMOLED_CLK_PIN        GPIO_NUM_14
-#define AMOLED_D0_PIN         GPIO_NUM_11
-#define AMOLED_D1_PIN         GPIO_NUM_12
-#define AMOLED_D2_PIN         GPIO_NUM_2
-#define AMOLED_D3_PIN         GPIO_NUM_13  
+#define AMOLED_RESET_PIN      GPIO_NUM_2
+#define AMOLED_VCI_EN_PIN     GPIO_NUM_48
+#define AMOLED_TE_PIN         GPIO_NUM_1
+#define AMOLED_CS_PIN         GPIO_NUM_4
+#define AMOLED_CLK_PIN        GPIO_NUM_5
+#define AMOLED_D0_PIN         GPIO_NUM_6
+#define AMOLED_D1_PIN         GPIO_NUM_7
+#define AMOLED_D2_PIN         GPIO_NUM_15
+#define AMOLED_D3_PIN         GPIO_NUM_16
 
 
 #define AMOLED_HOR_RES       410
@@ -91,12 +91,12 @@
 #define CONFIG_DEBUG_TX_PIN         PA9
 
 /* SD CARD */
-#define CONFIG_SD_SPI               SPI_2
-#define CONFIG_SD_CD_PIN            PA8
-#define CONFIG_SD_MOSI_PIN          PB15
-#define CONFIG_SD_MISO_PIN          PB14
-#define CONFIG_SD_SCK_PIN           PB13
-#define CONFIG_SD_CS_PIN            PB12
+#define CONFIG_SD_CS               GPIO_NUM_11
+#define CONFIG_SD_CLK              GPIO_NUM_12
+#define CONFIG_SD_D0               GPIO_NUM_13
+#define CONFIG_SD_D1               GPIO_NUM_14
+#define CONFIG_SD_D2               GPIO_NUM_9
+#define CONFIG_SD_D3               GPIO_NUM_10
 
 /* HAL Interrupt Update Timer */
 #define CONFIG_HAL_UPDATE_TIM       TIM4
@@ -113,8 +113,8 @@
 
 /* I2C peripheral */
 #define HAL_PIN_I2C_PORT    0
-#define HAL_PIN_I2C_SCL     8
-#define HAL_PIN_I2C_SDA     6
+#define HAL_PIN_I2C_SCL     17
+#define HAL_PIN_I2C_SDA     18
 
 /* Touch pad */
 #define HAL_PIN_TP_RST      10

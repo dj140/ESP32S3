@@ -66,7 +66,7 @@ void MAG_SetCommitCallback(CommitFunc_t func, void* userData);
 void MAG_Update();
 
 /* SD */
-bool SD_Init();
+void SD_Init();
 void SD_Update();
 bool SD_GetReady();
 float SD_GetCardSizeMB();
@@ -109,6 +109,11 @@ void Buzz_Tone(uint32_t freq, int32_t duration = -1);
 void Motor_Init();
 void Motor_Update();
 
+/* Button */
+void Button_Init();
+void Button_Update();
+void Button_GetInfo(Button_Info_t* info);
+bool Button_GetIsPush();
 
 /* Audio */
 void Audio_Init();

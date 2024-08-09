@@ -26,8 +26,8 @@ extern "C" {
 #define AXP_ISR_GPIO                (gpio_num_t)(2)  /*!< axp power chip interrupt Pin*/
 #define GPIO_INPUT_PIN_SEL          (1ULL<<AXP_ISR_GPIO)
 
-#define I2C_MASTER_SCL_IO           8//CONFIG_I2C_MASTER_SCL                   /*!< gpio number for I2C master clock */
-#define I2C_MASTER_SDA_IO           6//CONFIG_I2C_MASTER_SDA                   /*!< gpio number for I2C master data  */
+#define I2C_MASTER_SCL_IO           17//CONFIG_I2C_MASTER_SCL                   /*!< gpio number for I2C master clock */
+#define I2C_MASTER_SDA_IO           18//CONFIG_I2C_MASTER_SDA                   /*!< gpio number for I2C master data  */
 #define I2C_MASTER_NUM              I2C_NUM_0//I2C_NUMBER(I2C_NUM_0)  /*!< I2C port number for master dev */
 #define I2C_MASTER_FREQ_HZ          400*1000             /*!< I2C master clock frequency */
 #define I2C_MASTER_TX_BUF_DISABLE   0                                       /*!< I2C master doesn't need buffer */

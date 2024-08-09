@@ -34,6 +34,7 @@ static int16_t x = -1, y = -1, w = -1, h = -1;
 FILE *mjpegFile;
 uint8_t *mjpeg_buf;
 uint16_t *output_buf;
+bool status;
 
 // pixel drawing callback
 static int jpegDrawCallback(JPEGDRAW *pDraw)
@@ -66,6 +67,7 @@ void Video_Player::onCustomAttrConfig()
 void Video_Player::onViewLoad()
 {
     printf("Video_Player begin \n");
+    Model.Init();
     View.Create(_root);
     AttachEvent(_root);
     AttachEvent(View.ui.cont);
@@ -136,7 +138,7 @@ void Video_Player::onViewWillAppear()
 {
     LV_LOG_USER("begin");
     ESP_LOGI(TAG, "Opening file");
-    mjpegFile = fopen("/littlefs//earth.mjpeg", "r");
+    mjpegFile = fopen("/littlefs/earth.mjpeg", "r");
     if (mjpegFile == NULL)
     {
         ESP_LOGE(TAG, "Failed to open file");
@@ -185,6 +187,7 @@ void Video_Player::Update()
     mjpeg.readMjpegBuf();
     mjpeg.drawJpg();
     lv_obj_invalidate(View.ui.canvas);
+    Model.GetButtonInfo(&status);
 }
 
 void Video_Player::onTimerUpdate(lv_timer_t* timer)
@@ -205,8 +208,17 @@ void Video_Player::onEvent(lv_event_t* event)
 
     if (code == LV_EVENT_PRESSED)
     {    
-
+    printf("SystemInfos on \n");
         instance->_Manager->Push("Pages/Dialplate");
     }
-
+    if(code == LV_EVENT_SHORT_CLICKED)
+    {
+        printf("LV_EVENT_CLICKED \n");
+        instance->_Manager->Push("Pages/Dialplate");
+    }
+    if(status == 0x01)
+    {
+        // printf("SystemInfos on \n");
+        // instance->_Manager->Push("Pages/Dialplate");
+    }
 }

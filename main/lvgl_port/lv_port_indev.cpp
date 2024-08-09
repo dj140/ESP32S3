@@ -110,12 +110,12 @@ void lv_port_indev_init(void)
 static void touchpad_init(void)
 {
     /*Your code comes here*/
-    gpio_reset_pin(GPIO_NUM_10);
-    gpio_set_direction(GPIO_NUM_10, GPIO_MODE_OUTPUT);
-    gpio_set_pull_mode(GPIO_NUM_10, GPIO_PULLUP_PULLDOWN);
-    gpio_set_level(GPIO_NUM_10, 0);
+    gpio_reset_pin(HAL_PIN_TP_RST);
+    gpio_set_direction(HAL_PIN_TP_RST, GPIO_MODE_OUTPUT);
+    gpio_set_pull_mode(HAL_PIN_TP_RST, GPIO_PULLUP_PULLDOWN);
+    gpio_set_level(HAL_PIN_TP_RST, 0);
     vTaskDelay(pdMS_TO_TICKS(200));
-    gpio_set_level(GPIO_NUM_10, 1);
+    gpio_set_level(HAL_PIN_TP_RST, 1);
     vTaskDelay(pdMS_TO_TICKS(200));
     touch.begin(CTS820_SLAVE_ADDRESS, -1, twi_read, twi_write);
 }

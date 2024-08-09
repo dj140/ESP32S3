@@ -188,10 +188,10 @@ static void gpio_task_example(void* arg)
 static void disp_init(void)
 {
     /*You code here*/
-    gpio_reset_pin(GPIO_NUM_3);
-    gpio_set_direction(GPIO_NUM_3, GPIO_MODE_OUTPUT);
-    gpio_set_pull_mode(GPIO_NUM_3, GPIO_PULLUP_PULLDOWN);
-    gpio_set_level(GPIO_NUM_3, 1);
+    gpio_reset_pin(AMOLED_VCI_EN_PIN);
+    gpio_set_direction(AMOLED_VCI_EN_PIN, GPIO_MODE_OUTPUT);
+    gpio_set_pull_mode(AMOLED_VCI_EN_PIN, GPIO_PULLUP_PULLDOWN);
+    gpio_set_level(AMOLED_VCI_EN_PIN, 1);
     vTaskDelay(pdMS_TO_TICKS(10));
 
     gpio_config_t io_conf;

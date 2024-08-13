@@ -18,7 +18,7 @@ extern "C" {
 #include "esp_log.h"
 #include "driver/i2c.h"
 #include "sdkconfig.h"
-
+#include "HAL_Config.h"
 //! ESP32C3只有I2C_NUM_0一个I2C通道
 // #define _I2C_NUMBER(num)            I2C_NUM_##num                           /*!< I2C port*/
 // #define I2C_NUMBER(num)             _I2C_NUMBER(num)
@@ -26,9 +26,9 @@ extern "C" {
 #define AXP_ISR_GPIO                (gpio_num_t)(2)  /*!< axp power chip interrupt Pin*/
 #define GPIO_INPUT_PIN_SEL          (1ULL<<AXP_ISR_GPIO)
 
-#define I2C_MASTER_SCL_IO           17//CONFIG_I2C_MASTER_SCL                   /*!< gpio number for I2C master clock */
-#define I2C_MASTER_SDA_IO           18//CONFIG_I2C_MASTER_SDA                   /*!< gpio number for I2C master data  */
-#define I2C_MASTER_NUM              I2C_NUM_0//I2C_NUMBER(I2C_NUM_0)  /*!< I2C port number for master dev */
+#define I2C_MASTER_SCL_IO           HAL_PIN_I2C_SCL//CONFIG_I2C_MASTER_SCL                   /*!< gpio number for I2C master clock */
+#define I2C_MASTER_SDA_IO           HAL_PIN_I2C_SDA//CONFIG_I2C_MASTER_SDA                   /*!< gpio number for I2C master data  */
+#define I2C_MASTER_NUM              HAL_PIN_I2C_PORT//I2C_NUMBER(I2C_NUM_0)  /*!< I2C port number for master dev */
 #define I2C_MASTER_FREQ_HZ          400*1000             /*!< I2C master clock frequency */
 #define I2C_MASTER_TX_BUF_DISABLE   0                                       /*!< I2C master doesn't need buffer */
 #define I2C_MASTER_RX_BUF_DISABLE   0                                       /*!< I2C master doesn't need buffer */
@@ -43,6 +43,7 @@ extern "C" {
 esp_err_t i2c_master_init(void);
 uint32_t twi_read(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint8_t len);   //! 类型错误：uint16_t
 uint32_t twi_write(uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint8_t len);  //! 类型错误：uint16_t
+void I2C_Scan(void);
 
 #ifdef __cplusplus
 }

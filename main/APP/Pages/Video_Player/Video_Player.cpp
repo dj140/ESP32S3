@@ -39,9 +39,14 @@ bool status;
 // pixel drawing callback
 static int jpegDrawCallback(JPEGDRAW *pDraw)
 {
+    /*Draw pos = 0,0. size = 416 x 16
+    Draw pos = 0,16. size = 416 x 16
+    .....
+    Draw pos = 0,464. size = 416 x 16
+    Draw pos = 0,480. size = 416 x 14*/
     // printf("Draw pos = %d,%d. size = %d x %d\n", pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight);
     // unsigned long start = millis();
-    memcpy(&output_buf[pDraw->y* pDraw->iWidth], pDraw->pPixels, pDraw->iWidth * pDraw->iHeight * 2);
+    memcpy(&output_buf[pDraw->y * pDraw->iWidth], pDraw->pPixels, pDraw->iWidth * pDraw->iHeight * 2);
     // total_show_video += millis() - start;
     return 1;
 }
@@ -120,7 +125,7 @@ void Video_Player::onViewLoad()
     if (output_buf!=NULL && mjpeg_buf!=NULL)
     {    
         lv_canvas_set_buffer(View.ui.canvas, (uint8_t*)output_buf, TFT_HOR_RES + 6, TFT_VER_RES, LV_COLOR_FORMAT_RGB565);
-        printf("input/output_buf malloc successful!");
+        printf("input/output_buf malloc successful! \n");
     }
     else
     {
@@ -208,7 +213,7 @@ void Video_Player::onEvent(lv_event_t* event)
 
     if (code == LV_EVENT_PRESSED)
     {    
-    printf("SystemInfos on \n");
+        printf("SystemInfos on \n");
         instance->_Manager->Push("Pages/Dialplate");
     }
     if(code == LV_EVENT_SHORT_CLICKED)
@@ -218,7 +223,7 @@ void Video_Player::onEvent(lv_event_t* event)
     }
     if(status == 0x01)
     {
-        // printf("SystemInfos on \n");
+        printf("SystemInfos on \n");
         // instance->_Manager->Push("Pages/Dialplate");
     }
 }

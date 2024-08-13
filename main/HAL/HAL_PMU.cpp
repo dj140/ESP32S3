@@ -1,12 +1,8 @@
 #include "HAL/HAL.h"
 #include "esp_log.h"
-
 extern "C" {
-
 #include "i2c_port.h"
-
 }
-
 #include "axp20x.hpp"
 
 static const char *TAG = "AXP202";
@@ -29,7 +25,6 @@ static void Power_ADC_Update()
 
 void HAL::Power_Init()
 {
-    ESP_ERROR_CHECK(i2c_master_init());
 
  if (axp.begin(twi_read, twi_write, AXP202_SLAVE_ADDRESS))
     {
@@ -170,5 +165,6 @@ void HAL::Power_GetInfo(Power_Info_t* info)
 {
     info->voltage = axp.getBattVoltage();
     info->Percentage = axp.getBattPercentage();
+    info->isCharging = axp.isChargeing();
 }
 

@@ -24,6 +24,8 @@
 #define LCD_OPCODE_READ_CMD         (0x03ULL)
 #define LCD_OPCODE_WRITE_COLOR      (0x32ULL)
 
+#define CONFIG_Demo_Board 1
+
 static const char *TAG = "sh8601";
 
 static esp_err_t panel_sh8601_del(esp_lcd_panel_t *panel);
@@ -192,16 +194,34 @@ static esp_err_t panel_sh8601_reset(esp_lcd_panel_t *panel)
 
 static const sh8601_lcd_init_cmd_t vendor_specific_init_default[] = {
 //  {cmd, { data }, data_size, delay_ms}
-    {0xFE, (uint8_t []){0x00}, 1, 1},
-    {0xC4, (uint8_t []){0x80}, 1, 1},
-    {0x3A, (uint8_t []){0x55}, 1, 1},
-    {0x44, (uint8_t []){0x00, 0xc8}, 2, 0},
-    {0x35, (uint8_t []){0x00}, 1, 0},
-    {0x53, (uint8_t []){0x20}, 1, 25},
-    {0x51, (uint8_t []){0x40}, 1, 0},
-    {0x2A, (uint8_t []){0x00,0x16,0x01,0xAF}, 4, 1},
-    {0x2B, (uint8_t []){0x00,0x00,0x01,0xF5}, 4, 1},
-    {0x11, (uint8_t []){0x00}, 0, 60},
+    #if CONFIG_Watch_Board
+        {0xFE, (uint8_t []){0x00}, 1, 1},
+        {0xC4, (uint8_t []){0x80}, 1, 1},
+        {0x3A, (uint8_t []){0x55}, 1, 1},
+        {0x44, (uint8_t []){0x00, 0xc8}, 2, 0},
+        {0x35, (uint8_t []){0x00}, 1, 0},
+        {0x53, (uint8_t []){0x20}, 1, 25},
+        {0x51, (uint8_t []){0x40}, 1, 0},
+        {0x2A, (uint8_t []){0x00,0x16,0x01,0xAF}, 4, 1},
+        {0x2B, (uint8_t []){0x00,0x00,0x01,0xF5}, 4, 1},
+        {0x11, (uint8_t []){0x00}, 0, 60},
+    #endif
+
+    #if CONFIG_Demo_Board
+        {0xF0, (uint8_t []){0x5A, 0x5A}, 2, 1},
+        {0xF1, (uint8_t []){0x5A, 0x5A}, 2, 1},
+        {0x11, (uint8_t []){0x00}, 0, 10},
+        {0xFF, (uint8_t []){0x5A, 0x00}, 2, 1},
+        {0xF2, (uint8_t []){0x1D}, 1, 1},
+        {0xE1, (uint8_t []){0x00}, 1, 1},
+        {0x2A, (uint8_t []){0x00,0x00,0x01,0x99}, 4, 1},
+        {0x2B, (uint8_t []){0x00,0x00,0x01,0xED}, 4, 1},
+        {0x44, (uint8_t []){0x01, 0xED}, 2, 1},
+        {0x35, (uint8_t []){0x00}, 1, 1},
+        {0x53, (uint8_t []){0x20}, 1, 50},
+        {0x51, (uint8_t []){0x40}, 1, 0},
+    #endif
+
 };
 
 static esp_err_t panel_sh8601_init(esp_lcd_panel_t *panel)

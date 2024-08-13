@@ -21,7 +21,15 @@ public:
             lv_obj_t* labelClock;
             lv_obj_t* labelClockmin;
             lv_obj_t* labelClockhour;
+            lv_obj_t* Power;
         } dialplate;
+        
+        struct
+        {
+            lv_obj_t* img;
+            lv_obj_t* objUsage;
+            lv_obj_t* label;
+        } battery;
 
         lv_anim_timeline_t* anim_timeline;
     } ui;

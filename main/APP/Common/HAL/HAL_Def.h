@@ -95,6 +95,7 @@ typedef struct
 {
     uint16_t voltage;
     uint8_t Percentage;
+    uint8_t usage;
     bool isCharging;
 } Power_Info_t;
 

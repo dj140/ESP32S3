@@ -28,7 +28,7 @@
  *=========================*/
 
 /* Board */
-#define CONFIG_Watch_Board        1
+#define CONFIG_Demo_Board        1
 
 #if CONFIG_Watch_Board
 
@@ -82,13 +82,13 @@
 #define AMOLED_D3_PIN         GPIO_NUM_16
 
 /* I2C peripheral */
-#define HAL_PIN_I2C_PORT    0
-#define HAL_PIN_I2C_SCL     17
-#define HAL_PIN_I2C_SDA     18
+#define HAL_PIN_I2C_PORT    I2C_NUM_0
+#define HAL_PIN_I2C_SCL     GPIO_NUM_17
+#define HAL_PIN_I2C_SDA     GPIO_NUM_18
 
 /* Touch pad */
-#define HAL_PIN_TP_RST      10
-#define HAL_PIN_TP_INTR     5
+#define HAL_PIN_TP_RST      GPIO_NUM_47
+#define HAL_PIN_TP_INTR     GPIO_NUM_8
 
 /* SD CARD */
 #define CONFIG_SD_CS               GPIO_NUM_11
@@ -98,6 +98,12 @@
 #define CONFIG_SD_D2               GPIO_NUM_9
 #define CONFIG_SD_D3               GPIO_NUM_10
 
+/* Button */
+#define CONFIG_Button_PIN             GPIO_NUM_3  // TIM2
+
+/* Buzzer */
+#define CONFIG_BUZZ_PIN             GPIO_NUM_38  // TIM2
+
 #endif
 
 
@@ -105,8 +111,7 @@
 #define CONFIG_BAT_DET_PIN          PA1
 #define CONFIG_BAT_CHG_DET_PIN      PA11
 
-/* Buzzer */
-#define CONFIG_BUZZ_PIN             PA0  // TIM2
+
 
 /* GPS */
 #define CONFIG_GPS_SERIAL           Serial2

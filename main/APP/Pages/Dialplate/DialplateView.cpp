@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include "esp_heap_caps.h"
 
+#define BATT_USAGE_HEIGHT (lv_obj_get_style_height(ui.battery.img, 0) - 6)
+#define BATT_USAGE_WIDTH  (lv_obj_get_style_width(ui.battery.img, 0) - 4)
+
 using namespace Page;
 
 // static const char dog_lottie[] = {
@@ -195,27 +198,56 @@ void DialplateView::Dialplate_Create(lv_obj_t* par)
     lv_obj_set_style_img_opa(home_digital_img_flash, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     //Write codes home_digital_label_flashText
-    lv_obj_t* home_digital_label_flashText = lv_label_create(home_digital);
-    lv_label_set_text(home_digital_label_flashText, "86%");
-    lv_label_set_long_mode(home_digital_label_flashText, LV_LABEL_LONG_WRAP);
-    lv_obj_set_align(home_digital_label_flashText, LV_ALIGN_TOP_MID);
-    //   lv_obj_set_pos(home_digital_label_flashText, 186, 35);
-    lv_obj_set_size(home_digital_label_flashText, 59, 21);
+        /* battery */
+    lv_obj_t* img = lv_img_create(home_digital);
+    lv_img_set_src(img, ResourcePool::GetImage("battery"));
+    lv_obj_align(img, LV_ALIGN_TOP_MID, -25, 0);
+    // lv_img_t* img_ext = (lv_img_t*)img;
+    // lv_obj_set_size(img, img_ext->w, img_ext->h);
+    ui.battery.img = img;
 
-    //Write style for home_digital_label_flashText, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_border_width(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_radius(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_color(home_digital_label_flashText, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(home_digital_label_flashText, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_letter_space(home_digital_label_flashText, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_line_space(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_align(home_digital_label_flashText, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_top(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_right(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_bottom(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_left(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_width(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_t* obj = lv_obj_create(img);
+    lv_obj_remove_style_all(obj);
+    lv_obj_set_style_bg_color(obj, lv_color_white(), 0);
+    lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
+    lv_obj_set_style_opa(obj, LV_OPA_COVER, 0);
+    lv_obj_set_size(obj, 4, 9);
+    printf("BATT_USAGE_HEIGHT: %d \n", BATT_USAGE_HEIGHT);
+    lv_obj_align(obj, LV_ALIGN_BOTTOM_MID, 0, -2);
+    ui.battery.objUsage = obj;
+
+    static lv_style_t style_label;
+    lv_style_init(&style_label);
+    lv_style_set_text_color(&style_label, lv_color_white());
+    lv_style_set_text_font(&style_label, ResourcePool::GetFont("bahnschrift_17"));
+
+    lv_obj_t* label = lv_label_create(home_digital);
+    lv_obj_add_style(label, &style_label, 0);
+    lv_obj_align_to(label, ui.battery.img, LV_ALIGN_TOP_MID, 35, 0);
+    lv_label_set_text(label, "100%");
+    ui.battery.label = label;
+    // lv_obj_t* home_digital_label_flashText = lv_label_create(home_digital);
+    // lv_label_set_text(home_digital_label_flashText, "86%");
+    // lv_label_set_long_mode(home_digital_label_flashText, LV_LABEL_LONG_WRAP);
+    // lv_obj_set_align(home_digital_label_flashText, LV_ALIGN_TOP_MID);
+    // //   lv_obj_set_pos(home_digital_label_flashText, 186, 35);
+    // lv_obj_set_size(home_digital_label_flashText, 59, 21);
+    // ui.dialplate.Power = home_digital_label_flashText;
+    
+    // //Write style for home_digital_label_flashText, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
+    // lv_obj_set_style_border_width(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_radius(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_color(home_digital_label_flashText, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_font(home_digital_label_flashText, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_letter_space(home_digital_label_flashText, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_line_space(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_align(home_digital_label_flashText, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_bg_opa(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_pad_top(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_pad_right(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_pad_bottom(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_pad_left(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_shadow_width(home_digital_label_flashText, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     //Write codes home_digital_img_dialDot
     lv_obj_t* home_digital_img_dialDot = lv_img_create(home_digital);

@@ -19,7 +19,7 @@
 
 #define TFT_HOR_RES 410
 
-#define TFT_VER_RES 502
+#define TFT_VER_RES 494
 
 /*If you need to include anything here, do it inside the `__ASSEMBLY__` guard */
 #if  0 && defined(__ASSEMBLY__)

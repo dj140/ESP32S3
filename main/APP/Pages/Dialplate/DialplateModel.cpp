@@ -11,7 +11,7 @@ void DialplateModel::Init()
 //    account->Subscribe("StatusBar");
 //    account->Subscribe("GPS");
 //    account->Subscribe("MusicPlayer");
-    account->SetEventCallback(onEvent);
+    // account->SetEventCallback(onEvent);
 }
 
 void DialplateModel::Deinit()
@@ -35,18 +35,18 @@ void DialplateModel::GetClockinfo(HAL::Clock_Info_t* info)
 void DialplateModel::GetPowerInfo(HAL::Power_Info_t* info)
 {
     memset(info, 0, sizeof(HAL::Power_Info_t));
-    if (account->Pull("Clock", info, sizeof(HAL::Power_Info_t)) != Account::RES_OK)
+    if (account->Pull("Power", info, sizeof(HAL::Power_Info_t)) != Account::RES_OK)
     {
         return;
     }
 }
 
-int DialplateModel::onEvent(Account* account, Account::EventParam_t* param)
-{
-    if (param->event != Account::EVENT_PUB_PUBLISH)
-    {
-        return Account::RES_UNSUPPORTED_REQUEST;
-    }
+// int DialplateModel::onEvent(Account* account, Account::EventParam_t* param)
+// {
+//     if (param->event != Account::EVENT_PUB_PUBLISH)
+//     {
+//         return Account::RES_UNSUPPORTED_REQUEST;
+//     }
 
-    return Account::RES_OK;
-}
+//     return Account::RES_OK;
+// }

@@ -30,9 +30,9 @@ static void Encoder_PushHandler(ButtonEvent* btn, int event)
 }
 void HAL::Button_Init()
 {
-    gpio_reset_pin(GPIO_NUM_39);
-    gpio_set_direction(GPIO_NUM_39, GPIO_MODE_INPUT);
-    // gpio_set_pull_mode(GPIO_NUM_39, GPIO_PULLUP_PULLDOWN);
+    gpio_reset_pin(CONFIG_Button_PIN);
+    gpio_set_direction(CONFIG_Button_PIN, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(CONFIG_Button_PIN, GPIO_FLOATING);
     EncoderPush.EventAttach(Encoder_PushHandler);
 }
 
@@ -64,8 +64,9 @@ void HAL::Button_Update()
 }
 bool HAL::Button_GetIsPush()
 {
-    return (gpio_get_level(GPIO_NUM_39) == 0);
+    return (gpio_get_level(CONFIG_Button_PIN) == 0);
 }
+
 void HAL::Button_GetInfo(Button_Info_t* info)
 {
     if(press == 1)

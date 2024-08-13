@@ -14,6 +14,7 @@ void DataProc_Init()
     Account* act##NODE_NAME = new Account(#NODE_NAME, &center, BUFFER_SIZE);
 DP_DEF(Clock, 0);
 DP_DEF(Button, sizeof(HAL::Button_Info_t));
+DP_DEF(Power, sizeof(HAL::Power_Info_t));
 
 #undef DP_DEF
 
@@ -24,6 +25,7 @@ do{\
 }while(0)
 DP_DEF(Clock, 0);
 DP_DEF(Button, sizeof(HAL::Button_Info_t));
+DP_DEF(Power, sizeof(HAL::Power_Info_t));
 
 #undef DP_DEF
 

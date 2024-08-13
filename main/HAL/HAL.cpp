@@ -2,6 +2,7 @@
 #include "App/Version.h"
 #include "MillisTaskManager.h"
 #include "esp_timer.h"
+#include "i2c_port.h"
 
 static MillisTaskManager taskManager;
 
@@ -41,11 +42,13 @@ static void HAL_TimerInterrputUpdate()
 
 void HAL::HAL_Init()
 {
+    ESP_ERROR_CHECK(i2c_master_init());
+    I2C_Scan();
     Power_Init();
     Clock_Init();
     SD_Init();
     Button_Init();
-    // taskManager.Register(Power_Update, 1500);
+    taskManager.Register(Power_Update, 500);
     taskManager.Register(Button_Update, 100);
 }
 

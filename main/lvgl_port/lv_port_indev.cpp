@@ -94,7 +94,11 @@ void lv_port_indev_init(void)
     indev_button = lv_indev_create();
     lv_indev_set_type(indev_button, LV_INDEV_TYPE_BUTTON);
     lv_indev_set_read_cb(indev_button, button_read);
-
+    /*Assign buttons to points on the screen*/
+    static const lv_point_t btn_points[1] = {
+        {100, 100},   /*Button 0 -> x:100; y:100*/
+    };
+    lv_indev_set_button_points(indev_button, btn_points);
     
 }
 

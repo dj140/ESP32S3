@@ -99,10 +99,10 @@
 #define CONFIG_SD_D3               GPIO_NUM_10
 
 /* Button */
-#define CONFIG_Button_PIN             GPIO_NUM_3  // TIM2
+#define CONFIG_Button_PIN             GPIO_NUM_3  
 
 /* Buzzer */
-#define CONFIG_BUZZ_PIN             GPIO_NUM_38  // TIM2
+#define CONFIG_BUZZ_PIN             GPIO_NUM_38  
 
 #endif
 

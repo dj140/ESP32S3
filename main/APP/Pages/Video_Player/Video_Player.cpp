@@ -15,7 +15,7 @@ using namespace Page;
 #include "MjpegClass.h"
 
 // #include <ESP32_JPEG_Library.h>
-static const char *TAG = "littlefs";
+static const char *TAG = "Video_Player";
 
 #define MJPEG_FILENAME "/earth.mjpeg"
 #define MJPEG_OUTPUT_SIZE ((TFT_HOR_RES + 6) * TFT_VER_RES * 2)          // memory for a output image frame
@@ -189,10 +189,20 @@ void Video_Player::AttachEvent(lv_obj_t* obj)
 
 void Video_Player::Update()
 {
-    mjpeg.readMjpegBuf();
-    mjpeg.drawJpg();
-    lv_obj_invalidate(View.ui.canvas);
-    Model.GetButtonInfo(&status);
+    if(mjpeg.readMjpegBuf())
+    {
+        mjpeg.drawJpg();
+        lv_obj_invalidate(View.ui.canvas);
+    }
+    else
+    {
+        ESP_LOGI(TAG, "Finish Video Playing Loop \n");
+        fclose(mjpegFile);
+        mjpegFile = fopen("/littlefs/earth.mjpeg", "r");
+        mjpeg.setup(mjpegFile, mjpeg_buf, jpegDrawCallback, false , 0 , 0 , TFT_HOR_RES + 6, TFT_VER_RES );
+    }
+//    ESP_LOGI(TAG, "free MALLOC_CAP_DMA: %d \n", heap_caps_get_free_size(MALLOC_CAP_DMA));
+
 }
 
 void Video_Player::onTimerUpdate(lv_timer_t* timer)
@@ -213,17 +223,11 @@ void Video_Player::onEvent(lv_event_t* event)
 
     if (code == LV_EVENT_PRESSED)
     {    
-        printf("SystemInfos on \n");
         instance->_Manager->Push("Pages/Dialplate");
     }
     if(code == LV_EVENT_SHORT_CLICKED)
     {
-        printf("LV_EVENT_CLICKED \n");
         instance->_Manager->Push("Pages/Dialplate");
     }
-    if(status == 0x01)
-    {
-        printf("SystemInfos on \n");
-        // instance->_Manager->Push("Pages/Dialplate");
-    }
+
 }

@@ -70,7 +70,7 @@ public:
       else
       {
         // _buf_read = _input->readBytes(_read_buf, READ_BUFFER_SIZE);
-              _buf_read = fread(_read_buf, 1, READ_BUFFER_SIZE, _input);
+          _buf_read = fread(_read_buf, 1, READ_BUFFER_SIZE, _input);
 
       }
     }

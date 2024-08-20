@@ -48,7 +48,7 @@ void HAL::HAL_Init()
     Clock_Init();
     SD_Init();
     Button_Init();
-    taskManager.Register(Power_Update, 500);
+    // taskManager.Register(Power_Update, 1500);
     taskManager.Register(Button_Update, 100);
 }
 

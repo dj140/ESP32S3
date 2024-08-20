@@ -34,6 +34,7 @@ static const char *TAG = "LVGL";
  *  STATIC PROTOTYPES
  **********************/
 static void disp_init(void);
+static void TE_init(void);
 
 static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map);
 
@@ -133,7 +134,7 @@ void lv_port_disp_init(void)
     ESP_LOGI(TAG, "Install SH8601 panel driver");
     ESP_ERROR_CHECK(esp_lcd_new_panel_sh8601(io_handle, &panel_config, &panel_handle));
 
-    esp_lcd_panel_set_gap(panel_handle, 0x16, 0x00);
+    // esp_lcd_panel_set_gap(panel_handle, 0x16, 0x00);
 
     ESP_ERROR_CHECK(esp_lcd_panel_reset(panel_handle));
     ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle));
@@ -158,8 +159,11 @@ void lv_port_disp_init(void)
     lv_display_set_user_data(disp, panel_handle);
     // lv_display_add_event_cb(disp, lvgl_rounder_cb, LV_EVENT_INVALIDATE_AREA, NULL);
     lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * TFT_VER_RES * 2, LV_DISPLAY_RENDER_MODE_FULL);
+    /*Delete the original display refresh timer*/
+    // lv_display_delete_refr_timer(disp);
 
     ESP_LOGI(TAG, "Register display driver to LVGL");
+    TE_init();
 }
 
 /**********************
@@ -174,13 +178,15 @@ static void IRAM_ATTR gpio_isr_handler(void* arg)
     xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
 }
 
-static void gpio_task_example(void* arg)
+static void TE_task(void* arg)
 {
     uint32_t io_num;
-    ESP_LOGI(TAG, "gpio_task_example");
+    ESP_LOGI(TAG, "TE_task");
     for (;;) {
         if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
-            printf("GPIO[%"PRIu32"] intr, val: %d\n", io_num, gpio_get_level(io_num));
+            // printf("GPIO[%"PRIu32"] intr, val: %d\n", io_num, gpio_get_level(io_num));
+            /*Call this anywhere you want to refresh the dirty areas*/
+            // _lv_display_refr_timer(NULL);
         }
     }
 }
@@ -193,30 +199,31 @@ static void disp_init(void)
     gpio_set_pull_mode(AMOLED_VCI_EN_PIN, GPIO_PULLUP_PULLDOWN);
     gpio_set_level(AMOLED_VCI_EN_PIN, 1);
     vTaskDelay(pdMS_TO_TICKS(10));
+}
 
+static void TE_init(void)
+{
     gpio_config_t io_conf;
     //interrupt of rising edge
     io_conf.intr_type = GPIO_INTR_POSEDGE;
     //bit mask of the pins, use GPIO4/5 here
-    io_conf.pin_bit_mask = GPIO_NUM_7;
+    io_conf.pin_bit_mask = 1ULL << AMOLED_TE_PIN;
     //set as input mode
     io_conf.mode = GPIO_MODE_INPUT;
     //enable pull-up mode
-    io_conf.pull_up_en = 0;
+    io_conf.pull_up_en = 1;
     gpio_config(&io_conf);
     
     gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
 
-    xTaskCreate(gpio_task_example, "gpio_task_example", 2048, NULL, 10, NULL);
+    xTaskCreate(TE_task, "TE_task", 2048, NULL, 10, NULL);
 
     // Install ISR service
     gpio_install_isr_service(0);
 
     // Add GPIO interrupt handler
-    gpio_isr_handler_add(GPIO_NUM_7, gpio_isr_handler, (void*)GPIO_NUM_7);
+    gpio_isr_handler_add(AMOLED_TE_PIN, gpio_isr_handler, (void*)AMOLED_TE_PIN);
 }
-
-
 
 #else /*Enable this file at the top*/
 

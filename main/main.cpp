@@ -21,11 +21,10 @@ void uiTask(void *pvParameters)
 {
     xGuiSemaphore = xSemaphoreCreateMutex();
     ESP_LOGI(TAG, "lvgl ui task");
-   //  lv_demo_benchmark();
     // lv_demo_widgets();      /* A widgets example. This is what you get out of the box */
    //  lv_demo_music();        /* A modern, smartphone-like music player demo. */
     // lv_demo_stress();       /* A stress test for LVGL. */
-    // lv_demo_benchmark();    /* A demo to measure the performance of LVGL or to compare different settings. */
+   //  lv_demo_benchmark();    /* A demo to measure the performance of LVGL or to compare different settings. */
    while (1)
    {
       /* Delay 1 tick (assumes FreeRTOS tick is 10ms */

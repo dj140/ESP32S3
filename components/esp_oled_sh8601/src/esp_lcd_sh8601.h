@@ -9,6 +9,7 @@
 #include <stdint.h>
 
 #include "esp_lcd_panel_vendor.h"
+#include "esp_lcd_panel_interface.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,6 +56,8 @@ typedef struct {
  */
 esp_err_t esp_lcd_new_panel_sh8601(const esp_lcd_panel_io_handle_t io, const esp_lcd_panel_dev_config_t *panel_dev_config, esp_lcd_panel_handle_t *ret_panel);
 
+esp_err_t panel_sh8601_disp_set_BGR(esp_lcd_panel_t *panel, bool off);
+
 /**
  * @brief LCD panel bus configuration structure
  *
@@ -87,7 +90,7 @@ esp_err_t esp_lcd_new_panel_sh8601(const esp_lcd_panel_io_handle_t io, const esp
         .cs_gpio_num = cs,                                      \
         .dc_gpio_num = dc,                                      \
         .spi_mode = 0,                                          \
-        .pclk_hz = 40 * 1000 * 1000,                            \
+        .pclk_hz = 80 * 1000 * 1000,                            \
         .trans_queue_depth = 3,                                \
         .on_color_trans_done = cb,                              \
         .user_ctx = cb_ctx,                                     \
@@ -99,7 +102,7 @@ esp_err_t esp_lcd_new_panel_sh8601(const esp_lcd_panel_io_handle_t io, const esp
         .cs_gpio_num = cs,                                      \
         .dc_gpio_num = -1,                                      \
         .spi_mode = 0,                                          \
-        .pclk_hz = 40 * 1000 * 1000,                            \
+        .pclk_hz = 80 * 1000 * 1000,                            \
         .trans_queue_depth = 3,                                \
         .on_color_trans_done = cb,                              \
         .user_ctx = cb_ctx,                                     \

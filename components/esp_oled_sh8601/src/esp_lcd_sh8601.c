@@ -37,6 +37,7 @@ static esp_err_t panel_sh8601_mirror(esp_lcd_panel_t *panel, bool mirror_x, bool
 static esp_err_t panel_sh8601_swap_xy(esp_lcd_panel_t *panel, bool swap_axes);
 static esp_err_t panel_sh8601_set_gap(esp_lcd_panel_t *panel, int x_gap, int y_gap);
 static esp_err_t panel_sh8601_disp_on_off(esp_lcd_panel_t *panel, bool off);
+ esp_err_t panel_sh8601_disp_set_BGR(esp_lcd_panel_t *panel, bool off);
 
 typedef struct {
     esp_lcd_panel_t base;
@@ -217,7 +218,9 @@ static const sh8601_lcd_init_cmd_t vendor_specific_init_default[] = {
         {0x2A, (uint8_t []){0x00,0x00,0x01,0x99}, 4, 1},
         {0x2B, (uint8_t []){0x00,0x00,0x01,0xED}, 4, 1},
         {0x44, (uint8_t []){0x01, 0xED}, 2, 1},
-        {0x35, (uint8_t []){0x00}, 1, 1},
+        {0x35, (uint8_t []){0x00}, 1, 1}, 
+        /*RGB --- BGR*/
+        {0x36, (uint8_t []){0x08}, 1, 0},
         {0x53, (uint8_t []){0x20}, 1, 50},
         {0x51, (uint8_t []){0x40}, 1, 0},
     #endif
@@ -370,5 +373,20 @@ static esp_err_t panel_sh8601_disp_on_off(esp_lcd_panel_t *panel, bool on_off)
         command = LCD_CMD_DISPOFF;
     }
     ESP_RETURN_ON_ERROR(tx_param(sh8601, io, command, NULL, 0), TAG, "send command failed");
+    return ESP_OK;
+}
+
+ esp_err_t panel_sh8601_disp_set_BGR(esp_lcd_panel_t *panel, bool on_off)
+{
+    sh8601_panel_t *sh8601 = __containerof(panel, sh8601_panel_t, base);
+    esp_lcd_panel_io_handle_t io = sh8601->io;
+    int command = 0;
+
+    if (on_off) {
+        command = 0x08;
+    } else {
+        command = 0x00;
+    }
+    ESP_RETURN_ON_ERROR(tx_param(sh8601, io, 0x36, (uint8_t[]) {command}, 1), TAG, "send command failed");
     return ESP_OK;
 }

@@ -28,7 +28,7 @@
 
 #define LCD_HOST    SPI3_HOST
 static const char *TAG = "LVGL";
-#define LCD_BIT_PER_PIXEL       (16)
+#define LCD_BIT_PER_PIXEL       (24)
 
 /**********************
  *  STATIC PROTOTYPES
@@ -60,7 +60,7 @@ static void disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * px
 
     // copy a buffer's content to a specific area of the display
     //RRRRR GGG | GGG BBBBB  ---->  GGG BBBBB | RRRRR GGG
-    lv_draw_sw_rgb565_swap(px_map, (offsetx2 - offsetx1 + 1) * (offsety2 - offsety1 + 1));
+    // lv_draw_sw_rgb565_swap(px_map, (offsetx2 - offsetx1 + 1) * (offsety2 - offsety1 + 1));
     esp_lcd_panel_draw_bitmap(panel_handle, offsetx1 , offsety1, offsetx2 + 1, offsety2 + 1, px_map);
     // esp_lcd_panel_draw_bitmap(panel_handle, 0 , 0, 410, 168, &px_map[0]);
     // esp_lcd_panel_draw_bitmap(panel_handle, 0 , 168, 410, 336, &px_map[410 * 168 * 2]);
@@ -135,17 +135,17 @@ void lv_port_disp_init(void)
     ESP_ERROR_CHECK(esp_lcd_new_panel_sh8601(io_handle, &panel_config, &panel_handle));
 
     // esp_lcd_panel_set_gap(panel_handle, 0x16, 0x00);
-
     ESP_ERROR_CHECK(esp_lcd_panel_reset(panel_handle));
-    ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle));
+    ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle)); 
+    // ESP_ERROR_CHECK(esp_lcd_panel_invert_color(panel_handle, true));
     // user can flush pre-defined pattern to the screen before we turn on the screen or backlight
     ESP_ERROR_CHECK(esp_lcd_panel_disp_on_off(panel_handle, true));
 
     ESP_LOGI(TAG, "Initialize LVGL library");
 
     // lv_display_add_event_cb(disp, lvgl_port_rounder_callback, LV_EVENT_RENDER_START, NULL);
-    lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
-    lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 2, MALLOC_CAP_SPIRAM);
+    lv_color_t* buf_3_1 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 3, MALLOC_CAP_SPIRAM);
+    lv_color_t* buf_3_2 = (lv_color_t *)heap_caps_malloc(TFT_HOR_RES * TFT_VER_RES * 3, MALLOC_CAP_SPIRAM);
 
     /* If failed */
     if ((buf_3_1 == NULL) || (buf_3_2 == NULL)) {
@@ -158,7 +158,7 @@ void lv_port_disp_init(void)
 
     lv_display_set_user_data(disp, panel_handle);
     // lv_display_add_event_cb(disp, lvgl_rounder_cb, LV_EVENT_INVALIDATE_AREA, NULL);
-    lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * TFT_VER_RES * 2, LV_DISPLAY_RENDER_MODE_FULL);
+    lv_display_set_buffers(disp, buf_3_1, buf_3_2, TFT_HOR_RES * TFT_VER_RES * 3, LV_DISPLAY_RENDER_MODE_FULL);
     /*Delete the original display refresh timer*/
     // lv_display_delete_refr_timer(disp);
 
@@ -216,7 +216,7 @@ static void TE_init(void)
     
     gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
 
-    xTaskCreate(TE_task, "TE_task", 2048, NULL, 10, NULL);
+    xTaskCreatePinnedToCore(TE_task, "TE_task", 2048, NULL, 6, NULL, 1);
 
     // Install ISR service
     gpio_install_isr_service(0);

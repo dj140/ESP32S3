@@ -129,19 +129,15 @@ void Image_Player::onEvent(lv_event_t* event)
     lv_event_code_t code = lv_event_get_code(event);
     // printf("lv_event_code_t: %d ", code);
 
-    if (code == LV_EVENT_PRESSED)
+    // if (code == LV_EVENT_PRESSED)
+    // {    
+
+    //     instance->_Manager->Pop();
+    // }
+
+    if (code == LV_EVENT_LONG_PRESSED)
     {    
-
-        instance->_Manager->Pop();
+        instance->_Manager->BackHome();
     }
-
-//     if (code == LV_EVENT_GESTURE)
-//     {
-// //      LV_LOG_USER("LV_EVENT_GESTURE %d", code);
-
-//       if (lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
-//           instance->_Manager->Push("Pages/Dialplate");
-//       }
-//     }
 
 }

@@ -222,7 +222,7 @@ static const sh8601_lcd_init_cmd_t vendor_specific_init_default[] = {
         /*RGB --- BGR*/
         {0x36, (uint8_t []){0x08}, 1, 0},
         {0x53, (uint8_t []){0x20}, 1, 50},
-        {0x51, (uint8_t []){0x40}, 1, 0},
+        {0x51, (uint8_t []){0x80}, 1, 0},
     #endif
 
 };

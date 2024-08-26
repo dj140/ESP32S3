@@ -19,9 +19,9 @@ using namespace Page;
 // #include <ESP32_JPEG_Library.h>
 static const char *TAG = "Video_Player";
 
-// #define MJPEG_FILENAME "/sdcard/output.mjpeg"
-#define MJPEG_FILENAME "/littlefs/earth.mjpeg"
-#define MJPEG_OUTPUT_SIZE ((TFT_HOR_RES) * TFT_VER_RES * 2)          // memory for a output image frame
+#define MJPEG_FILENAME "/sdcard/video0.mjpeg"
+// #define MJPEG_FILENAME "/littlefs/earth.mjpeg"
+#define MJPEG_OUTPUT_SIZE ((TFT_HOR_RES + 6) * TFT_VER_RES * 2)          // memory for a output image frame
 #define MJPEG_BUFFER_SIZE (MJPEG_OUTPUT_SIZE) // memory for a single JPEG frame
 
 static MjpegClass mjpeg;
@@ -38,24 +38,27 @@ FILE *mjpegFile;
 uint8_t *mjpeg_buf;
 uint16_t *output_buf;
 bool status;
+uint8_t video_str[20];
+uint8_t video_num = 1;
+uint8_t video_max = 7;
 
 esp_lcd_panel_handle_t panel_handle = NULL;
 lv_display_t * disp;
 
 // pixel drawing callback
-// static int jpegDrawCallback(JPEGDRAW *pDraw)
-// {
-//     /*Draw pos = 0,0. size = 416 x 16
-//     Draw pos = 0,16. size = 416 x 16
-//     .....
-//     Draw pos = 0,464. size = 416 x 16
-//     Draw pos = 0,480. size = 416 x 14*/
-//     // printf("Draw pos = %d,%d. size = %d x %d\n", pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight);
-//     // unsigned long start = millis();
-//     memcpy(&output_buf[pDraw->y * pDraw->iWidth], pDraw->pPixels, pDraw->iWidth * pDraw->iHeight * 2);
-//     // total_show_video += millis() - start;
-//     return 1;
-// }
+static int jpegDrawCallback(JPEGDRAW *pDraw)
+{
+    /*Draw pos = 0,0. size = 416 x 16
+    Draw pos = 0,16. size = 416 x 16
+    .....
+    Draw pos = 0,464. size = 416 x 16
+    Draw pos = 0,480. size = 416 x 14*/
+    // printf("Draw pos = %d,%d. size = %d x %d\n", pDraw->x, pDraw->y, pDraw->iWidth, pDraw->iHeight);
+    // unsigned long start = millis();
+    memcpy(&output_buf[pDraw->y * pDraw->iWidth], pDraw->pPixels, pDraw->iWidth * pDraw->iHeight * 2);
+    // total_show_video += millis() - start;
+    return 1;
+}
 
 
 Video_Player::Video_Player()
@@ -126,19 +129,20 @@ void Video_Player::onViewLoad()
     }
     // uint8_t *mjpeg_buf = (uint8_t *)aligned_alloc(16, MJPEG_BUFFER_SIZE);
     // uint16_t *output_buf = (uint16_t *)aligned_alloc(16, MJPEG_OUTPUT_SIZE);
-
     mjpeg_buf = (uint8_t *)heap_caps_malloc(MJPEG_BUFFER_SIZE, MALLOC_CAP_SPIRAM);
     output_buf = (uint16_t *)heap_caps_aligned_alloc(16, MJPEG_OUTPUT_SIZE, MALLOC_CAP_8BIT);
     printf("PSRAM free size: %d\n", heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+
     if (output_buf!=NULL && mjpeg_buf!=NULL)
     {    
-        lv_canvas_set_buffer(View.ui.canvas, (uint8_t*)output_buf, TFT_HOR_RES, TFT_VER_RES, LV_COLOR_FORMAT_RGB888);
+        lv_canvas_set_buffer(View.ui.canvas, (uint8_t*)output_buf, TFT_HOR_RES + 6, TFT_VER_RES, LV_COLOR_FORMAT_RGB565);
         printf("input/output_buf malloc successful! \n");
     }
     else
     {
         printf("input/output_buf malloc fail!");
     }
+
 }
 
 void Video_Player::onViewDidLoad()
@@ -152,18 +156,19 @@ void Video_Player::onViewWillAppear()
     disp = lv_disp_get_default();
     panel_handle = (esp_lcd_panel_handle_t)lv_display_get_user_data(disp);
 
-    panel_sh8601_disp_set_BGR(panel_handle, 0);
+    // panel_sh8601_disp_set_BGR(panel_handle, 0);
 
     LV_LOG_USER("begin");
     ESP_LOGI(TAG, "Opening file");
-    // mjpegFile = fopen("/littlefs/earth.mjpeg", "r");
-    // if (mjpegFile == NULL)
-    // {
-    //     ESP_LOGE(TAG, "Failed to open file");
-    //     return;
-    // }
+    mjpegFile = fopen(MJPEG_FILENAME, "r");
+    if (mjpegFile == NULL)
+    {
+        ESP_LOGE(TAG, "Failed to open file");
+        return;
+    }
+    mjpeg.setup(mjpegFile, mjpeg_buf, jpegDrawCallback, false , 0 , 0 , TFT_HOR_RES + 6, TFT_VER_RES );
     // mjpeg.setup(mjpegFile, mjpeg_buf, false , 0 , 0 , TFT_HOR_RES + 6, TFT_VER_RES );
-    mjpeg.setup(MJPEG_FILENAME, mjpeg_buf, output_buf, MJPEG_OUTPUT_SIZE, true /* useBigEndian */);
+    // mjpeg.setup(mjpegFile, mjpeg_buf, output_buf, MJPEG_OUTPUT_SIZE, true /* useBigEndian */);
     timer = lv_timer_create(onTimerUpdate, 10, this);
 
 }
@@ -184,7 +189,14 @@ void Video_Player::onViewDidDisappear()
     lv_timer_del(timer);
     mjpeg.close();
     panel_sh8601_disp_set_BGR(panel_handle, 1);
-
+    // if(mjpeg_buf)
+    // {
+    //     heap_caps_free(mjpeg_buf);
+    // }
+    // if(output_buf)
+    // {
+    //     heap_caps_free(output_buf);
+    // }
 }
 
 void Video_Player::onViewUnload()
@@ -207,18 +219,24 @@ void Video_Player::Update()
 {
     if(mjpeg.readMjpegBuf())
     {
-        // mjpeg.drawJpg();
-        mjpeg.decodeJpg();
+        mjpeg.drawJpg();
+        // mjpeg.decodeJpg();
         lv_obj_invalidate(View.ui.canvas);
     }
     else
     {
+        sprintf((char*)video_str, "/sdcard/video%01d.mjpeg", video_num); 
+        printf("%d: %s\r\n", video_num, (char*)video_str);
+        video_num++;
+        if (video_num > video_max)
+        {
+            video_num = 0;
+        }
         ESP_LOGI(TAG, "Finish Video Playing Loop \n");
-        // fclose(mjpegFile);
-        // mjpegFile = fopen(MJPEG_FILENAME, "r");
-        // mjpeg.setup(mjpegFile, mjpeg_buf, jpegDrawCallback, false , 0 , 0 , TFT_HOR_RES + 6, TFT_VER_RES );
-        mjpeg.close();
-        mjpeg.setup(MJPEG_FILENAME, mjpeg_buf, output_buf, MJPEG_OUTPUT_SIZE, true /* useBigEndian */);
+        fclose(mjpegFile);
+        mjpegFile = fopen((char*)video_str, "r");
+        lv_canvas_set_buffer(View.ui.canvas, (uint8_t*)output_buf, TFT_HOR_RES + 6, TFT_VER_RES, LV_COLOR_FORMAT_RGB565);
+        mjpeg.setup(mjpegFile, mjpeg_buf, jpegDrawCallback, false , 0 , 0 , TFT_HOR_RES + 6, TFT_VER_RES );
     }
 //    ESP_LOGI(TAG, "free MALLOC_CAP_DMA: %d \n", heap_caps_get_free_size(MALLOC_CAP_DMA));
 
@@ -244,10 +262,22 @@ void Video_Player::onEvent(lv_event_t* event)
     // {    
     //     instance->_Manager->Push("Pages/Dialplate");
     // }
-    // if(code == LV_EVENT_SHORT_CLICKED)
-    // {
-    //     instance->_Manager->Push("Pages/Dialplate");
-    // }
+    if(code == LV_EVENT_SHORT_CLICKED)
+    {
+        sprintf((char*)video_str, "/sdcard/video%01d.mjpeg", video_num); 
+        printf("%d: %s\r\n", video_num, (char*)video_str);
+        video_num++;
+        if (video_num > video_max)
+        {
+            video_num = 0;
+        }
+        ESP_LOGI(TAG, "Next Video Playing \n");
+        fclose(mjpegFile);
+        mjpegFile = fopen((char*)video_str, "r");
+        lv_canvas_set_buffer(instance->View.ui.canvas, (uint8_t*)output_buf, TFT_HOR_RES + 6, TFT_VER_RES, LV_COLOR_FORMAT_RGB565);
+        mjpeg.setup(mjpegFile, mjpeg_buf, jpegDrawCallback, false , 0 , 0 , TFT_HOR_RES + 6, TFT_VER_RES );
+        // instance->_Manager->Push("Pages/Dialplate");
+    }
 
     if (code == LV_EVENT_LONG_PRESSED)
     {    

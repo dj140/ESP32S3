@@ -151,9 +151,9 @@ void HAL::Power_Init()
 
 void HAL::Power_Update()
 {
-    ESP_LOGI(TAG, "VbusCurrent:%.2f mV", axp.getVbusCurrent());
-    ESP_LOGI(TAG, "BattChargeCurrent:%.2f mV", axp.getBattChargeCurrent());
-    ESP_LOGI(TAG, "BattDischargeCurrent:%.2f mV", axp.getBattDischargeCurrent());
+    ESP_LOGI(TAG, "VbusCurrent:%.2f mA", axp.getVbusCurrent());
+    ESP_LOGI(TAG, "BattChargeCurrent:%.2f mA", axp.getBattChargeCurrent());
+    ESP_LOGI(TAG, "BattDischargeCurrent:%.2f mA", axp.getBattDischargeCurrent());
     ESP_LOGI(TAG, "BattPercentage: %d %%", axp.getBattPercentage());
     ESP_LOGI(TAG, "BattVoltage:%.2f mV", axp.getBattVoltage());
     ESP_LOGI(TAG, "TSVoltage:%.2f mV", axp.getTSTemp());

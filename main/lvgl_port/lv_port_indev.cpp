@@ -184,7 +184,7 @@ static void button_read(lv_indev_t * indev_drv, lv_indev_data_t * data)
     if(isPush != lastState)
     {
         // HAL::Buzz_Tone(isPush ? 500 : 700, 20);
-        ESP_LOGI(TAG,"state:%d \n", isPush);
+        ESP_LOGI(TAG,"Button state isPush:%d \n", isPush);
         lastState = isPush;
     }
     // static uint8_t last_btn = 0;

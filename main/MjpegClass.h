@@ -8,23 +8,19 @@
 
 // #if defined(ESP32)
 
-#define READ_BUFFER_SIZE 1024
+#define READ_BUFFER_SIZE 4096
 
 #include <ESP32_JPEG_Library.h>
+#include <JPEGDEC.h>
 
 class MjpegClass
 {
 public:
   bool setup(
-      const char *path, uint8_t *mjpeg_buf,
+      FILE *input, uint8_t *mjpeg_buf,
       uint16_t *output_buf, size_t output_buf_size, bool useBigEndian)
   {
-    _input = fopen(path, "r");
-   if (_input == NULL)
-    {
-        printf("Failed to open file \n");
-        return false;
-    }
+    _input = input;
     _mjpeg_buf = mjpeg_buf;
     _output_buf = (uint8_t *)output_buf;
     _output_buf_size = output_buf_size;
@@ -39,6 +35,28 @@ public:
     if (!_read_buf)
     {
       return false;
+    }
+
+    return true;
+  }
+  
+  bool setup(
+      FILE *input, uint8_t *mjpeg_buf, JPEG_DRAW_CALLBACK *pfnDraw, bool useBigEndian,
+      int x, int y, int widthLimit, int heightLimit)
+  {
+    _input = input;
+    _mjpeg_buf = mjpeg_buf;
+    _pfnDraw = pfnDraw;
+    _useBigEndian = useBigEndian;
+    _x = x;
+    _y = y;
+    _widthLimit = widthLimit;
+    _heightLimit = heightLimit;
+    _inputindex = 0;
+
+    if (!_read_buf)
+    {
+      _read_buf = (uint8_t *)malloc(READ_BUFFER_SIZE);
     }
 
     return true;
@@ -173,6 +191,56 @@ public:
 
     return true;
   }
+  bool drawJpg()
+  {
+    _remain = _mjpeg_buf_offset;
+    _jpeg.openRAM(_mjpeg_buf, _remain, _pfnDraw);
+    if (_scale == -1)
+    {
+      // scale to fit height
+      int iMaxMCUs;
+      int w = _jpeg.getWidth();
+      int h = _jpeg.getHeight();
+      float ratio = (float)h / _heightLimit;
+      if (ratio <= 1)
+      {
+        _scale = 0;
+        iMaxMCUs = _widthLimit / 16;
+      }
+      else if (ratio <= 2)
+      {
+        _scale = JPEG_SCALE_HALF;
+        iMaxMCUs = _widthLimit / 8;
+        w /= 2;
+        h /= 2;
+      }
+      else if (ratio <= 4)
+      {
+        _scale = JPEG_SCALE_QUARTER;
+        iMaxMCUs = _widthLimit / 4;
+        w /= 4;
+        h /= 4;
+      }
+      else
+      {
+        _scale = JPEG_SCALE_EIGHTH;
+        iMaxMCUs = _widthLimit / 2;
+        w /= 8;
+        h /= 8;
+      }
+      _jpeg.setMaxOutputSize(iMaxMCUs);
+      _x = (w > _widthLimit) ? 0 : ((_widthLimit - w) / 2);
+      _y = (_heightLimit - h) / 2;
+    }
+    if (_useBigEndian)
+    {
+      _jpeg.setPixelType(RGB565_BIG_ENDIAN);
+    }
+    _jpeg.decode(_x, _y, _scale);
+    _jpeg.close();
+
+    return true;
+  }
 
   int16_t getWidth()
   {
@@ -208,6 +276,15 @@ private:
   int32_t _inputindex = 0;
   int32_t _buf_read;
   int32_t _remain = 0;
+
+  JPEG_DRAW_CALLBACK *_pfnDraw;
+  int _x;
+  int _y;
+  int _widthLimit;
+  int _heightLimit;
+
+  JPEGDEC _jpeg;
+  int _scale = -1;
 };
 
 // #endif // defined(ESP32)

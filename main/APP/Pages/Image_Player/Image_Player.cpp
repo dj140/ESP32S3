@@ -1,14 +1,20 @@
 #include "Image_Player.h"
 #include "stdio.h"
+#include "esp_lcd_sh8601.h"
+#include "freertos/FreeRTOS.h"
+
 using namespace Page;
 
 uint32_t counter = 0;
-uint8_t  ubNumberOfFiles = 4;
-uint8_t str[10];
+uint8_t  ubNumberOfFiles = 50;
+uint8_t str[30];
 #define MAX_BMP_FILES     10
 #define MAX_BMP_FILE_NAME 10
 char* pDirectoryFiles[MAX_BMP_FILES];
 uint8_t num = 1;
+
+esp_lcd_panel_handle_t panel_handle = NULL;
+lv_display_t * disp;
 
 Image_Player::Image_Player()
     : timer(nullptr)
@@ -36,6 +42,8 @@ void Image_Player::onViewLoad()
     AttachEvent(View.ui.image);
     // AttachEvent(View.ui.lottie);
 
+    disp = lv_disp_get_default();
+    panel_handle = (esp_lcd_panel_handle_t)lv_display_get_user_data(disp);
 }
 
 void Image_Player::onViewDidLoad()
@@ -53,7 +61,6 @@ void Image_Player::onViewWillAppear()
 void Image_Player::onViewDidAppear()
 {
     LV_LOG_USER("begin");
-    //  xTaskCreate(show_video_task, "video task", 8196, NULL, 4, &Task1Task_Handler);
 }
 
 void Image_Player::onViewWillDisappear()
@@ -65,6 +72,7 @@ void Image_Player::onViewDidDisappear()
 {
     LV_LOG_USER("begin");
     lv_timer_del(timer);
+    panel_sh8601_disp_set_Brightness(panel_handle, 0x80);
 }
 
 void Image_Player::onViewUnload()
@@ -85,32 +93,27 @@ void Image_Player::AttachEvent(lv_obj_t* obj)
 
 void Image_Player::Update()
 {
-    static lv_style_t style;                     //创建样式
-    lv_style_init(&style);                       //初始化样式
-    //lv_img_set_src(View.ui.image, ResourcePool::GetImage("image_001"));
-    if (num == ubNumberOfFiles)
+    if (num > ubNumberOfFiles)
     {
-        num = 1;
+        num = 0;
     }
+    sprintf((char*)str, "A:sdcard/image/888/UI_%02d.bin",num); 
+    printf("%d: %s\r\n", num, (char*)str);
+    num++;
+    lv_img_set_src(View.ui.image, (char*)str);
+    for(uint8_t i = 0; i < 255; i++)
+    {
+        //TRANSP -> Bright
+        panel_sh8601_disp_set_Brightness(panel_handle, i);
+        vTaskDelay(pdMS_TO_TICKS(10));
 
-   sprintf((char*)str, "image%01d",num); 
-   printf("%d: %s\r\n", num, (char*)str);
-   num++;
-   lv_opa_t opa;
-   opa = lv_obj_get_style_opa(View.ui.image, 0);
-   printf("opa: %d", opa);
-   if (opa < 10)
-   {
-       //TRANSP -> Bright
-       lv_obj_fade_in(View.ui.image, 4000, 0);
-       lv_img_set_src(View.ui.image, ResourcePool::GetImage((char*)str));
-
-   }
-   else
-   {   
-       //Bright -> TRANSP
-       lv_obj_fade_out(View.ui.image, 2000, 0); 
-   }
+    }
+    for(uint8_t i = 255; i > 0; i--)
+    {
+        //Bright -> TRANSP
+        panel_sh8601_disp_set_Brightness(panel_handle, i);
+        vTaskDelay(pdMS_TO_TICKS(15));
+    }
 }
 
 void Image_Player::onTimerUpdate(lv_timer_t* timer)
@@ -129,11 +132,10 @@ void Image_Player::onEvent(lv_event_t* event)
     lv_event_code_t code = lv_event_get_code(event);
     // printf("lv_event_code_t: %d ", code);
 
-    // if (code == LV_EVENT_PRESSED)
-    // {    
-
-    //     instance->_Manager->Pop();
-    // }
+    if (code == LV_EVENT_PRESSED)
+    {    
+        instance->_Manager->BackHome();
+    }
 
     if (code == LV_EVENT_LONG_PRESSED)
     {    

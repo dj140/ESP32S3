@@ -38,7 +38,43 @@ void Image_Player_View::Create(lv_obj_t* root)
   */
 uint32_t Image_Player_View::Storage_GetDirectoryBitmapFiles (const char* DirName, char* Files[])
 {
+//   FRESULT res;
   uint32_t index = 0;
+
+// //  /* Open filesystem */
+// //  if(f_mount(&fs, (TCHAR const*)"",0) != FR_OK)
+// //  {
+// //    return 0;
+// //  }
+
+//   /* Start to search for wave files */
+//   res = f_findfirst(&dir, &fno, DirName, "*.bin");
+//   printf("f_findfir stutas: %d \n", res);
+//   /* Repeat while an item is found */
+//   while (fno.fname[0])
+//   {
+//     if(res == FR_OK)
+//     {
+//       if(index < 25)
+//       {
+// //        printf("index: %d Max files: %d\r\n", index, MAX_BMP_FILES);								//输出文件名	
+//         sprintf (Files[index++], "%s", fno.fname);
+// //        printf("index: %d %s\r\n",index,Files[index]);								//输出文件名	
+
+//       } 
+
+//       /* Search for next item */
+//       res = f_findnext(&dir, &fno);
+//     }
+//     else
+//     {
+//       printf("no files left\r\n");								//输出文件名	
+//       index = 0;
+//       break;
+//     }
+//   }
+
+//   f_closedir(&dir);
 
   return index;
 }

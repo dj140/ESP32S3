@@ -376,7 +376,7 @@ static esp_err_t panel_sh8601_disp_on_off(esp_lcd_panel_t *panel, bool on_off)
     return ESP_OK;
 }
 
- esp_err_t panel_sh8601_disp_set_BGR(esp_lcd_panel_t *panel, bool on_off)
+esp_err_t panel_sh8601_disp_set_BGR(esp_lcd_panel_t *panel, bool on_off)
 {
     sh8601_panel_t *sh8601 = __containerof(panel, sh8601_panel_t, base);
     esp_lcd_panel_io_handle_t io = sh8601->io;
@@ -388,5 +388,13 @@ static esp_err_t panel_sh8601_disp_on_off(esp_lcd_panel_t *panel, bool on_off)
         command = 0x00;
     }
     ESP_RETURN_ON_ERROR(tx_param(sh8601, io, 0x36, (uint8_t[]) {command}, 1), TAG, "send command failed");
+    return ESP_OK;
+}
+
+esp_err_t panel_sh8601_disp_set_Brightness(esp_lcd_panel_t *panel, uint8_t Brightness)
+{
+    sh8601_panel_t *sh8601 = __containerof(panel, sh8601_panel_t, base);
+    esp_lcd_panel_io_handle_t io = sh8601->io;
+    ESP_RETURN_ON_ERROR(tx_param(sh8601, io, 0x51, (uint8_t[]) {Brightness}, 1), TAG, "send command failed");
     return ESP_OK;
 }

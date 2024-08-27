@@ -13,13 +13,11 @@ using namespace Page;
 #include "esp_flash.h"
 #include "JPEGDEC.h"
 #include "MjpegClass.h"
-#include "esp_lcd_sh8601.h"
-#include "esp_lcd_panel_io.h"
-#include "esp_lcd_panel_io_interface.h"
+
 // #include <ESP32_JPEG_Library.h>
 static const char *TAG = "Video_Player";
 
-#define MJPEG_FILENAME "/sdcard/video0.mjpeg"
+#define MJPEG_FILENAME "/sdcard/video/video0.mjpeg"
 // #define MJPEG_FILENAME "/littlefs/earth.mjpeg"
 #define MJPEG_OUTPUT_SIZE ((TFT_HOR_RES + 6) * TFT_VER_RES * 2)          // memory for a output image frame
 #define MJPEG_BUFFER_SIZE (MJPEG_OUTPUT_SIZE) // memory for a single JPEG frame
@@ -38,12 +36,9 @@ FILE *mjpegFile;
 uint8_t *mjpeg_buf;
 uint16_t *output_buf;
 bool status;
-uint8_t video_str[20];
+uint8_t video_str[30];
 uint8_t video_num = 1;
 uint8_t video_max = 7;
-
-esp_lcd_panel_handle_t panel_handle = NULL;
-lv_display_t * disp;
 
 // pixel drawing callback
 static int jpegDrawCallback(JPEGDRAW *pDraw)
@@ -153,11 +148,6 @@ void Video_Player::onViewDidLoad()
 
 void Video_Player::onViewWillAppear()
 {
-    disp = lv_disp_get_default();
-    panel_handle = (esp_lcd_panel_handle_t)lv_display_get_user_data(disp);
-
-    // panel_sh8601_disp_set_BGR(panel_handle, 0);
-
     LV_LOG_USER("begin");
     ESP_LOGI(TAG, "Opening file");
     mjpegFile = fopen(MJPEG_FILENAME, "r");
@@ -188,15 +178,6 @@ void Video_Player::onViewDidDisappear()
     LV_LOG_USER("begin");
     lv_timer_del(timer);
     mjpeg.close();
-    panel_sh8601_disp_set_BGR(panel_handle, 1);
-    // if(mjpeg_buf)
-    // {
-    //     heap_caps_free(mjpeg_buf);
-    // }
-    // if(output_buf)
-    // {
-    //     heap_caps_free(output_buf);
-    // }
 }
 
 void Video_Player::onViewUnload()
@@ -225,7 +206,7 @@ void Video_Player::Update()
     }
     else
     {
-        sprintf((char*)video_str, "/sdcard/video%01d.mjpeg", video_num); 
+        sprintf((char*)video_str, "/sdcard/video/video%01d.mjpeg", video_num); 
         printf("%d: %s\r\n", video_num, (char*)video_str);
         video_num++;
         if (video_num > video_max)
@@ -264,7 +245,7 @@ void Video_Player::onEvent(lv_event_t* event)
     // }
     if(code == LV_EVENT_SHORT_CLICKED)
     {
-        sprintf((char*)video_str, "/sdcard/video%01d.mjpeg", video_num); 
+        sprintf((char*)video_str, "/sdcard/video/video%01d.mjpeg", video_num); 
         printf("%d: %s\r\n", video_num, (char*)video_str);
         video_num++;
         if (video_num > video_max)

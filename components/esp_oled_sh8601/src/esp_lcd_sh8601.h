@@ -58,6 +58,8 @@ esp_err_t esp_lcd_new_panel_sh8601(const esp_lcd_panel_io_handle_t io, const esp
 
 esp_err_t panel_sh8601_disp_set_BGR(esp_lcd_panel_t *panel, bool off);
 
+esp_err_t panel_sh8601_disp_set_Brightness(esp_lcd_panel_t *panel, uint8_t Brightness);
+
 /**
  * @brief LCD panel bus configuration structure
  *
